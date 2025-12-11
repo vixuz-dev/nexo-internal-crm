@@ -19,8 +19,7 @@ const menuItems = [
     label: 'Clientes',
     icon: FiUsers,
     children: [
-      { label: 'Lista de clientes', path: ROUTES.CLIENTS_LIST },
-      { label: 'Subir clientes', path: ROUTES.CLIENTS_UPLOAD },
+      { label: 'Listado de clientes', path: ROUTES.CLIENTS_LIST },
     ],
     separatorAfter: true,
   },
@@ -51,15 +50,6 @@ const menuItems = [
       { label: 'Cobranza', path: ROUTES.CONSULTAS_COBRANZA },
       // { label: 'Cobranza diaria', path: ROUTES.CONSULTAS_COBRANZA_DIA },
     ],
-  },
-  // Gestión de Empresas
-  {
-    label: 'Empresas',
-    icon: FiBriefcase,
-    children: [
-      { label: 'Alta empresa', path: ROUTES.COBRANZA_ALTA_EMPRESA },
-    ],
-    separatorAfter: true,
   },
   // Dashboards y Análisis
   {

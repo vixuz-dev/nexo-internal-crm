@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import ClientsList from "./pages/ClientsList";
-import ClientsUpload from "./pages/ClientsUpload";
 import Affiliates from "./pages/Affiliates";
 import OrdersList from "./pages/OrdersList";
 import InvoicesList from "./pages/InvoicesList";
@@ -31,14 +30,6 @@ function App() {
           element={
             <PrivateRoute>
               <ClientsList />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path={ROUTES.CLIENTS_UPLOAD}
-          element={
-            <PrivateRoute>
-              <ClientsUpload />
             </PrivateRoute>
           }
         />
