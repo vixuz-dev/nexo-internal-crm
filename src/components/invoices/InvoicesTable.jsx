@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { FiDollarSign, FiInfo, FiChevronUp, FiChevronDown } from 'react-icons/fi';
+import { FiChevronUp, FiChevronDown } from 'react-icons/fi';
 import { useInvoicesList } from '../../store/useInvoicesList';
 import { TableSkeleton } from '../sharedComponents/Skeletons';
 
@@ -102,7 +102,7 @@ export default function InvoicesTable() {
   };
 
   if (loading) {
-    return <TableSkeleton rows={5} columns={9} />;
+    return <TableSkeleton rows={5} columns={8} />;
   }
 
   return (
@@ -159,15 +159,12 @@ export default function InvoicesTable() {
               <th className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium">
                 SALDO PENDIENTE
               </th>
-              <th className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium">
-                ACCIONES
-              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-100">
             {paginatedInvoices.length === 0 ? (
               <tr>
-                <td colSpan={9} className="px-4 py-8 text-center text-neutral-600">
+                <td colSpan={8} className="px-4 py-8 text-center text-neutral-600">
                   {searchTerm ? 'No se encontraron facturas' : 'No hay facturas registradas'}
                 </td>
               </tr>
@@ -185,30 +182,6 @@ export default function InvoicesTable() {
                   </td>
                   <td className="px-4 py-3 text-neutral-900 font-poppinsMedium">
                     {formatCurrency(invoice.remaining_payment || 0)}
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-2">
-                      <button 
-                        onClick={() => {
-                          // TODO: Implementar acción de ver detalles/pago
-                          console.log('Ver detalles/pago de factura:', invoice.id_invoice);
-                        }}
-                        className="p-2 rounded-full hover:bg-primary-50 hover:text-primary-600 transition"
-                        title="Ver detalles/pago"
-                      >
-                        <FiDollarSign className="h-5 w-5 text-neutral-600" />
-                      </button>
-                      <button 
-                        onClick={() => {
-                          // TODO: Implementar acción de ver información
-                          console.log('Ver información de factura:', invoice.id_invoice);
-                        }}
-                        className="p-2 rounded-full hover:bg-primary-50 hover:text-primary-600 transition"
-                        title="Ver información"
-                      >
-                        <FiInfo className="h-5 w-5 text-neutral-600" />
-                      </button>
-                    </div>
                   </td>
                 </tr>
               ))

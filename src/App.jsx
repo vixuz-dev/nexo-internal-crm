@@ -3,8 +3,11 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import ClientsList from "./pages/ClientsList";
+import ClientDetails from "./pages/ClientDetails";
 import Affiliates from "./pages/Affiliates";
+import AffiliateDetails from "./pages/AffiliateDetails";
 import OrdersList from "./pages/OrdersList";
+import OrderDetails from "./pages/OrderDetails";
 import InvoicesList from "./pages/InvoicesList";
 import CobranzaSummary from "./pages/CobranzaSummary";
 import Logout from "./pages/Logout";
@@ -34,6 +37,14 @@ function App() {
           }
         />
         <Route
+          path={ROUTES.CLIENTS_DETAILS}
+          element={
+            <PrivateRoute>
+              <ClientDetails />
+            </PrivateRoute>
+          }
+        />
+        <Route
           path={ROUTES.AFFILIATES}
           element={
             <PrivateRoute>
@@ -42,10 +53,26 @@ function App() {
           }
         />
         <Route
+          path={ROUTES.AFFILIATES_DETAILS}
+          element={
+            <PrivateRoute>
+              <AffiliateDetails />
+            </PrivateRoute>
+          }
+        />
+        <Route
           path={ROUTES.ORDERS_LIST}
           element={
             <PrivateRoute>
               <OrdersList />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={ROUTES.ORDERS_DETAILS}
+          element={
+            <PrivateRoute>
+              <OrderDetails />
             </PrivateRoute>
           }
         />

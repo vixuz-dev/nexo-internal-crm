@@ -4,11 +4,14 @@ export const ROUTES = {
   LOGOUT: '/logout',
   // Nuevas rutas organizadas
   CLIENTS_LIST: '/administrador/clientes/listado',
+  CLIENTS_DETAILS: '/administrador/clientes/:id_client',
   REQUESTS: '/administrador/solicitudes',
   AFFILIATES_ORDERS: '/afiliados/pedidos/listado',
   ORDERS_LIST: '/administrador/listado-de-pedidos',
+  ORDERS_DETAILS: '/administrador/listado-de-pedidos/detalle/:id_order',
   ROUTES: '/administrador/rutas',
   AFFILIATES: '/administrador/afiliados',
+  AFFILIATES_DETAILS: '/administrador/afiliados/:company_id',
   // Consultas (grupo)
   CONSULTAS_AUDIT: '/administrador/consultas/auditoria',
   CONSULTAS_FICHAS: '/administrador/consultas/fichas',

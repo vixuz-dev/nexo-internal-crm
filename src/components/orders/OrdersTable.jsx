@@ -1,7 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useOrdersList } from '../../store/useOrdersList';
 import { TableSkeleton } from '../sharedComponents/Skeletons';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { ROUTES } from '../../utils/routes';
 
 export default function OrdersTable() {
   const { 
@@ -14,6 +16,16 @@ export default function OrdersTable() {
     setCurrentPage,
     setLimit 
   } = useOrdersList();
+  const navigate = useNavigate();
+
+  // Función para navegar a la página de detalles del pedido
+  // Pasamos el objeto pedido completo por state para evitar llamadas adicionales a la API
+  const handleOrderClick = (order) => {
+    navigate(
+      ROUTES.ORDERS_DETAILS.replace(':id_order', order.id),
+      { state: { order } }
+    );
+  };
 
   if (loading) {
     return <TableSkeleton rows={10} columns={6} />;
@@ -84,7 +96,11 @@ export default function OrdersTable() {
               </tr>
             ) : (
               orders.map((order) => (
-                <tr key={order.id} className="hover:bg-neutral-50 transition">
+                <tr 
+                  key={order.id} 
+                  onClick={() => handleOrderClick(order)}
+                  className="hover:bg-highlight-50 transition cursor-pointer"
+                >
                   <td className="px-4 py-3 text-neutral-900 font-poppinsMedium">
                     {order.folio || '-'}
                   </td>

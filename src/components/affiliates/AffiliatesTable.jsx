@@ -1,14 +1,26 @@
 import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FiChevronUp, FiChevronDown } from 'react-icons/fi';
 import { useAffiliatesList } from '../../store/useAffiliatesList';
 import { TableSkeleton } from '../sharedComponents/Skeletons';
+import { ROUTES } from '../../utils/routes';
 
 export default function AffiliatesTable() {
   const { affiliates, loading, searchTerm } = useAffiliatesList();
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [sortColumn, setSortColumn] = useState('company_id');
   const [sortDirection, setSortDirection] = useState('asc');
+
+  // Función para navegar a la página de detalles del afiliado
+  // Pasamos el objeto afiliado completo por state para evitar llamadas adicionales a la API
+  const handleAffiliateClick = (affiliate) => {
+    navigate(
+      ROUTES.AFFILIATES_DETAILS.replace(':company_id', affiliate.company_id),
+      { state: { affiliate } }
+    );
+  };
 
   // Filtrar afiliados por búsqueda
   const filteredAffiliates = useMemo(() => {
@@ -113,7 +125,11 @@ export default function AffiliatesTable() {
               </tr>
             ) : (
               paginatedAffiliates.map((affiliate) => (
-                <tr key={affiliate.company_id} className="hover:bg-neutral-50 transition">
+                <tr 
+                  key={affiliate.company_id} 
+                  onClick={() => handleAffiliateClick(affiliate)}
+                  className="hover:bg-highlight-50 transition cursor-pointer"
+                >
                   <td className="px-4 py-3 text-neutral-900">{affiliate.company_id || '-'}</td>
                   <td className="px-4 py-3 text-neutral-900">{affiliate.legal_name || '-'}</td>
                   <td className="px-4 py-3 text-neutral-600">{affiliate.comercial_name || '-'}</td>

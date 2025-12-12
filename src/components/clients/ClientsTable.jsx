@@ -1,27 +1,39 @@
-import React, { useState, useMemo } from 'react';
-import { FiEye, FiDollarSign, FiChevronUp, FiChevronDown } from 'react-icons/fi';
-import { useClientsList } from '../../store/useClientsList';
-import { TableSkeleton } from '../sharedComponents/Skeletons';
-import ClientDetailsModal from './ClientDetailsModal';
+import React, { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { FiChevronUp, FiChevronDown } from "react-icons/fi";
+import { useClientsList } from "../../store/useClientsList";
+import { TableSkeleton } from "../sharedComponents/Skeletons";
+import { ROUTES } from "../../utils/routes";
 
 export default function ClientsTable() {
   const { clients, loading, searchTerm } = useClientsList();
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
-  const [sortColumn, setSortColumn] = useState('id_client');
-  const [sortDirection, setSortDirection] = useState('asc');
-  const [selectedClient, setSelectedClient] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [sortColumn, setSortColumn] = useState("id_client");
+  const [sortDirection, setSortDirection] = useState("asc");
+
+  // Función para navegar a la página de detalles del cliente opc 1
+  // const handleClientClick = (clientId) => {
+  //   navigate(ROUTES.CLIENTS_DETAILS.replace(':id_client', clientId));
+
+  // Pasamos el objeto cliente completo por state para evitar llamadas adicionales a la API opc 2
+  const handleClientClick = (client) => {
+    navigate(ROUTES.CLIENTS_DETAILS.replace(":id_client", client.id_client), {
+      state: { client },
+    });
+  };
 
   // Filtrar clientes por búsqueda
   const filteredClients = useMemo(() => {
     if (!searchTerm) return clients;
     const term = searchTerm.toLowerCase();
-    return clients.filter(client => 
-      client.name?.toLowerCase().includes(term) ||
-      client.id_client?.toString().includes(term) ||
-      client.city?.toLowerCase().includes(term) ||
-      client.zip_code?.toString().includes(term)
+    return clients.filter(
+      (client) =>
+        client.name?.toLowerCase().includes(term) ||
+        client.id_client?.toString().includes(term) ||
+        client.city?.toLowerCase().includes(term) ||
+        client.zip_code?.toString().includes(term)
     );
   }, [clients, searchTerm]);
 
@@ -31,13 +43,13 @@ export default function ClientsTable() {
     sorted.sort((a, b) => {
       let aVal = a[sortColumn];
       let bVal = b[sortColumn];
-      
-      if (typeof aVal === 'string') {
+
+      if (typeof aVal === "string") {
         aVal = aVal.toLowerCase();
-        bVal = (bVal || '').toLowerCase();
+        bVal = (bVal || "").toLowerCase();
       }
-      
-      if (sortDirection === 'asc') {
+
+      if (sortDirection === "asc") {
         return aVal > bVal ? 1 : -1;
       } else {
         return aVal < bVal ? 1 : -1;
@@ -55,22 +67,24 @@ export default function ClientsTable() {
 
   const handleSort = (column) => {
     if (sortColumn === column) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
     } else {
       setSortColumn(column);
-      setSortDirection('asc');
+      setSortDirection("asc");
     }
   };
 
   const SortIcon = ({ column }) => {
     if (sortColumn !== column) return null;
-    return sortDirection === 'asc' 
-      ? <FiChevronUp className="h-4 w-4 inline-block" />
-      : <FiChevronDown className="h-4 w-4 inline-block" />;
+    return sortDirection === "asc" ? (
+      <FiChevronUp className="h-4 w-4 inline-block" />
+    ) : (
+      <FiChevronDown className="h-4 w-4 inline-block" />
+    );
   };
 
   if (loading) {
-    return <TableSkeleton rows={5} columns={6} />;
+    return <TableSkeleton rows={5} columns={5} />;
   }
 
   return (
@@ -79,73 +93,75 @@ export default function ClientsTable() {
         <table className="min-w-full text-sm">
           <thead className="bg-neutral-50 border-b border-neutral-200">
             <tr>
-              <th 
+              <th
                 className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium cursor-pointer hover:bg-neutral-100 transition"
-                onClick={() => handleSort('id_client')}
+                onClick={() => handleSort("id_client")}
               >
                 <div className="flex items-center gap-2">
                   ID CLIENTE
                   <SortIcon column="id_client" />
                 </div>
               </th>
-              <th 
+              <th
                 className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium cursor-pointer hover:bg-neutral-100 transition"
-                onClick={() => handleSort('name')}
+                onClick={() => handleSort("name")}
               >
                 <div className="flex items-center gap-2">
                   NOMBRE
                   <SortIcon column="name" />
                 </div>
               </th>
-              <th className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium">MUNICIPIO</th>
-              <th className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium">CP</th>
-              <th className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium">ACTIVO</th>
-              <th className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium">ACCIONES</th>
+              <th className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium">
+                MUNICIPIO
+              </th>
+              <th className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium">
+                CP
+              </th>
+              <th className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium">
+                ACTIVO
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-100">
             {paginatedClients.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-neutral-600">
+                <td
+                  colSpan={5}
+                  className="px-4 py-8 text-center text-neutral-600"
+                >
                   No se encontraron clientes
                 </td>
               </tr>
             ) : (
               paginatedClients.map((client) => (
-                <tr key={client.id_client} className="hover:bg-neutral-50 transition">
-                  <td className="px-4 py-3 text-neutral-900">{client.id_client}</td>
-                  <td className="px-4 py-3 text-neutral-900">{client.name || '-'}</td>
-                  <td className="px-4 py-3 text-neutral-600">{client.city || '-'}</td>
-                  <td className="px-4 py-3 text-neutral-600">{client.zip_code || '-'}</td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-2">
-                      <span className={`text-sm ${client.status === 1 ? 'text-emerald-700' : 'text-neutral-600'}`}>
-                        {client.status === 1 ? 'Sí' : 'No'}
-                      </span>
-                    </div>
+                <tr
+                  key={client.id_client}
+                  onClick={() => handleClientClick(client)}
+                  className="hover:bg-highlight-50 transition cursor-pointer"
+                >
+                  <td className="px-4 py-3 text-neutral-900">
+                    {client.id_client}
+                  </td>
+                  <td className="px-4 py-3 text-neutral-900">
+                    {client.name || "-"}
+                  </td>
+                  <td className="px-4 py-3 text-neutral-600">
+                    {client.city || "-"}
+                  </td>
+                  <td className="px-4 py-3 text-neutral-600">
+                    {client.zip_code || "-"}
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <button 
-                        onClick={() => {
-                          setSelectedClient(client);
-                          setIsModalOpen(true);
-                        }}
-                        className="p-2 rounded-full hover:bg-primary-50 hover:text-primary-600 transition"
-                        title="Ver detalles"
+                      <span
+                        className={`text-sm ${
+                          client.status === 1
+                            ? "text-emerald-700"
+                            : "text-neutral-600"
+                        }`}
                       >
-                        <FiEye className="h-5 w-5 text-neutral-600" />
-                      </button>
-                      <button 
-                        onClick={() => {
-                          // TODO: Implementar acción de facturas
-                          console.log('Ver facturas del cliente:', client.id_client);
-                        }}
-                        className="p-2 rounded-full hover:bg-primary-50 hover:text-primary-600 transition"
-                        title="Ver facturas"
-                      >
-                        <FiDollarSign className="h-5 w-5 text-neutral-600" />
-                      </button>
+                        {client.status === 1 ? "Sí" : "No"}
+                      </span>
                     </div>
                   </td>
                 </tr>
@@ -160,7 +176,9 @@ export default function ClientsTable() {
         <div className="bg-neutral-50 border-t border-neutral-200 px-4 py-3">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <span className="text-sm text-neutral-600 font-poppinsRegular">Filas por página:</span>
+              <span className="text-sm text-neutral-600 font-poppinsRegular">
+                Filas por página:
+              </span>
               <select
                 value={itemsPerPage}
                 onChange={(e) => {
@@ -175,21 +193,26 @@ export default function ClientsTable() {
                 <option value={50}>50</option>
               </select>
             </div>
-            
+
             <div className="flex items-center gap-2">
               <span className="text-sm text-neutral-600 font-poppinsRegular">
-                {startIndex + 1}-{Math.min(endIndex, totalItems)} of {totalItems}
+                {startIndex + 1}-{Math.min(endIndex, totalItems)} of{" "}
+                {totalItems}
               </span>
               <div className="flex items-center gap-1">
                 <button
-                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(1, prev - 1))
+                  }
                   disabled={currentPage === 1}
                   className="p-2 rounded border border-neutral-300 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed transition"
                 >
                   <span className="text-neutral-700">‹</span>
                 </button>
                 <button
-                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+                  }
                   disabled={currentPage === totalPages}
                   className="p-2 rounded border border-neutral-300 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed transition"
                 >
@@ -200,17 +223,6 @@ export default function ClientsTable() {
           </div>
         </div>
       )}
-
-      {/* Modal de detalles del cliente */}
-      <ClientDetailsModal
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          setSelectedClient(null);
-        }}
-        client={selectedClient}
-      />
     </div>
   );
 }
-
