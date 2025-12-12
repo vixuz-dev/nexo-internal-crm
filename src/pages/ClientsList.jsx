@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { FiPlus } from 'react-icons/fi';
 import DashboardLayout from '../layouts/DashboardLayout';
 import { getClients } from '../api/clientsApi';
 import { useClientsList } from '../store/useClientsList';
 import ClientsSummaryCards from '../components/clients/ClientsSummaryCards';
 import SearchBar from '../components/sharedComponents/SearchBar';
 import ClientsTable from '../components/clients/ClientsTable';
-import ClientDetailsModal from '../components/clients/ClientDetailsModal';
+
 
 const ClientsList = () => {
   const { setClients, setLoading, setError, setSearchTerm, searchTerm, loading, error } = useClientsList();
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  
 
   // Cargar lista de clientes al ingresar a la página
   useEffect(() => {
@@ -55,13 +54,7 @@ const ClientsList = () => {
                 placeholder="Buscar por nombre, ID, municipio o código postal..."
               />
             </div>
-            <button 
-              onClick={() => setIsCreateModalOpen(true)}
-              className="w-full sm:w-auto flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-poppinsMedium"
-            >
-              <FiPlus className="h-5 w-5" />
-              Nuevo cliente
-            </button>
+            
           </div>
           
           {/* Tabla de clientes */}
@@ -72,13 +65,6 @@ const ClientsList = () => {
           ) : (
             <ClientsTable />
           )}
-
-          {/* Modal para crear nuevo cliente */}
-          <ClientDetailsModal
-            isOpen={isCreateModalOpen}
-            onClose={() => setIsCreateModalOpen(false)}
-            client={null}
-          />
         </div>
       </div>
     </DashboardLayout>

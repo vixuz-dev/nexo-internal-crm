@@ -12,9 +12,11 @@ export const useClientsList = create(persist(
     setLoading: (loading) => set({ loading }),
     setError: (error) => set({ error, loading: false }),
     setSearchTerm: (searchTerm) => set({ searchTerm }),
-    addClient: (newClient) => set((state) => ({
-      clients: [newClient, ...state.clients],
-    })),
+    // NOTA: addClient marcado para eliminación - solo se usa para agregar clientes nuevos al store
+    // Uso actual: Solo en src/components/clients/ClientDetailsModal.jsx (línea 14: import, línea 255: uso)
+    // addClient: (newClient) => set((state) => ({
+    //   clients: [newClient, ...state.clients],
+    // })),
     updateClientInList: (updatedClient) => set((state) => ({
       clients: state.clients.map(client => 
         client.id_client === updatedClient.id_client ? updatedClient : client

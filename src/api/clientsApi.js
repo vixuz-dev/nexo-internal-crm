@@ -21,29 +21,11 @@ export async function getClients() {
   }
 }
 
-export async function createClient(clientData) {
-  try {
-    const response = await axios.post(
-      `${API_BASE_URL}/clients`,
-      clientData,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          token: getCookie('accessToken'),
-        },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    const errMsg = error.response?.data?.message || 'Error al crear el cliente';
-    throw new Error(errMsg);
-  }
-}
 
 export async function updateClient(clientId, clientData) {
   try {
     const response = await axios.put(
-      `${API_BASE_URL}/clients/${clientId}`,
+      `${API_BASE_URL}/update/${clientId}`,
       clientData,
       {
         headers: {
