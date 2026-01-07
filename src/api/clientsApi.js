@@ -6,7 +6,7 @@ const API_BASE_URL = import.meta.env.VITE_APP_NEXO_API_URL;
 export async function getClients() {
   try {
     const response = await axios.get(
-      `${API_BASE_URL}/clients`,
+      `${API_BASE_URL}/web/clients/get_clients`,
       {
         headers: {
           'Content-Type': 'application/json',

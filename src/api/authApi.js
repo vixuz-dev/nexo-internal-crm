@@ -4,7 +4,7 @@ const API_BASE_URL = import.meta.env.VITE_APP_NEXO_API_URL;
 
 export async function login({ username, password }) {
   try {
-    const response = await axios.post(`${API_BASE_URL}/login`, {
+    const response = await axios.post(`${API_BASE_URL}/web/auth/login_web`, {
       username,
       password,
     }, {

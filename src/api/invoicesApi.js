@@ -5,8 +5,8 @@ const API_BASE_URL = import.meta.env.VITE_APP_NEXO_API_URL;
 
 export async function getInvoices() {
   try {
-    const response = await axios.get(
-      `${API_BASE_URL}/invoices`,
+    const response = await axios.post(
+      `${API_BASE_URL}/web/invoices`,
       {
         headers: {
           'Content-Type': 'application/json',

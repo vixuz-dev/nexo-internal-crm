@@ -4,7 +4,7 @@ export const ROUTES = {
   LOGOUT: '/logout',
   // Nuevas rutas organizadas
   CLIENTS_LIST: '/administrador/clientes/listado',
-  CLIENTS_DETAILS: '/administrador/clientes/:id_client',
+  CLIENTS_DETAILS: '/administrador/clientes/:client_id',
   REQUESTS: '/administrador/solicitudes',
   AFFILIATES_ORDERS: '/afiliados/pedidos/listado',
   ORDERS_LIST: '/administrador/listado-de-pedidos',

@@ -6,8 +6,8 @@ export default function ClientsSummaryCards() {
   const { clients, loading } = useClientsList();
 
   const totalClients = clients.length;
-  const activeClients = clients.filter(c => c.status === 1).length;
-  const inactiveClients = clients.filter(c => c.status === 0 || !c.status).length;
+  const activeClients = clients.filter(c => c.user_status === true).length;
+  const inactiveClients = clients.filter(c => c.user_status === false || !c.user_status).length;
 
   const formatNumber = (val) => {
     return Number(val || 0).toLocaleString('es-MX');

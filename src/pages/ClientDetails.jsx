@@ -6,7 +6,7 @@ import { useClientsList } from "../store/useClientsList";
 import { ROUTES } from "../utils/routes";
 
 const ClientDetails = () => {
-  const { id_client } = useParams();
+  const { client_id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
   const { clients } = useClientsList();
@@ -19,11 +19,11 @@ const ClientDetails = () => {
     }
 
     // 2. Si no está en state, buscar en el store usando el ID de la URL
-    const clientId = Number(id_client);
-    const foundClient = clients.find((c) => c.id_client === clientId);
+    const clientId = Number(client_id);
+    const foundClient = clients.find((c) => c.client_id === clientId);
 
     return foundClient || null;
-  }, [location.state, id_client, clients]);
+  }, [location.state, client_id, clients]);
 
   // Si no se encuentra el cliente, mostrar mensaje o redirigir
   if (!client) {
@@ -37,7 +37,7 @@ const ClientDetails = () => {
               </h2>
               <p className="text-neutral-600 font-poppinsRegular text-base md:text-lg mb-4">
                 No se pudo encontrar la información del cliente con ID:{" "}
-                {id_client}
+                {client_id}
               </p>
               <button
                 onClick={() => navigate(ROUTES.CLIENTS_LIST)}
@@ -65,7 +65,7 @@ const ClientDetails = () => {
                 </h2>
                 {/* Nombre e ID del cliente */}
                 <p className="text-neutral-600 font-poppinsRegular text-base md:text-lg">
-                  {client.name || "Sin nombre"} - ID: {client.id_client}
+                  {client.name || "Sin nombre"} - ID: {client.client_id}
                 </p>
               </div>
               {/* Botón de regresar */}

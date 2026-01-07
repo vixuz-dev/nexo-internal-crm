@@ -19,7 +19,7 @@ export const useClientsList = create(persist(
     // })),
     updateClientInList: (updatedClient) => set((state) => ({
       clients: state.clients.map(client => 
-        client.id_client === updatedClient.id_client ? updatedClient : client
+        client.client_id === updatedClient.client_id ? updatedClient : client
       ),
     })),
     clear: () => set({

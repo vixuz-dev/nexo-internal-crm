@@ -10,16 +10,16 @@ export default function ClientsTable() {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
-  const [sortColumn, setSortColumn] = useState("id_client");
+  const [sortColumn, setSortColumn] = useState("client_id");
   const [sortDirection, setSortDirection] = useState("asc");
 
   // Función para navegar a la página de detalles del cliente opc 1
   // const handleClientClick = (clientId) => {
-  //   navigate(ROUTES.CLIENTS_DETAILS.replace(':id_client', clientId));
+  //   navigate(ROUTES.CLIENTS_DETAILS.replace(':client_id', clientId));
 
   // Pasamos el objeto cliente completo por state para evitar llamadas adicionales a la API opc 2
   const handleClientClick = (client) => {
-    navigate(ROUTES.CLIENTS_DETAILS.replace(":id_client", client.id_client), {
+    navigate(ROUTES.CLIENTS_DETAILS.replace(":client_id", client.client_id), {
       state: { client },
     });
   };
@@ -31,7 +31,7 @@ export default function ClientsTable() {
     return clients.filter(
       (client) =>
         client.name?.toLowerCase().includes(term) ||
-        client.id_client?.toString().includes(term) ||
+        client.client_id?.toString().includes(term) ||
         client.city?.toLowerCase().includes(term) ||
         client.zip_code?.toString().includes(term)
     );
@@ -95,11 +95,11 @@ export default function ClientsTable() {
             <tr>
               <th
                 className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium cursor-pointer hover:bg-neutral-100 transition"
-                onClick={() => handleSort("id_client")}
+                onClick={() => handleSort("client_id")}
               >
                 <div className="flex items-center gap-2">
                   ID CLIENTE
-                  <SortIcon column="id_client" />
+                  <SortIcon column="client_id" />
                 </div>
               </th>
               <th
@@ -135,12 +135,12 @@ export default function ClientsTable() {
             ) : (
               paginatedClients.map((client) => (
                 <tr
-                  key={client.id_client}
+                  key={client.client_id}
                   onClick={() => handleClientClick(client)}
                   className="hover:bg-highlight-50 transition cursor-pointer"
                 >
                   <td className="px-4 py-3 text-neutral-900">
-                    {client.id_client}
+                    {client.client_id}
                   </td>
                   <td className="px-4 py-3 text-neutral-900">
                     {client.name || "-"}
@@ -155,12 +155,12 @@ export default function ClientsTable() {
                     <div className="flex items-center gap-2">
                       <span
                         className={`text-sm ${
-                          client.status === 1
+                          client.user_status === true
                             ? "text-emerald-700"
                             : "text-neutral-600"
                         }`}
                       >
-                        {client.status === 1 ? "Sí" : "No"}
+                        {client.user_status === true ? "Sí" : "No"}
                       </span>
                     </div>
                   </td>
