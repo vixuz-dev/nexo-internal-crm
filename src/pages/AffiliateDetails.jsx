@@ -6,7 +6,7 @@ import { useAffiliatesList } from "../store/useAffiliatesList";
 import { ROUTES } from "../utils/routes";
 
 const AffiliateDetails = () => {
-  const { company_id } = useParams();
+  const { affiliate_id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
   const { affiliates } = useAffiliatesList();
@@ -19,13 +19,13 @@ const AffiliateDetails = () => {
     }
 
     // 2. Si no está en state, buscar en el store usando el ID de la URL
-    const affiliateId = Number(company_id);
+    const affiliateId = Number(affiliate_id);
     const foundAffiliate = affiliates.find(
-      (a) => a.company_id === affiliateId
+      (a) => a.affiliate_id === affiliateId
     );
 
     return foundAffiliate || null;
-  }, [location.state, company_id, affiliates]);
+  }, [location.state, affiliate_id, affiliates]);
 
   // Si no se encuentra el afiliado, mostrar mensaje o redirigir
   if (!affiliate) {
@@ -39,7 +39,7 @@ const AffiliateDetails = () => {
               </h2>
               <p className="text-neutral-600 font-poppinsRegular text-base md:text-lg mb-4">
                 No se pudo encontrar la información del afiliado con ID:{" "}
-                {company_id}
+                {affiliate_id}
               </p>
               <button
                 onClick={() => navigate(ROUTES.AFFILIATES)}
@@ -69,7 +69,7 @@ const AffiliateDetails = () => {
                 <p className="text-neutral-600 font-poppinsRegular text-base md:text-lg">
                   Razón Social: {affiliate.legal_name || "Sin razón social"} - 
                   Nombre Comercial: {affiliate.comercial_name || "Sin nombre comercial"} - 
-                  ID: {affiliate.company_id}
+                  ID: {affiliate.affiliate_id}
                 </p>
               </div>
               {/* Botón de regresar */}

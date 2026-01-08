@@ -11,7 +11,7 @@ export const ROUTES = {
   ORDERS_DETAILS: '/administrador/listado-de-pedidos/detalle/:id_order',
   ROUTES: '/administrador/rutas',
   AFFILIATES: '/administrador/afiliados',
-  AFFILIATES_DETAILS: '/administrador/afiliados/:company_id',
+  AFFILIATES_DETAILS: '/administrador/afiliados/:affiliate_id',
   // Consultas (grupo)
   CONSULTAS_AUDIT: '/administrador/consultas/auditoria',
   CONSULTAS_FICHAS: '/administrador/consultas/fichas',

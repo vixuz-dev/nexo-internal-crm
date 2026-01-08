@@ -8,9 +8,9 @@ export default function InvoicesSummaryCards() {
 
   const { totalInvoices, paidInvoices, pendingInvoices, cancelledInvoices } = useMemo(() => {
     const total = invoices.length;
-    const paid = invoices.filter(invoice => invoice.status === 2).length;
-    const pending = invoices.filter(invoice => invoice.status === 1).length;
-    const cancelled = invoices.filter(invoice => invoice.status === 0 || invoice.status === null || invoice.status === undefined).length;
+    const paid = invoices.filter(invoice => invoice.invoice_status === 'paid').length;
+    const pending = invoices.filter(invoice => invoice.invoice_status === 'pending').length;
+    const cancelled = invoices.filter(invoice => invoice.invoice_status === 'cancelled' || !invoice.invoice_status).length;
     return { 
       totalInvoices: total, 
       paidInvoices: paid, 

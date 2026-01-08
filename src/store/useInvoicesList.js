@@ -7,7 +7,7 @@ export const useInvoicesList = create(persist(
     loading: false,
     error: null,
     searchTerm: '',
-    statusFilter: null, // null = todos, 1 = pendiente, 2 = pagada, 0 = cancelada
+    statusFilter: null, // null = todos, "pending" = pendiente, "paid" = pagada, "cancelled" = cancelada
     currentPage: 1,
     itemsPerPage: 5,
 

@@ -50,7 +50,6 @@ const LoginPage = () => {
       }
       if (response && response.body && response.body.token) {
         setCookie("accessToken", response.body.token);
-        console.log(response.body.token);
         setUser(response.body);
         localStorage.setItem("lastLogin", Date.now());
         setRedirecting(true);

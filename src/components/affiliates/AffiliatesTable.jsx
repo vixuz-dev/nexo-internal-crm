@@ -10,14 +10,14 @@ export default function AffiliatesTable() {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [sortColumn, setSortColumn] = useState('company_id');
+  const [sortColumn, setSortColumn] = useState('affiliate_id');
   const [sortDirection, setSortDirection] = useState('asc');
 
   // Función para navegar a la página de detalles del afiliado
   // Pasamos el objeto afiliado completo por state para evitar llamadas adicionales a la API
   const handleAffiliateClick = (affiliate) => {
     navigate(
-      ROUTES.AFFILIATES_DETAILS.replace(':company_id', affiliate.company_id),
+      ROUTES.AFFILIATES_DETAILS.replace(':affiliate_id', affiliate.affiliate_id),
       { state: { affiliate } }
     );
   };
@@ -29,7 +29,7 @@ export default function AffiliatesTable() {
     return affiliates.filter(affiliate => 
       affiliate.legal_name?.toLowerCase().includes(term) ||
       affiliate.comercial_name?.toLowerCase().includes(term) ||
-      affiliate.company_id?.toString().includes(term)
+      affiliate.affiliate_id?.toString().includes(term)
     );
   }, [affiliates, searchTerm]);
 
@@ -89,11 +89,11 @@ export default function AffiliatesTable() {
             <tr>
               <th 
                 className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium cursor-pointer hover:bg-neutral-100 transition"
-                onClick={() => handleSort('company_id')}
+                onClick={() => handleSort('affiliate_id')}
               >
                 <div className="flex items-center gap-2">
                   ID EMPRESA
-                  <SortIcon column="company_id" />
+                  <SortIcon column="affiliate_id" />
                 </div>
               </th>
               <th 
@@ -126,11 +126,11 @@ export default function AffiliatesTable() {
             ) : (
               paginatedAffiliates.map((affiliate) => (
                 <tr 
-                  key={affiliate.company_id} 
+                  key={affiliate.affiliate_id} 
                   onClick={() => handleAffiliateClick(affiliate)}
                   className="hover:bg-highlight-50 transition cursor-pointer"
                 >
-                  <td className="px-4 py-3 text-neutral-900">{affiliate.company_id || '-'}</td>
+                  <td className="px-4 py-3 text-neutral-900">{affiliate.affiliate_id || '-'}</td>
                   <td className="px-4 py-3 text-neutral-900">{affiliate.legal_name || '-'}</td>
                   <td className="px-4 py-3 text-neutral-600">{affiliate.comercial_name || '-'}</td>
                 </tr>

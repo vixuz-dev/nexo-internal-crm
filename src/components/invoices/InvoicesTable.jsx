@@ -5,7 +5,7 @@ import { TableSkeleton } from '../sharedComponents/Skeletons';
 
 export default function InvoicesTable() {
   const { invoices, loading, searchTerm, statusFilter, currentPage, itemsPerPage, setCurrentPage, setItemsPerPage } = useInvoicesList();
-  const [sortColumn, setSortColumn] = useState('id_invoice');
+  const [sortColumn, setSortColumn] = useState('invoice_id');
   const [sortDirection, setSortDirection] = useState('desc');
 
   // Filtrar facturas por búsqueda y estado
@@ -14,16 +14,17 @@ export default function InvoicesTable() {
 
     // Filtrar por estado
     if (statusFilter !== null) {
-      filtered = filtered.filter(invoice => invoice.status === statusFilter);
+      filtered = filtered.filter(invoice => invoice.invoice_status === statusFilter);
     }
 
     // Filtrar por búsqueda
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       filtered = filtered.filter(invoice => 
-        invoice.id_invoice?.toString().includes(term) ||
-        invoice.name_client?.toLowerCase().includes(term) ||
-        invoice.type_serial?.toLowerCase().includes(term)
+        invoice.invoice_id?.toString().includes(term)
+        // Campos comentados temporalmente - no vienen en la nueva respuesta del backend
+        // invoice.name_client?.toLowerCase().includes(term) ||
+        // invoice.type_serial?.toLowerCase().includes(term)
       );
     }
 
@@ -89,13 +90,13 @@ export default function InvoicesTable() {
     return `${day}-${month}-${year}`;
   };
 
-  const getStatusBadge = (status) => {
-    // status es numérico: 1 = Pendiente, 2 = Saldada, 0 o null = Cancelada
-    if (status === 2) {
-      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-emerald-100 text-emerald-800">Saldada</span>;
-    } else if (status === 0 || status === null || status === undefined) {
+  const getStatusBadge = (invoice_status) => {
+    // invoice_status es string: "paid" = Pagada, "pending" = Pendiente, "cancelled" = Cancelada
+    if (invoice_status === 'paid') {
+      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-emerald-100 text-emerald-800">Pagada</span>;
+    } else if (invoice_status === 'cancelled') {
       return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-rose-100 text-rose-800">Cancelada</span>;
-    } else if (status === 1) {
+    } else if (invoice_status === 'pending') {
       return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-amber-100 text-amber-800">Pendiente</span>;
     }
     return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-neutral-100 text-neutral-800">-</span>;
@@ -113,14 +114,15 @@ export default function InvoicesTable() {
             <tr>
               <th 
                 className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium cursor-pointer hover:bg-neutral-100 transition"
-                onClick={() => handleSort('id_invoice')}
+                onClick={() => handleSort('invoice_id')}
               >
                 <div className="flex items-center gap-2">
                   ID
-                  <SortIcon column="id_invoice" />
+                  <SortIcon column="invoice_id" />
                 </div>
               </th>
-              <th 
+              {/* Campos comentados temporalmente - no vienen en la nueva respuesta del backend */}
+              {/* <th 
                 className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium cursor-pointer hover:bg-neutral-100 transition"
                 onClick={() => handleSort('name_client')}
               >
@@ -131,7 +133,7 @@ export default function InvoicesTable() {
               </th>
               <th className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium">
                 TIPO DE PAGO
-              </th>
+              </th> */}
               <th 
                 className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium cursor-pointer hover:bg-neutral-100 transition"
                 onClick={() => handleSort('created_at')}
@@ -142,15 +144,15 @@ export default function InvoicesTable() {
                 </div>
               </th>
               <th className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium">
-                FECHA DE EXPIRACIÓN
+                FECHA DE FINALIZACIÓN
               </th>
               <th 
                 className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium cursor-pointer hover:bg-neutral-100 transition"
-                onClick={() => handleSort('total_amount')}
+                onClick={() => handleSort('total')}
               >
                 <div className="flex items-center gap-2">
                   CANTIDAD
-                  <SortIcon column="total_amount" />
+                  <SortIcon column="total" />
                 </div>
               </th>
               <th className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium">
@@ -164,21 +166,22 @@ export default function InvoicesTable() {
           <tbody className="divide-y divide-neutral-100">
             {paginatedInvoices.length === 0 ? (
               <tr>
-                <td colSpan={8} className="px-4 py-8 text-center text-neutral-600">
+                <td colSpan={6} className="px-4 py-8 text-center text-neutral-600">
                   {searchTerm ? 'No se encontraron facturas' : 'No hay facturas registradas'}
                 </td>
               </tr>
             ) : (
               paginatedInvoices.map((invoice) => (
-                <tr key={invoice.id_invoice} className="hover:bg-neutral-50 transition">
-                  <td className="px-4 py-3 text-neutral-900">{invoice.id_invoice || '-'}</td>
-                  <td className="px-4 py-3 text-neutral-900">{invoice.name_client || '-'}</td>
-                  <td className="px-4 py-3 text-neutral-600">{(invoice.type_payment || '').toUpperCase() || '-'}</td>
+                <tr key={invoice.invoice_id} className="hover:bg-neutral-50 transition">
+                  <td className="px-4 py-3 text-neutral-900">{invoice.invoice_id || '-'}</td>
+                  {/* Campos comentados temporalmente - no vienen en la nueva respuesta del backend */}
+                  {/* <td className="px-4 py-3 text-neutral-900">{invoice.name_client || '-'}</td>
+                  <td className="px-4 py-3 text-neutral-600">{(invoice.type_payment || '').toUpperCase() || '-'}</td> */}
                   <td className="px-4 py-3 text-neutral-600">{formatDate(invoice.created_at)}</td>
-                  <td className="px-4 py-3 text-neutral-600">{formatDate(invoice.expiration_date)}</td>
-                  <td className="px-4 py-3 text-neutral-900 font-poppinsMedium">{formatCurrency(invoice.total_amount || 0)}</td>
+                  <td className="px-4 py-3 text-neutral-600">{formatDate(invoice.finished_at)}</td>
+                  <td className="px-4 py-3 text-neutral-900 font-poppinsMedium">{formatCurrency(invoice.total || 0)}</td>
                   <td className="px-4 py-3">
-                    {getStatusBadge(invoice.status)}
+                    {getStatusBadge(invoice.invoice_status)}
                   </td>
                   <td className="px-4 py-3 text-neutral-900 font-poppinsMedium">
                     {formatCurrency(invoice.remaining_payment || 0)}
