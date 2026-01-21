@@ -40,9 +40,9 @@ export default function HomeLastInvoicesTable() {
                   <td className="px-4 py-3 text-neutral-600">{row.client || '-'}</td> 
                   <td className="px-4 py-3">
                     <span className={`px-2 py-1 rounded text-xs ${
-                      row.status === 'Pagada' ? 'bg-emerald-100 text-emerald-700' : 
-                      row.status === 'Pendiente' ? 'bg-amber-100 text-amber-700' : 
-                      'bg-rose-100 text-rose-700'
+                      row.status === 'Pagada' ? 'bg-emerald-50 text-emerald-700' : 
+                      row.status === 'Pendiente' ? 'bg-amber-50 text-amber-700' : 
+                      'bg-rose-50 text-rose-700'
                     }`}>
                       {row.status === 'Pagada' ? 'Pagada' : row.status === 'Pendiente' ? 'Pendiente' : 'Cancelada'}
                     </span>

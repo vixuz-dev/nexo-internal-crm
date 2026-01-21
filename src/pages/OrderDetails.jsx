@@ -85,13 +85,13 @@ const OrderDetails = () => {
   const getStatusBadge = (status) => {
     const statusLower = status?.toLowerCase() || '';
     if (statusLower === 'pendiente') {
-      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-amber-100 text-amber-800">Pendiente</span>;
+      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-amber-50 text-amber-800">Pendiente</span>;
     } else if (statusLower === 'seminuevo') {
-      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-blue-100 text-blue-800">Seminuevo</span>;
+      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-blue-50 text-blue-800">Seminuevo</span>;
     } else if (statusLower === 'completado') {
-      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-emerald-100 text-emerald-800">Completado</span>;
+      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-emerald-50 text-emerald-800">Completado</span>;
     }
-    return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-neutral-100 text-neutral-800">{status || '-'}</span>;
+    return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-neutral-50 text-neutral-800">{status || '-'}</span>;
   };
 
   return (
@@ -214,7 +214,7 @@ const OrderDetails = () => {
           {/* Tabla de productos */}
           <div className="rounded-xl bg-white border border-neutral-200 overflow-hidden">
             <div className="px-6 py-4 border-b border-neutral-200">
-              <h3 className="text-lg md:text-xl font-poppinsBold text-neutral-900">
+              <h3 className="text-lg md:text-xl font-poppinsBold font-bold text-neutral-900">
                 Productos del pedido
               </h3>
             </div>

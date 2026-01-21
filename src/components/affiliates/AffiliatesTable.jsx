@@ -13,12 +13,9 @@ export default function AffiliatesTable() {
   const [sortColumn, setSortColumn] = useState('affiliate_id');
   const [sortDirection, setSortDirection] = useState('asc');
 
-  // Función para navegar a la página de detalles del afiliado
-  // Pasamos el objeto afiliado completo por state para evitar llamadas adicionales a la API
   const handleAffiliateClick = (affiliate) => {
     navigate(
-      ROUTES.AFFILIATES_DETAILS.replace(':affiliate_id', affiliate.affiliate_id),
-      { state: { affiliate } }
+      ROUTES.AFFILIATES_DETAILS.replace(':affiliate_id', affiliate.affiliate_id)
     );
   };
 

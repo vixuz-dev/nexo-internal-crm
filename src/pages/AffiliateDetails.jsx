@@ -1,31 +1,37 @@
 import React, { useMemo } from "react";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
-import { FiArrowLeft } from "react-icons/fi";
+import { useParams, useNavigate } from "react-router-dom";
+import { 
+  FiArrowLeft, 
+  FiBriefcase, 
+  FiUser, 
+  FiCheckCircle, 
+  FiXCircle,
+  FiHash,
+  FiFileText,
+  FiTag,
+  FiInfo,
+  FiPhone,
+  FiMail,
+  FiImage,
+  FiClock
+} from "react-icons/fi";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { useAffiliatesList } from "../store/useAffiliatesList";
 import { ROUTES } from "../utils/routes";
 
 const AffiliateDetails = () => {
   const { affiliate_id } = useParams();
-  const location = useLocation();
   const navigate = useNavigate();
   const { affiliates } = useAffiliatesList();
 
-  // Estrategia híbrida: obtener afiliado del state (navegación desde tabla) o del store (recarga/acceso directo)
+  // Obtener afiliado del store usando el ID de la URL
   const affiliate = useMemo(() => {
-    // 1. Intentar obtener del state (cuando navegas desde AffiliatesTable)
-    if (location.state?.affiliate) {
-      return location.state.affiliate;
-    }
-
-    // 2. Si no está en state, buscar en el store usando el ID de la URL
     const affiliateId = Number(affiliate_id);
     const foundAffiliate = affiliates.find(
       (a) => a.affiliate_id === affiliateId
     );
-
     return foundAffiliate || null;
-  }, [location.state, affiliate_id, affiliates]);
+  }, [affiliate_id, affiliates]);
 
   // Si no se encuentra el afiliado, mostrar mensaje o redirigir
   if (!affiliate) {
@@ -54,23 +60,66 @@ const AffiliateDetails = () => {
     );
   }
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "-";
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString;
+    return date.toLocaleDateString("es-MX", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+  };
+
   return (
     <DashboardLayout>
       <div className="min-h-screen bg-neutral-200 px-4 py-8">
         <div className="w-full max-w-7xl mx-auto">
           {/* Encabezado con título, razón social, nombre comercial y botón de regresar */}
-          <div className="mb-6 mt-4 rounded-xl bg-white border border-neutral-200 p-6">
+          <div className="mb-6 mt-4 rounded-xl bg-primary-50 border border-primary-200 p-6">
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1">
-                <h2 className="text-2xl md:text-3xl font-poppinsMedium text-neutral-900 mb-2">
+                <h2 className="text-2xl md:text-3xl font-poppinsBold font-semibold text-neutral-900 mb-4 flex items-center gap-2">
+                  <FiBriefcase className="h-6 w-6 text-primary-600" />
                   Detalle del afiliado
                 </h2>
-                {/* Razón social, nombre comercial e ID */}
-                <p className="text-neutral-600 font-poppinsRegular text-base md:text-lg">
-                  Razón Social: {affiliate.legal_name || "Sin razón social"} - 
-                  Nombre Comercial: {affiliate.comercial_name || "Sin nombre comercial"} - 
-                  ID: {affiliate.affiliate_id}
-                </p>
+                {/* Información resumida del afiliado */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="flex items-center gap-2 text-neutral-700">
+                    <FiFileText className="h-5 w-5 text-primary-600 flex-shrink-0" />
+                    <div>
+                      <p className="text-xs text-neutral-600 font-poppinsMedium">Razón Social</p>
+                      <p className="text-sm font-poppinsBold text-neutral-900">{affiliate.legal_name || "Sin razón social"}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 text-neutral-700">
+                    <FiTag className="h-5 w-5 text-primary-600 flex-shrink-0" />
+                    <div>
+                      <p className="text-xs text-neutral-600 font-poppinsMedium">Nombre Comercial</p>
+                      <p className="text-sm font-poppinsBold text-neutral-900">{affiliate.comercial_name || "Sin nombre comercial"}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 text-neutral-700">
+                    <FiHash className="h-5 w-5 text-primary-600 flex-shrink-0" />
+                    <div>
+                      <p className="text-xs text-neutral-600 font-poppinsMedium">ID</p>
+                      <p className="text-sm font-poppinsBold text-neutral-900">{affiliate.affiliate_id}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 text-neutral-700">
+                    {affiliate.user_status === true ? (
+                      <FiCheckCircle className="h-5 w-5 text-emerald-600 flex-shrink-0" />
+                    ) : (
+                      <FiXCircle className="h-5 w-5 text-rose-600 flex-shrink-0" />
+                    )}
+                    <div>
+                      <p className="text-xs text-neutral-600 font-poppinsMedium">Estado</p>
+                      <p className={`text-sm font-poppinsBold ${affiliate.user_status === true ? "text-emerald-700" : "text-rose-700"}`}>
+                        {affiliate.user_status === true ? "Activo" : "Inactivo"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
               {/* Botón de regresar */}
               <button
@@ -84,17 +133,159 @@ const AffiliateDetails = () => {
             </div>
           </div>
 
-          {/* Contenido - Se agregará el template más adelante */}
-          <div className="rounded-xl bg-white border border-neutral-200 p-6">
-            <p className="text-neutral-600 font-poppinsRegular">
-              La información del afiliado se mostrará aquí.
-            </p>
-            {/* Debug: mostrar que tenemos los datos del afiliado */}
-            <div className="mt-4 p-4 bg-neutral-50 rounded-lg">
-              <p className="text-xs text-neutral-500 font-poppinsRegular">
-                Debug: Afiliado obtenido{" "}
-                {location.state?.affiliate ? "desde state" : "desde store"}
-              </p>
+          {/* Contenido principal con secciones */}
+          <div className="space-y-6">
+            {/* Sección 1: Información Legal/Empresarial */}
+            <div className="rounded-xl bg-secondary-50 border border-secondary-200 p-6">
+              <h3 className="text-lg md:text-xl font-poppinsBold font-bold text-neutral-900 mb-4 flex items-center gap-2">
+                <FiFileText className="h-5 w-5 text-secondary-600" />
+                Información Legal/Empresarial
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex items-start gap-3">
+                  <FiFileText className="h-5 w-5 text-secondary-600 flex-shrink-0 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-sm text-neutral-600 font-poppinsMedium mb-1">RFC</p>
+                    <p className="text-neutral-900 font-poppinsRegular">{affiliate.rfc || "-"}</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <FiBriefcase className="h-5 w-5 text-secondary-600 flex-shrink-0 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-sm text-neutral-600 font-poppinsMedium mb-1">Tipo de empresa</p>
+                    <p className="text-neutral-900 font-poppinsRegular">{affiliate.company_type || "-"}</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <FiTag className="h-5 w-5 text-secondary-600 flex-shrink-0 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-sm text-neutral-600 font-poppinsMedium mb-1">Sector</p>
+                    <p className="text-neutral-900 font-poppinsRegular">{affiliate.sector || "-"}</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  {affiliate.is_constituded === true ? (
+                    <FiCheckCircle className="h-5 w-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                  ) : (
+                    <FiXCircle className="h-5 w-5 text-rose-600 flex-shrink-0 mt-0.5" />
+                  )}
+                  <div className="flex-1">
+                    <p className="text-sm text-neutral-600 font-poppinsMedium mb-1">Constituida</p>
+                    <p className={`font-poppinsRegular ${affiliate.is_constituded === true ? "text-emerald-700" : "text-rose-700"}`}>
+                      {affiliate.is_constituded === true ? "Sí" : "No"}
+                    </p>
+                  </div>
+                </div>
+                {affiliate.description && (
+                  <div className="md:col-span-2 flex items-start gap-3">
+                    <FiInfo className="h-5 w-5 text-secondary-600 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1">
+                      <p className="text-sm text-neutral-600 font-poppinsMedium mb-1">Descripción</p>
+                      <p className="text-neutral-900 font-poppinsRegular">{affiliate.description}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Sección 2: Información de Contacto */}
+            <div className="rounded-xl bg-highlight-50 border border-highlight-200 p-6">
+              <h3 className="text-lg md:text-xl font-poppinsBold font-bold text-neutral-900 mb-4 flex items-center gap-2">
+                <FiUser className="h-5 w-5 text-highlight-600" />
+                Información de Contacto
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex items-start gap-3">
+                  <FiUser className="h-5 w-5 text-highlight-600 flex-shrink-0 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-sm text-neutral-600 font-poppinsMedium mb-1">Nombre del titular</p>
+                    <p className="text-neutral-900 font-poppinsRegular">{affiliate.titular_name || "-"}</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <FiMail className="h-5 w-5 text-highlight-600 flex-shrink-0 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-sm text-neutral-600 font-poppinsMedium mb-1">Email</p>
+                    <p className="text-neutral-900 font-poppinsRegular">{affiliate.email || "-"}</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <FiPhone className="h-5 w-5 text-highlight-600 flex-shrink-0 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-sm text-neutral-600 font-poppinsMedium mb-1">Teléfono domicilio</p>
+                    <p className="text-neutral-900 font-poppinsRegular">{affiliate.home_phone || "-"}</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <FiPhone className="h-5 w-5 text-highlight-600 flex-shrink-0 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-sm text-neutral-600 font-poppinsMedium mb-1">Teléfono personal</p>
+                    <p className="text-neutral-900 font-poppinsRegular">{affiliate.personal_phone || "-"}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Sección 3 y 4: Información Adicional e Información del Sistema (en 2 columnas) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Sección 3: Información Adicional */}
+              <div className="rounded-xl bg-emerald-50 border border-emerald-200 p-6">
+                <h3 className="text-lg md:text-xl font-poppinsBold font-bold text-neutral-900 mb-4 flex items-center gap-2">
+                  <FiInfo className="h-5 w-5 text-emerald-600" />
+                  Información Adicional
+                </h3>
+                <div className="grid grid-cols-1 gap-4">
+                  {affiliate.affiliate_profile_info && (
+                    <div className="flex items-start gap-3">
+                      <FiInfo className="h-5 w-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="text-sm text-neutral-600 font-poppinsMedium mb-1">Perfil del afiliado</p>
+                        <p className="text-neutral-900 font-poppinsRegular">{affiliate.affiliate_profile_info}</p>
+                      </div>
+                    </div>
+                  )}
+                  {affiliate.logo_url && (
+                    <div className="flex items-start gap-3">
+                      <FiImage className="h-5 w-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="text-sm text-neutral-600 font-poppinsMedium mb-1">Logo</p>
+                        <img 
+                          src={affiliate.logo_url} 
+                          alt={affiliate.comercial_name || "Logo"}
+                          className="w-24 h-24 object-contain rounded-lg border border-neutral-200 bg-white p-2"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                          }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Sección 4: Información del Sistema */}
+              <div className="rounded-xl bg-secondary-50 border border-secondary-200 p-6">
+                <h3 className="text-lg md:text-xl font-poppinsBold font-bold text-neutral-900 mb-4 flex items-center gap-2">
+                  <FiClock className="h-5 w-5 text-secondary-600" />
+                  Información del Sistema
+                </h3>
+                <div className="grid grid-cols-1 gap-4">
+                  <div className="flex items-start gap-3">
+                    <FiHash className="h-5 w-5 text-secondary-600 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1">
+                      <p className="text-sm text-neutral-600 font-poppinsMedium mb-1">ID del afiliado</p>
+                      <p className="text-neutral-900 font-poppinsRegular">{affiliate.affiliate_id}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <FiClock className="h-5 w-5 text-secondary-600 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1">
+                      <p className="text-sm text-neutral-600 font-poppinsMedium mb-1">Fecha de registro</p>
+                      <p className="text-neutral-900 font-poppinsRegular">{formatDate(affiliate.created_at)}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

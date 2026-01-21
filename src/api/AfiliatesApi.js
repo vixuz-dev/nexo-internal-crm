@@ -5,9 +5,8 @@ const API_BASE_URL = import.meta.env.VITE_APP_NEXO_API_URL;
 
 export async function getCompaniesCatalog() {
   try {
-    const response = await axios.post(
-      `${API_BASE_URL}/web/companies/get_companies_catalog`,
-      {},
+    const response = await axios.get(
+      `${API_BASE_URL}/web/affiliates/get_affiliates`,
       {
         headers: {
           "Content-Type": "application/json",

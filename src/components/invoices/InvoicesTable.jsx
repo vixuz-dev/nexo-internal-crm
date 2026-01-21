@@ -21,10 +21,8 @@ export default function InvoicesTable() {
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       filtered = filtered.filter(invoice => 
-        invoice.invoice_id?.toString().includes(term)
-        // Campos comentados temporalmente - no vienen en la nueva respuesta del backend
-        // invoice.name_client?.toLowerCase().includes(term) ||
-        // invoice.type_serial?.toLowerCase().includes(term)
+        invoice.invoice_id?.toString().includes(term) ||
+        invoice.name?.toLowerCase().includes(term)
       );
     }
 
@@ -77,7 +75,7 @@ export default function InvoicesTable() {
 
   const formatCurrency = (amount) => {
     const num = Number(amount || 0);
-    return num.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return num.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
   };
 
   const formatDate = (dateString) => {
@@ -91,15 +89,15 @@ export default function InvoicesTable() {
   };
 
   const getStatusBadge = (invoice_status) => {
-    // invoice_status es string: "paid" = Pagada, "pending" = Pendiente, "cancelled" = Cancelada
-    if (invoice_status === 'paid') {
-      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-emerald-100 text-emerald-800">Pagada</span>;
-    } else if (invoice_status === 'cancelled') {
-      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-rose-100 text-rose-800">Cancelada</span>;
-    } else if (invoice_status === 'pending') {
-      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-amber-100 text-amber-800">Pendiente</span>;
+    
+    if (invoice_status === 'Pagada') {
+      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-emerald-50 text-emerald-800">Pagada</span>;
+    } else if (invoice_status === 'Cancelada') {
+      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-rose-50 text-rose-800">Cancelada</span>;
+    } else if (invoice_status === 'Pendiente') {
+      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-amber-50 text-amber-800">Pendiente</span>;
     }
-    return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-neutral-100 text-neutral-800">-</span>;
+    return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-neutral-50 text-neutral-800">-</span>;
   };
 
   if (loading) {
@@ -121,19 +119,15 @@ export default function InvoicesTable() {
                   <SortIcon column="invoice_id" />
                 </div>
               </th>
-              {/* Campos comentados temporalmente - no vienen en la nueva respuesta del backend */}
-              {/* <th 
+              <th 
                 className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium cursor-pointer hover:bg-neutral-100 transition"
-                onClick={() => handleSort('name_client')}
+                onClick={() => handleSort('name')}
               >
                 <div className="flex items-center gap-2">
                   CLIENTE
-                  <SortIcon column="name_client" />
+                  <SortIcon column="name" />
                 </div>
               </th>
-              <th className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium">
-                TIPO DE PAGO
-              </th> */}
               <th 
                 className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium cursor-pointer hover:bg-neutral-100 transition"
                 onClick={() => handleSort('created_at')}
@@ -166,7 +160,7 @@ export default function InvoicesTable() {
           <tbody className="divide-y divide-neutral-100">
             {paginatedInvoices.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-neutral-600">
+                <td colSpan={7} className="px-4 py-8 text-center text-neutral-600">
                   {searchTerm ? 'No se encontraron facturas' : 'No hay facturas registradas'}
                 </td>
               </tr>
@@ -174,9 +168,7 @@ export default function InvoicesTable() {
               paginatedInvoices.map((invoice) => (
                 <tr key={invoice.invoice_id} className="hover:bg-neutral-50 transition">
                   <td className="px-4 py-3 text-neutral-900">{invoice.invoice_id || '-'}</td>
-                  {/* Campos comentados temporalmente - no vienen en la nueva respuesta del backend */}
-                  {/* <td className="px-4 py-3 text-neutral-900">{invoice.name_client || '-'}</td>
-                  <td className="px-4 py-3 text-neutral-600">{(invoice.type_payment || '').toUpperCase() || '-'}</td> */}
+                  <td className="px-4 py-3 text-neutral-900">{invoice.name || '-'}</td>
                   <td className="px-4 py-3 text-neutral-600">{formatDate(invoice.created_at)}</td>
                   <td className="px-4 py-3 text-neutral-600">{formatDate(invoice.finished_at)}</td>
                   <td className="px-4 py-3 text-neutral-900 font-poppinsMedium">{formatCurrency(invoice.total || 0)}</td>

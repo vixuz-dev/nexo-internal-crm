@@ -18,8 +18,6 @@ export default function OrdersTable() {
   } = useOrdersList();
   const navigate = useNavigate();
 
-  // Función para navegar a la página de detalles del pedido
-  // El pedido se obtiene del store usando el ID de la URL
   const handleOrderClick = (order) => {
     navigate(
       ROUTES.ORDERS_DETAILS.replace(':id_order', order.orderId)
