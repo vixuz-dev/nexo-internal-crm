@@ -13,15 +13,10 @@ export default function ClientsTable() {
   const [sortColumn, setSortColumn] = useState("client_id");
   const [sortDirection, setSortDirection] = useState("asc");
 
-  // Función para navegar a la página de detalles del cliente opc 1
-  // const handleClientClick = (clientId) => {
-  //   navigate(ROUTES.CLIENTS_DETAILS.replace(':client_id', clientId));
-
-  // Pasamos el objeto cliente completo por state para evitar llamadas adicionales a la API opc 2
+  // Función para navegar a la página de detalles del cliente
+  // El cliente se obtiene del store usando el ID de la URL
   const handleClientClick = (client) => {
-    navigate(ROUTES.CLIENTS_DETAILS.replace(":client_id", client.client_id), {
-      state: { client },
-    });
+    navigate(ROUTES.CLIENTS_DETAILS.replace(":client_id", client.client_id));
   };
 
   // Filtrar clientes por búsqueda

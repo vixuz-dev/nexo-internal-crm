@@ -33,20 +33,18 @@ export default function HomeLastInvoicesTable() {
               <tr><td className="px-4 py-4" colSpan={5}>Sin registros</td></tr>
             ) : (
               data.slice(0, 10).map((row) => (
-                <tr key={row.invoice_id} className="border-t border-neutral-200">
-                  <td className="px-4 py-3 text-neutral-800">{row.invoice_id}</td>
-                  <td className="px-4 py-3 text-neutral-600">{new Date(row.created_at).toLocaleString()}</td>
-                  <td className="px-4 py-3 text-neutral-800">{Number(row.total).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })}</td>
-                  {/* Campo comentado temporalmente - no viene en la nueva respuesta del backend */}
-                  {/* <td className="px-4 py-3 text-neutral-600">{row.client_name || row.clientName || row.customer_name || row.customerName || row.client_full_name || row.clientFullName || row.client || '-'}</td> */}
-                  <td className="px-4 py-3 text-neutral-600">-</td>
+                <tr key={row.invoiceId} className="border-t border-neutral-200">
+                  <td className="px-4 py-3 text-neutral-800">{row.invoiceId}</td>
+                  <td className="px-4 py-3 text-neutral-600">{new Date(row.createdAt).toLocaleString()}</td>
+                  <td className="px-4 py-3 text-neutral-800">{Number(row.totalAmount).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })}</td>
+                  <td className="px-4 py-3 text-neutral-600">{row.client || '-'}</td> 
                   <td className="px-4 py-3">
                     <span className={`px-2 py-1 rounded text-xs ${
-                      row.invoice_status === 'paid' ? 'bg-emerald-100 text-emerald-700' : 
-                      row.invoice_status === 'pending' ? 'bg-amber-100 text-amber-700' : 
+                      row.status === 'Pagada' ? 'bg-emerald-100 text-emerald-700' : 
+                      row.status === 'Pendiente' ? 'bg-amber-100 text-amber-700' : 
                       'bg-rose-100 text-rose-700'
                     }`}>
-                      {row.invoice_status === 'paid' ? 'Pagada' : row.invoice_status === 'pending' ? 'Pendiente' : 'Cancelada'}
+                      {row.status === 'Pagada' ? 'Pagada' : row.status === 'Pendiente' ? 'Pendiente' : 'Cancelada'}
                     </span>
                   </td>
                 </tr>

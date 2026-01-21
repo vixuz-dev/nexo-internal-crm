@@ -19,11 +19,10 @@ export default function OrdersTable() {
   const navigate = useNavigate();
 
   // Función para navegar a la página de detalles del pedido
-  // Pasamos el objeto pedido completo por state para evitar llamadas adicionales a la API
+  // El pedido se obtiene del store usando el ID de la URL
   const handleOrderClick = (order) => {
     navigate(
-      ROUTES.ORDERS_DETAILS.replace(':id_order', order.id),
-      { state: { order } }
+      ROUTES.ORDERS_DETAILS.replace(':id_order', order.orderId)
     );
   };
 
@@ -97,7 +96,7 @@ export default function OrdersTable() {
             ) : (
               orders.map((order) => (
                 <tr 
-                  key={order.id} 
+                  key={order.orderId} 
                   onClick={() => handleOrderClick(order)}
                   className="hover:bg-highlight-50 transition cursor-pointer"
                 >
@@ -111,13 +110,17 @@ export default function OrdersTable() {
                     {formatDate(order.date)}
                   </td>
                   <td className="px-4 py-3 text-neutral-600">
-                    {order.quantity || 0}
+                    {/* Campo temporalmente comentado - pendiente de backend */}
+                    {/* {order.quantity || 0} */}
+                    {order.products?.length || 0}
                   </td>
                   <td className="px-4 py-3 text-neutral-900 font-poppinsMedium">
                     {formatCurrency(order.total)}
                   </td>
                   <td className="px-4 py-3">
-                    {getStatusBadge(order.status)}
+                    {/* Campo temporalmente comentado - pendiente de backend */}
+                    {/* {getStatusBadge(order.status)} */}
+                    <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-neutral-100 text-neutral-800">-</span>
                   </td>
                 </tr>
               ))
