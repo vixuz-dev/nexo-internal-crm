@@ -13,13 +13,14 @@ export const useOrdersList = create(persist(
     loading: false,
     error: null,
 
-    setOrders: (data) => set({ 
-      orders: data.orders || [], 
-      totalItems: data.totalItems || 0,
-      totalPages: data.totalPages || 0,
-      loading: false, 
-      error: null 
-    }),
+    setOrders: (data) => set((state) => ({
+      orders: data.orders || [],
+      totalItems: data.totalItems ?? state.totalItems,
+      totalPages: data.totalPages ?? state.totalPages,
+      ...(data.currentPage != null && { currentPage: data.currentPage }),
+      loading: false,
+      error: null,
+    })),
     setLoading: (loading) => set({ loading }),
     setError: (error) => set({ error, loading: false }),
     setCurrentPage: (page) => set({ currentPage: page }),

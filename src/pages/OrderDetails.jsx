@@ -10,10 +10,10 @@ const OrderDetails = () => {
   const navigate = useNavigate();
   const { orders } = useOrdersList();
 
-  // Obtener pedido del store usando el ID de la URL
+  // Obtener pedido del store usando el ID de la URL (soporta order_id y orderId)
   const order = useMemo(() => {
     const orderId = Number(id_order);
-    const foundOrder = orders.find((o) => o.orderId === orderId);
+    const foundOrder = orders.find((o) => (o.order_id ?? o.orderId) === orderId);
     return foundOrder || null;
   }, [id_order, orders]);
 
@@ -73,10 +73,11 @@ const OrderDetails = () => {
     });
   };
 
-  const parseAttributes = (attributesString) => {
-    if (!attributesString) return {};
+  const parseAttributes = (attributes) => {
+    if (!attributes) return {};
+    if (typeof attributes === 'object' && !Array.isArray(attributes)) return attributes;
     try {
-      return JSON.parse(attributesString);
+      return typeof attributes === 'string' ? JSON.parse(attributes) : {};
     } catch {
       return {};
     }
@@ -86,9 +87,11 @@ const OrderDetails = () => {
     const statusLower = status?.toLowerCase() || '';
     if (statusLower === 'pendiente') {
       return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-amber-50 text-amber-800">Pendiente</span>;
-    } else if (statusLower === 'seminuevo') {
-      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-blue-50 text-blue-800">Seminuevo</span>;
-    } else if (statusLower === 'completado') {
+    }
+    if (statusLower === 'en tránsito' || statusLower === 'en transito') {
+      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-purple-50 text-purple-800">En tránsito</span>;
+    }
+    if (statusLower === 'completado') {
       return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-emerald-50 text-emerald-800">Completado</span>;
     }
     return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-neutral-50 text-neutral-800">{status || '-'}</span>;
@@ -119,14 +122,14 @@ const OrderDetails = () => {
                     <FiUser className="h-5 w-5 text-primary-600 flex-shrink-0" />
                     <div>
                       <p className="text-xs text-neutral-600 font-poppinsMedium">Cliente</p>
-                      <p className="text-sm font-poppinsBold text-neutral-900">{order.name || "Sin nombre"}</p>
+                      <p className="text-sm font-poppinsBold text-neutral-900">{(order.client_name ?? order.name) || "Sin nombre"}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2 text-neutral-700">
                     <FiCalendar className="h-5 w-5 text-primary-600 flex-shrink-0" />
                     <div>
                       <p className="text-xs text-neutral-600 font-poppinsMedium">Fecha</p>
-                      <p className="text-sm font-poppinsBold text-neutral-900">{formatDateTime(order.date)}</p>
+                      <p className="text-sm font-poppinsBold text-neutral-900">{formatDateTime(order.created_at ?? order.date)}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2 text-neutral-700">
@@ -150,8 +153,8 @@ const OrderDetails = () => {
             </div>
           </div>
 
-          {/* Información de envío */}
-          {order.shippingInfo && (
+          {/* Información de envío (soporta shipping_info y shippingInfo) */}
+          {((order.shipping_info ?? order.shippingInfo)) && (
             <div className="mb-6 rounded-xl bg-highlight-50 border border-highlight-200 p-6">
               <h3 className="text-lg md:text-xl font-poppinsBold font-bold text-neutral-900 mb-4 flex items-center gap-2">
                 <FiTruck className="h-5 w-5 text-highlight-600" />
@@ -162,14 +165,14 @@ const OrderDetails = () => {
                   <FiUser className="h-5 w-5 text-highlight-600 flex-shrink-0 mt-0.5" />
                   <div className="flex-1">
                     <p className="text-sm text-neutral-600 font-poppinsMedium mb-1">Nombre del receptor</p>
-                    <p className="text-neutral-900 font-poppinsRegular">{order.shippingInfo.nameReceived || "-"}</p>
+                    <p className="text-neutral-900 font-poppinsRegular">{((order.shipping_info ?? order.shippingInfo)?.name_received ?? order.shippingInfo?.nameReceived) || "-"}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <FiPhone className="h-5 w-5 text-highlight-600 flex-shrink-0 mt-0.5" />
                   <div className="flex-1">
                     <p className="text-sm text-neutral-600 font-poppinsMedium mb-1">Teléfono</p>
-                    <p className="text-neutral-900 font-poppinsRegular">{order.shippingInfo.phoneReceived || "-"}</p>
+                    <p className="text-neutral-900 font-poppinsRegular">{(((order.shipping_info ?? order.shippingInfo)?.phone_received ?? order.shippingInfo?.phoneReceived) ?? "") || "-"}</p>
                   </div>
                 </div>
                 <div className="md:col-span-2 flex items-start gap-3">
@@ -177,33 +180,34 @@ const OrderDetails = () => {
                   <div className="flex-1">
                     <p className="text-sm text-neutral-600 font-poppinsMedium mb-1">Dirección</p>
                     <p className="text-neutral-900 font-poppinsRegular">
-                      {[
-                        order.shippingInfo.deliveryStreet,
-                        order.shippingInfo.deliveryExternalNum,
-                        order.shippingInfo.deliveryInternalNum && `Int. ${order.shippingInfo.deliveryInternalNum}`,
-                        order.shippingInfo.deliveryNeighborhood,
-                        order.shippingInfo.deliveryCity,
-                        order.shippingInfo.deliveryState,
-                        order.shippingInfo.deliveryZipCode
-                      ].filter(Boolean).join(", ")}
+                      {(((order.shipping_info ?? order.shippingInfo)?.address ??
+                        [
+                          order.shippingInfo?.deliveryStreet,
+                          order.shippingInfo?.deliveryExternalNum,
+                          order.shippingInfo?.deliveryInternalNum && `Int. ${order.shippingInfo.deliveryInternalNum}`,
+                          order.shippingInfo?.deliveryNeighborhood,
+                          order.shippingInfo?.deliveryCity,
+                          order.shippingInfo?.deliveryState,
+                          order.shippingInfo?.deliveryZipCode
+                        ].filter(Boolean).join(", ")) ?? "") || "-"}
                     </p>
                   </div>
                 </div>
-                {order.shippingInfo.deliveryReferences && (
+                {((order.shipping_info ?? order.shippingInfo)?.delivery_references ?? order.shippingInfo?.deliveryReferences) && (
                   <div className="md:col-span-2 flex items-start gap-3">
                     <FiInfo className="h-5 w-5 text-highlight-600 flex-shrink-0 mt-0.5" />
                     <div className="flex-1">
                       <p className="text-sm text-neutral-600 font-poppinsMedium mb-1">Referencias</p>
-                      <p className="text-neutral-900 font-poppinsRegular">{order.shippingInfo.deliveryReferences}</p>
+                      <p className="text-neutral-900 font-poppinsRegular">{(order.shipping_info ?? order.shippingInfo)?.delivery_references ?? order.shippingInfo?.deliveryReferences}</p>
                     </div>
                   </div>
                 )}
-                {order.deliveryDate && (
+                {(order.completed_date ?? order.deliveryDate) && (
                   <div className="flex items-start gap-3">
                     <FiCalendar className="h-5 w-5 text-highlight-600 flex-shrink-0 mt-0.5" />
                     <div className="flex-1">
                       <p className="text-sm text-neutral-600 font-poppinsMedium mb-1">Fecha de entrega</p>
-                      <p className="text-neutral-900 font-poppinsRegular">{formatDate(order.deliveryDate)}</p>
+                      <p className="text-neutral-900 font-poppinsRegular">{formatDate(order.completed_date ?? order.deliveryDate)}</p>
                     </div>
                   </div>
                 )}
@@ -240,9 +244,9 @@ const OrderDetails = () => {
                       return (
                         <tr key={product.order_detail_id} className="hover:bg-neutral-50 transition">
                           <td className="px-4 py-3">
-                            {product.image ? (
+                            {(product.variant_image_url ?? product.image) ? (
                               <img 
-                                src={product.image} 
+                                src={product.variant_image_url ?? product.image} 
                                 alt={product.product_name}
                                 className="w-16 h-16 object-cover rounded-lg"
                                 onError={(e) => {

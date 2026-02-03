@@ -30,13 +30,14 @@ const OrdersList = () => {
           page: currentPage,
           limit: limit,
           status: status,
-          text: searchText || '',
+          searchText: searchText || '',
         });
         const ordersData = data?.body || {};
         setOrders({
           orders: ordersData.orders || [],
           totalItems: ordersData.totalItems || 0,
           totalPages: ordersData.totalPages || 0,
+          ...(ordersData.currentPage != null && { currentPage: ordersData.currentPage }),
         });
       } catch (err) {
         setError(err?.message || 'Error al cargar la lista de pedidos');

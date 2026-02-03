@@ -20,7 +20,7 @@ export default function OrdersTable() {
 
   const handleOrderClick = (order) => {
     navigate(
-      ROUTES.ORDERS_DETAILS.replace(':id_order', order.orderId)
+      ROUTES.ORDERS_DETAILS.replace(':id_order', order.order_id)
     );
   };
 
@@ -47,15 +47,15 @@ export default function OrdersTable() {
   const getStatusBadge = (status) => {
     const statusLower = status?.toLowerCase() || '';
     if (statusLower === 'pendiente') {
-      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-amber-100 text-amber-800">Pendiente</span>;
+      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-amber-50 text-amber-800">Pendiente</span>;
     } else if (statusLower === 'completado') {
-      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-emerald-100 text-emerald-800">Completado</span>;
+      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-emerald-50 text-emerald-800">Completado</span>;
     } else if (statusLower === 'entregado') {
-      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-blue-100 text-blue-800">Entregado</span>;
+      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-blue-50 text-blue-800">Entregado</span>;
     } else if (statusLower === 'en tránsito' || statusLower === 'en transito') {
-      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-purple-100 text-purple-800">En tránsito</span>;
+      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-purple-50 text-purple-800">En tránsito</span>;
     }
-    return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-neutral-100 text-neutral-800">{status || '-'}</span>;
+    return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-neutral-50 text-neutral-800">{status || '-'}</span>;
   };
 
   return (
@@ -93,8 +93,8 @@ export default function OrdersTable() {
               </tr>
             ) : (
               orders.map((order) => (
-                <tr 
-                  key={order.orderId} 
+                <tr
+                  key={order.order_id}
                   onClick={() => handleOrderClick(order)}
                   className="hover:bg-highlight-50 transition cursor-pointer"
                 >
@@ -102,23 +102,19 @@ export default function OrdersTable() {
                     {order.folio || '-'}
                   </td>
                   <td className="px-4 py-3 text-neutral-900">
-                    {order.name || '-'}
+                    {order.client_name || '-'}
                   </td>
                   <td className="px-4 py-3 text-neutral-600">
-                    {formatDate(order.date)}
+                    {formatDate(order.created_at)}
                   </td>
                   <td className="px-4 py-3 text-neutral-600">
-                    {/* Campo temporalmente comentado - pendiente de backend */}
-                    {/* {order.quantity || 0} */}
-                    {order.products?.length || 0}
+                    {order.product_quantity ?? 0}
                   </td>
                   <td className="px-4 py-3 text-neutral-900 font-poppinsMedium">
                     {formatCurrency(order.total)}
                   </td>
                   <td className="px-4 py-3">
-                    {/* Campo temporalmente comentado - pendiente de backend */}
-                    {/* {getStatusBadge(order.status)} */}
-                    <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-neutral-100 text-neutral-800">-</span>
+                    {getStatusBadge(order.order_status)}
                   </td>
                 </tr>
               ))

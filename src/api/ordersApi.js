@@ -22,7 +22,7 @@ export async function getAllPendingOrders(typeUser) {
   }
 }
 
-export async function getOrders({ page, limit, status, text }) {
+export async function getOrders({ page, limit, status, searchText }) {
   try {
     const response = await axios.post(
       `${API_BASE_URL}/web/orders/get_orders`,
@@ -30,7 +30,7 @@ export async function getOrders({ page, limit, status, text }) {
         page,
         limit,
         status,
-        text,
+        searchText,
       },
       {
         headers: {
