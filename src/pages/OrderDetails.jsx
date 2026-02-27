@@ -73,18 +73,24 @@ const OrderDetails = () => {
     });
   };
 
-  const parseAttributes = (attributes) => {
-    if (!attributes) return {};
-    if (typeof attributes === 'object' && !Array.isArray(attributes)) return attributes;
-    try {
-      return typeof attributes === 'string' ? JSON.parse(attributes) : {};
-    } catch {
-      return {};
-    }
+  /** Devuelve lista { name, value } para mostrar atributos. Soporta array [{ name, value }] u objeto { key: value }. */
+  const getAttributesDisplayList = (attributes) => {
+    if (!attributes) return [];
+    const raw = Array.isArray(attributes)
+      ? attributes
+      : (typeof attributes === 'object' && attributes !== null
+          ? Object.entries(attributes).map(([key, value]) => ({ name: key, value }))
+          : []);
+    return raw
+      .map((a) => ({ name: String(a?.name ?? a?.key ?? ''), value: String(a?.value ?? '') }))
+      .filter((a) => a.name !== '' || a.value !== '');
   };
 
   const getStatusBadge = (status) => {
     const statusLower = status?.toLowerCase() || '';
+    if (statusLower === 'pendiente de pago') {
+      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-sky-50 text-sky-800">Pendiente de pago</span>;
+    }
     if (statusLower === 'pendiente') {
       return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-amber-50 text-amber-800">Pendiente</span>;
     }
@@ -240,7 +246,7 @@ const OrderDetails = () => {
                 <tbody className="divide-y divide-neutral-100">
                   {order.products && order.products.length > 0 ? (
                     order.products.map((product) => {
-                      const attributes = parseAttributes(product.attributes);
+                      const attributesList = getAttributesDisplayList(product.attributes);
                       return (
                         <tr key={product.order_detail_id} className="hover:bg-neutral-50 transition">
                           <td className="px-4 py-3">
@@ -278,11 +284,11 @@ const OrderDetails = () => {
                             {product.affiliate || "-"}
                           </td>
                           <td className="px-4 py-3 text-neutral-600 text-sm">
-                            {Object.keys(attributes).length > 0 ? (
+                            {attributesList.length > 0 ? (
                               <div className="flex flex-col gap-1">
-                                {Object.entries(attributes).map(([key, value]) => (
-                                  <span key={key}>
-                                    <span className="font-poppinsMedium">{key}:</span> {value}
+                                {attributesList.map((item, idx) => (
+                                  <span key={item.name || idx}>
+                                    <span className="font-poppinsMedium">{item.name}:</span> {item.value}
                                   </span>
                                 ))}
                               </div>

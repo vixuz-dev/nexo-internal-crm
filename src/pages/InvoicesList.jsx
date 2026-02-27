@@ -76,6 +76,16 @@ const InvoicesList = () => {
               Sin pagar
             </button>
             <button
+              onClick={() => setStatusFilter('Pendiente de pago')}
+              className={`px-4 py-2 rounded-lg transition font-poppinsMedium ${
+                statusFilter === 'Pendiente de pago'
+                  ? 'bg-sky-600 text-white'
+                  : 'bg-white text-neutral-700 border border-neutral-300 hover:bg-neutral-50'
+              }`}
+            >
+              Pendiente de pago
+            </button>
+            <button
               onClick={() => setStatusFilter('Cancelada')}
               className={`px-4 py-2 rounded-lg transition font-poppinsMedium ${
                 statusFilter === 'Cancelada'

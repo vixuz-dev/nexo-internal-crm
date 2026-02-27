@@ -191,7 +191,7 @@ export default function ClientsTable() {
 
             <div className="flex items-center gap-2">
               <span className="text-sm text-neutral-600 font-poppinsRegular">
-                {startIndex + 1}-{Math.min(endIndex, totalItems)} of{" "}
+                {startIndex + 1}-{Math.min(endIndex, totalItems)} de{" "}
                 {totalItems}
               </span>
               <div className="flex items-center gap-1">

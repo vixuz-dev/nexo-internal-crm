@@ -2,6 +2,15 @@ import React from 'react';
 import { useHomePageInformacion } from '../../store/useHomePageInformacion';
 import { TableSkeleton } from '../sharedComponents/Skeletons';
 
+const getStatusBadgeClass = (status) => {
+  const s = status?.trim() || '';
+  if (s === 'Pagada') return 'bg-emerald-50 text-emerald-700';
+  if (s === 'Pendiente') return 'bg-amber-50 text-amber-700';
+  if (s === 'Pendiente de pago') return 'bg-sky-50 text-sky-700';
+  if (s === 'Cancelada') return 'bg-rose-50 text-rose-700';
+  return 'bg-neutral-100 text-neutral-700';
+};
+
 export default function HomeLastInvoicesTable() {
   const { lastInvoices, loading } = useHomePageInformacion();
   const data = Array.isArray(lastInvoices) ? lastInvoices : [];
@@ -39,12 +48,8 @@ export default function HomeLastInvoicesTable() {
                   <td className="px-4 py-3 text-neutral-800">{Number(row.totalAmount).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })}</td>
                   <td className="px-4 py-3 text-neutral-600">{row.client || '-'}</td> 
                   <td className="px-4 py-3">
-                    <span className={`px-2 py-1 rounded text-xs ${
-                      row.status === 'Pagada' ? 'bg-emerald-50 text-emerald-700' : 
-                      row.status === 'Pendiente' ? 'bg-amber-50 text-amber-700' : 
-                      'bg-rose-50 text-rose-700'
-                    }`}>
-                      {row.status === 'Pagada' ? 'Pagada' : row.status === 'Pendiente' ? 'Pendiente' : 'Cancelada'}
+                    <span className={`px-2 py-1 rounded text-xs font-poppinsMedium ${getStatusBadgeClass(row.status)}`}>
+                      {row.status || '-'}
                     </span>
                   </td>
                 </tr>

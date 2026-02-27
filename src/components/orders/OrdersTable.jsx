@@ -46,13 +46,19 @@ export default function OrdersTable() {
 
   const getStatusBadge = (status) => {
     const statusLower = status?.toLowerCase() || '';
+    if (statusLower === 'pendiente de pago') {
+      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-sky-50 text-sky-800">Pendiente de pago</span>;
+    }
     if (statusLower === 'pendiente') {
       return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-amber-50 text-amber-800">Pendiente</span>;
-    } else if (statusLower === 'completado') {
+    }
+    if (statusLower === 'completado') {
       return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-emerald-50 text-emerald-800">Completado</span>;
-    } else if (statusLower === 'entregado') {
+    }
+    if (statusLower === 'entregado') {
       return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-blue-50 text-blue-800">Entregado</span>;
-    } else if (statusLower === 'en tránsito' || statusLower === 'en transito') {
+    }
+    if (statusLower === 'en tránsito' || statusLower === 'en transito') {
       return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-purple-50 text-purple-800">En tránsito</span>;
     }
     return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-neutral-50 text-neutral-800">{status || '-'}</span>;
