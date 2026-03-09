@@ -1,8 +1,9 @@
 import React, { useState, useMemo } from "react";
-import { FiChevronUp, FiChevronDown, FiEye } from "react-icons/fi";
+import { FiChevronUp, FiChevronDown, FiEye, FiDollarSign } from "react-icons/fi";
 import { useInvoicesList } from "../../store/useInvoicesList";
 import { TableSkeleton } from "../sharedComponents/Skeletons";
 import Modal from "../sharedComponents/Modal";
+import InvoicePaymentsModal from "./InvoicePaymentsModal";
 
 export default function InvoicesTable() {
   const { invoices, loading, searchTerm, statusFilter } = useInvoicesList();
@@ -12,6 +13,8 @@ export default function InvoicesTable() {
   const [sortDirection, setSortDirection] = useState("desc");
   const [selectedInvoice, setSelectedInvoice] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPaymentsModalOpen, setIsPaymentsModalOpen] = useState(false);
+  const [selectedInvoiceIdForPayments, setSelectedInvoiceIdForPayments] = useState(null);
 
   // Filtrar facturas por búsqueda y estado
   const filteredInvoices = useMemo(() => {
@@ -144,6 +147,16 @@ export default function InvoicesTable() {
     setSelectedInvoice(null);
   };
 
+  const handleOpenPayments = (invoice) => {
+    setSelectedInvoiceIdForPayments(invoice.invoice_id);
+    setIsPaymentsModalOpen(true);
+  };
+
+  const handleClosePayments = () => {
+    setIsPaymentsModalOpen(false);
+    setSelectedInvoiceIdForPayments(null);
+  };
+
   if (loading) {
     return <TableSkeleton rows={5} columns={9} />;
   }
@@ -262,14 +275,24 @@ export default function InvoicesTable() {
                     {formatCurrency(invoice.remaining_payment || 0)}
                   </td>
                   <td className="px-4 py-3 text-neutral-600">
-                    <button
-                      type="button"
-                      onClick={() => handleOpenDetails(invoice)}
-                      className="inline-flex items-center justify-center rounded-lg border border-neutral-300 px-2.5 py-1.5 text-xs font-poppinsMedium text-neutral-700 hover:bg-neutral-50 transition"
-                      title="Ver detalle de la factura"
-                    >
-                      <FiEye className="h-4 w-4" />
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleOpenDetails(invoice)}
+                        className="inline-flex items-center justify-center rounded-lg border border-neutral-300 px-2.5 py-1.5 text-xs font-poppinsMedium text-neutral-700 hover:bg-neutral-50 transition"
+                        title="Ver detalle de la factura"
+                      >
+                        <FiEye className="h-4 w-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleOpenPayments(invoice)}
+                        className="inline-flex items-center justify-center rounded-lg border border-neutral-300 px-2.5 py-1.5 text-xs font-poppinsMedium text-neutral-700 hover:bg-neutral-50 transition"
+                        title="Ver abonos y cortes"
+                      >
+                        <FiDollarSign className="h-4 w-4" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))
@@ -556,6 +579,12 @@ export default function InvoicesTable() {
           </div>
         )}
       </Modal>
+
+      <InvoicePaymentsModal
+        isOpen={isPaymentsModalOpen}
+        onClose={handleClosePayments}
+        invoiceId={selectedInvoiceIdForPayments}
+      />
     </div>
   );
 }

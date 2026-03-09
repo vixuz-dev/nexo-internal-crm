@@ -21,3 +21,22 @@ export async function getInvoices() {
   }
 }
 
+export async function getInvoicesPayments(invoiceId) {
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/web/invoices/get_invoice_payments`,
+      { invoiceId: Number(invoiceId) },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          token: getCookie('accessToken'),
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    const errMsg = error.response?.data?.message || 'Error al obtener los pagos de la factura';
+    throw new Error(errMsg);
+  }
+}
+
