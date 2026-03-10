@@ -154,7 +154,7 @@ export default function InvoicePaymentsModal({ isOpen, onClose, invoiceId }) {
                             {p.invoice_id}
                           </td>
                           <td className="px-3 py-2 text-neutral-600 font-poppinsRegular">
-                            {formatDateTime(p.payment_date)}
+                            {formatDateTime(p.created_at)}
                           </td>
                           <td className="px-3 py-2 text-neutral-600 font-poppinsRegular">
                             {p.payment_application_id}

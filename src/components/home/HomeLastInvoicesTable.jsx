@@ -4,9 +4,9 @@ import { TableSkeleton } from '../sharedComponents/Skeletons';
 
 const getStatusBadgeClass = (status) => {
   const s = status?.trim() || '';
-  if (s === 'Pagada') return 'bg-emerald-50 text-emerald-700';
+  if (s === 'Pagado') return 'bg-emerald-50 text-emerald-700';
   if (s === 'Pendiente') return 'bg-amber-50 text-amber-700';
-  if (s === 'Pendiente de pago') return 'bg-sky-50 text-sky-700';
+  if (s === 'Pendiente de Pago') return 'bg-sky-50 text-sky-700';
   if (s === 'Cancelada') return 'bg-rose-50 text-rose-700';
   return 'bg-neutral-100 text-neutral-700';
 };
