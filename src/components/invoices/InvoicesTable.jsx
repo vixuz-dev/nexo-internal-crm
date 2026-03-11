@@ -1,20 +1,20 @@
 import React, { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { FiChevronUp, FiChevronDown, FiEye, FiDollarSign } from "react-icons/fi";
 import { useInvoicesList } from "../../store/useInvoicesList";
 import { TableSkeleton } from "../sharedComponents/Skeletons";
 import Modal from "../sharedComponents/Modal";
-import InvoicePaymentsModal from "./InvoicePaymentsModal";
+import { ROUTES } from "../../utils/routes";
 
 export default function InvoicesTable() {
   const { invoices, loading, searchTerm, statusFilter } = useInvoicesList();
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [sortColumn, setSortColumn] = useState("invoice_id");
   const [sortDirection, setSortDirection] = useState("desc");
   const [selectedInvoice, setSelectedInvoice] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isPaymentsModalOpen, setIsPaymentsModalOpen] = useState(false);
-  const [selectedInvoiceIdForPayments, setSelectedInvoiceIdForPayments] = useState(null);
 
   // Filtrar facturas por búsqueda y estado
   const filteredInvoices = useMemo(() => {
@@ -147,16 +147,6 @@ export default function InvoicesTable() {
     setSelectedInvoice(null);
   };
 
-  const handleOpenPayments = (invoice) => {
-    setSelectedInvoiceIdForPayments(invoice.invoice_id);
-    setIsPaymentsModalOpen(true);
-  };
-
-  const handleClosePayments = () => {
-    setIsPaymentsModalOpen(false);
-    setSelectedInvoiceIdForPayments(null);
-  };
-
   if (loading) {
     return <TableSkeleton rows={5} columns={9} />;
   }
@@ -286,7 +276,14 @@ export default function InvoicesTable() {
                       </button>
                       <button
                         type="button"
-                        onClick={() => handleOpenPayments(invoice)}
+                        onClick={() =>
+                          navigate(
+                            ROUTES.CONSULTAS_FACTURAS_PAGOS.replace(
+                              ":invoiceId",
+                              String(invoice.invoice_id),
+                            ),
+                          )
+                        }
                         className="inline-flex items-center justify-center rounded-lg border border-neutral-300 px-2.5 py-1.5 text-xs font-poppinsMedium text-neutral-700 hover:bg-neutral-50 transition"
                         title="Ver abonos y cortes"
                       >
@@ -579,12 +576,6 @@ export default function InvoicesTable() {
           </div>
         )}
       </Modal>
-
-      <InvoicePaymentsModal
-        isOpen={isPaymentsModalOpen}
-        onClose={handleClosePayments}
-        invoiceId={selectedInvoiceIdForPayments}
-      />
     </div>
   );
 }

@@ -16,6 +16,7 @@ export const ROUTES = {
   CONSULTAS_AUDIT: '/administrador/consultas/auditoria',
   CONSULTAS_FICHAS: '/administrador/consultas/fichas',
   CONSULTAS_FACTURAS: '/administrador/consultas/facturas',
+  CONSULTAS_FACTURAS_PAGOS: '/administrador/consultas/facturas/abonos/:invoiceId',
   CONSULTAS_COBRANZA: '/administrador/resumen-cobranza',
   CONSULTAS_COBRANZA_DIA: '/administrador/consultas/cobranza-diaria',
   // Dashboards (grupo)

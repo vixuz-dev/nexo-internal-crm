@@ -9,6 +9,7 @@ import AffiliateDetails from "./pages/AffiliateDetails";
 import OrdersList from "./pages/OrdersList";
 import OrderDetails from "./pages/OrderDetails";
 import InvoicesList from "./pages/InvoicesList";
+import InvoicePayments from "./pages/InvoicePayments";
 import CobranzaSummary from "./pages/CobranzaSummary";
 import Logout from "./pages/Logout";
 import { ROUTES } from "./utils/routes";
@@ -81,6 +82,14 @@ function App() {
           element={
             <PrivateRoute>
               <InvoicesList />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={ROUTES.CONSULTAS_FACTURAS_PAGOS}
+          element={
+            <PrivateRoute>
+              <InvoicePayments />
             </PrivateRoute>
           }
         />
