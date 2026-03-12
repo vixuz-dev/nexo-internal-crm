@@ -1,13 +1,23 @@
-import React, { useEffect } from 'react';
-import DashboardLayout from '../layouts/DashboardLayout';
-import { getInvoices } from '../api/invoicesApi';
-import { useInvoicesList } from '../store/useInvoicesList';
-import SearchBar from '../components/sharedComponents/SearchBar';
-import InvoicesTable from '../components/invoices/InvoicesTable';
-import InvoicesSummaryCards from '../components/invoices/InvoicesSummaryCards';
+import React, { useEffect } from "react";
+import DashboardLayout from "../layouts/DashboardLayout";
+import { getInvoices } from "../api/invoicesApi";
+import { useInvoicesList } from "../store/useInvoicesList";
+import SearchBar from "../components/sharedComponents/SearchBar";
+import InvoicesTable from "../components/invoices/InvoicesTable";
+import InvoicesSummaryCards from "../components/invoices/InvoicesSummaryCards";
 
 const InvoicesList = () => {
-  const { setInvoices, setLoading, setError, setSearchTerm, setStatusFilter, searchTerm, statusFilter, loading, error } = useInvoicesList();
+  const {
+    setInvoices,
+    setLoading,
+    setError,
+    setSearchTerm,
+    setStatusFilter,
+    searchTerm,
+    statusFilter,
+    loading,
+    error,
+  } = useInvoicesList();
 
   // Cargar lista de facturas al ingresar a la página
   useEffect(() => {
@@ -18,7 +28,7 @@ const InvoicesList = () => {
         const invoicesList = data?.body || data?.data || [];
         setInvoices(Array.isArray(invoicesList) ? invoicesList : []);
       } catch (err) {
-        setError(err?.message || 'Error al cargar la lista de facturas');
+        setError(err?.message || "Error al cargar la lista de facturas");
       }
     };
     fetchInvoices();
@@ -49,48 +59,48 @@ const InvoicesList = () => {
               onClick={() => setStatusFilter(null)}
               className={`px-4 py-2 rounded-lg transition font-poppinsMedium ${
                 statusFilter === null
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-white text-neutral-700 border border-neutral-300 hover:bg-neutral-50'
+                  ? "bg-primary-600 text-white"
+                  : "bg-white text-neutral-700 border border-neutral-300 hover:bg-neutral-50"
               }`}
             >
               Todas
             </button>
             <button
-              onClick={() => setStatusFilter('Pagada')}
+              onClick={() => setStatusFilter("Pagado")}
               className={`px-4 py-2 rounded-lg transition font-poppinsMedium ${
-                statusFilter === 'Pagada'
-                  ? 'bg-emerald-600 text-white'
-                  : 'bg-white text-neutral-700 border border-neutral-300 hover:bg-neutral-50'
+                statusFilter === "Pagada"
+                  ? "bg-emerald-600 text-white"
+                  : "bg-white text-neutral-700 border border-neutral-300 hover:bg-neutral-50"
               }`}
             >
               Pagadas
             </button>
             <button
-              onClick={() => setStatusFilter('Pendiente')}
+              onClick={() => setStatusFilter("Pendiente")}
               className={`px-4 py-2 rounded-lg transition font-poppinsMedium ${
-                statusFilter === 'Pendiente'
-                  ? 'bg-amber-600 text-white'
-                  : 'bg-white text-neutral-700 border border-neutral-300 hover:bg-neutral-50'
+                statusFilter === "Pendiente"
+                  ? "bg-amber-600 text-white"
+                  : "bg-white text-neutral-700 border border-neutral-300 hover:bg-neutral-50"
               }`}
             >
               Sin pagar
             </button>
             <button
-              onClick={() => setStatusFilter('Pendiente de pago')}
+              onClick={() => setStatusFilter("Pendiente de pago")}
               className={`px-4 py-2 rounded-lg transition font-poppinsMedium ${
-                statusFilter === 'Pendiente de pago'
-                  ? 'bg-sky-600 text-white'
-                  : 'bg-white text-neutral-700 border border-neutral-300 hover:bg-neutral-50'
+                statusFilter === "Pendiente de pago"
+                  ? "bg-sky-600 text-white"
+                  : "bg-white text-neutral-700 border border-neutral-300 hover:bg-neutral-50"
               }`}
             >
               Pendiente de pago
             </button>
             <button
-              onClick={() => setStatusFilter('Cancelada')}
+              onClick={() => setStatusFilter("Cancelado")}
               className={`px-4 py-2 rounded-lg transition font-poppinsMedium ${
-                statusFilter === 'Cancelada'
-                  ? 'bg-rose-600 text-white'
-                  : 'bg-white text-neutral-700 border border-neutral-300 hover:bg-neutral-50'
+                statusFilter === "Cancelado"
+                  ? "bg-rose-600 text-white"
+                  : "bg-white text-neutral-700 border border-neutral-300 hover:bg-neutral-50"
               }`}
             >
               Canceladas
@@ -105,7 +115,7 @@ const InvoicesList = () => {
               placeholder="Buscar por ID, folio o cliente..."
             />
           </div>
-          
+
           {/* Tabla de facturas */}
           {error ? (
             <div className="rounded-xl bg-red-50 border border-red-200 p-4">
@@ -121,4 +131,3 @@ const InvoicesList = () => {
 };
 
 export default InvoicesList;
-

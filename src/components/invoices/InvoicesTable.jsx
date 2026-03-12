@@ -102,7 +102,7 @@ export default function InvoicesTable() {
   };
 
   const getStatusBadge = (invoice_status) => {
-    if (invoice_status === "Pagada") {
+    if (invoice_status === "Pagado") {
       return (
         <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-emerald-50 text-emerald-800">
           Pagada
@@ -123,7 +123,7 @@ export default function InvoicesTable() {
         </span>
       );
     }
-    if (invoice_status === "Cancelada") {
+    if (invoice_status === "Cancelado") {
       return (
         <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-rose-50 text-rose-800">
           Cancelada

@@ -71,22 +71,34 @@ const InvoicePayments = () => {
 
   const payments = data?.payments ?? [];
   const monthlyPayments = data?.monthly_payments ?? [];
+  const paymentsSummary = data?.payments_summary ?? {};
+  const monthlyPaymentsSummary = data?.monthly_payments_summary ?? {};
 
-  // Abonos: total y desglose
-  const sumAppliedAffiliatePayment = payments.reduce((s, p) => s + Number(p.applied_affiliate_payment || 0), 0);
-  const sumAppliedProfitMargin = payments.reduce((s, p) => s + Number(p.applied_profit_margin || 0), 0);
-  const sumAppliedAffiliateFee = payments.reduce((s, p) => s + Number(p.applied_affiliate_fee || 0), 0);
-  const sumAppliedLateFee = payments.reduce((s, p) => s + Number(p.applied_late_fee || 0), 0);
-  const totalAbonado = sumAppliedAffiliatePayment + sumAppliedProfitMargin + sumAppliedAffiliateFee + sumAppliedLateFee;
-  const totalAbonadoSinMora = sumAppliedAffiliatePayment + sumAppliedProfitMargin + sumAppliedAffiliateFee;
-  const countAbonos = payments.length;
+  // Abonos: usar resumen del backend
+  const sumAppliedAffiliatePayment = Number(paymentsSummary.total_affiliate_payment || 0);
+  const sumAppliedProfitMargin = Number(paymentsSummary.total_profit_margin || 0);
+  const sumAppliedAffiliateFee = Number(paymentsSummary.total_affiliate_fee || 0);
+  const sumAppliedLateFee = Number(paymentsSummary.total_late_fee || 0);
+  const totalAbonado = Number(paymentsSummary.total_paid_with_fee || 0);
+  const totalAbonadoSinMora = Number(paymentsSummary.total_paid || 0);
+  const countAbonos = Number(paymentsSummary.total_payments || payments.length || 0);
 
-  // Cortes mensuales: total y sumas para cards 7-10
-  const totalMensual = monthlyPayments.reduce((s, m) => s + Number(m.mensual_payment || 0), 0);
-  const sumMonthlyAffiliatePayment = monthlyPayments.reduce((s, m) => s + Number(m.monthly_affiliate_payment || 0), 0);
-  const sumMonthlyProfitMargin = monthlyPayments.reduce((s, m) => s + Number(m.monthly_profit_margin || 0), 0);
-  const sumMonthlyAffiliateFee = monthlyPayments.reduce((s, m) => s + Number(m.monthly_affiliate_fee || 0), 0);
-  const sumLateFeeAmount = monthlyPayments.reduce((s, m) => s + Number(m.late_fee_amount || 0), 0);
+  // Cortes mensuales: usar resumen del backend
+  const totalMensual = Number(
+    monthlyPaymentsSummary.total_amount_monthly_payment || 0,
+  );
+  const sumMonthlyAffiliatePayment = Number(
+    monthlyPaymentsSummary.total_affiliate_payment || 0,
+  );
+  const sumMonthlyProfitMargin = Number(
+    monthlyPaymentsSummary.total_profit_margin || 0,
+  );
+  const sumMonthlyAffiliateFee = Number(
+    monthlyPaymentsSummary.total_affiliate_fee || 0,
+  );
+  const sumLateFeeAmount = Number(
+    monthlyPaymentsSummary.total_late_fee || 0,
+  );
 
   return (
     <DashboardLayout>
@@ -168,11 +180,43 @@ const InvoicePayments = () => {
                         </div>
                       </div>
                     </div>
-                    {/* Card 2: Cortes mensuales - Total a pagar */}
-                    <div className="rounded-xl border border-amber-200 bg-amber-50/60 px-4 py-4 flex-1 flex flex-col justify-center">
-                      <p className="text-sm font-poppinsBold text-amber-800 mb-2">Cortes mensuales · Total a pagar</p>
-                      <p className="text-2xl font-poppinsBold text-neutral-900">{formatCurrency(totalMensual)}</p>
-                      <p className="text-xs font-poppinsRegular text-neutral-600 mt-1">Suma de pagos mensuales</p>
+                    {/* Card 2: Cortes mensuales - Total a pagar + desglose de estados */}
+                    <div className="rounded-xl border border-amber-200 bg-amber-50/60 px-4 py-4 flex-1 flex flex-col">
+                      <p className="text-sm font-poppinsBold text-amber-800 mb-2">
+                        Cortes mensuales · Total a pagar
+                      </p>
+                      <p className="text-2xl font-poppinsBold text-neutral-900">
+                        {formatCurrency(totalMensual)}
+                      </p>
+                      <p className="text-xs font-poppinsRegular text-neutral-600 mt-1">
+                        Suma de pagos mensuales
+                      </p>
+                      <div className="mt-3 pt-3 border-t border-amber-200 space-y-1.5 text-xs font-poppinsRegular text-neutral-700">
+                        <div className="flex justify-between">
+                          <span>Pagos mensuales pagados</span>
+                          <span className="font-poppinsMedium text-neutral-900">
+                            {Number(monthlyPaymentsSummary.monthly_payments_paid || 0)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Pagos mensuales pendientes</span>
+                          <span className="font-poppinsMedium text-neutral-900">
+                            {Number(monthlyPaymentsSummary.monthly_payments_pending || 0)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Pagos mensuales vencidos</span>
+                          <span className="font-poppinsMedium text-neutral-900">
+                            {Number(monthlyPaymentsSummary.monthly_payments_late || 0)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Total cortes mensuales</span>
+                          <span className="font-poppinsMedium text-neutral-900">
+                            {Number(monthlyPaymentsSummary.total_monthly_payments || monthlyPayments.length || 0)}
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   {/* Columna derecha: Cards 3-10 (4 filas x 2 columnas) */}
