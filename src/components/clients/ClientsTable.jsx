@@ -206,30 +206,48 @@ export default function ClientsTable() {
                       className="flex items-center gap-2"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <button
-                        type="button"
-                        onClick={() =>
-                          openCreditModal(client, !Boolean(client.credit_status))
-                        }
-                        className={`relative inline-flex h-5 w-10 items-center rounded-full border transition-colors ${
-                          client.credit_status
-                            ? "bg-highlight-500 border-highlight-500"
-                            : "bg-rose-100 border-rose-200"
-                        }`}
-                      >
-                        <span
-                          className={`h-4 w-4 rounded-full bg-white shadow-sm transform transition-transform ${
-                            client.credit_status ? "translate-x-5" : "translate-x-1"
-                          }`}
-                        />
-                      </button>
-                      <span
-                        className={`text-sm font-poppinsMedium ${
-                          client.credit_status ? "text-emerald-700" : "text-rose-700"
-                        }`}
-                      >
-                        {client.credit_status ? "Activo" : "Inactivo"}
-                      </span>
+                      {client.credit_approved ? (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              openCreditModal(client, !Boolean(client.credit_status))
+                            }
+                            className={`relative inline-flex h-5 w-10 items-center rounded-full border transition-colors ${
+                              client.credit_status
+                                ? "bg-highlight-500 border-highlight-500"
+                                : "bg-rose-100 border-rose-200"
+                            }`}
+                          >
+                            <span
+                              className={`h-4 w-4 rounded-full bg-white shadow-sm transform transition-transform ${
+                                client.credit_status ? "translate-x-5" : "translate-x-1"
+                              }`}
+                            />
+                          </button>
+                          <span
+                            className={`text-sm font-poppinsMedium ${
+                              client.credit_status ? "text-emerald-700" : "text-rose-700"
+                            }`}
+                          >
+                            {client.credit_status ? "Activo" : "Inactivo"}
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            type="button"
+                            disabled
+                            aria-label="Crédito no aprobado"
+                            className="relative inline-flex h-5 w-10 items-center rounded-full border border-neutral-200 bg-neutral-100 cursor-not-allowed opacity-70"
+                          >
+                            <span className="h-4 w-4 rounded-full bg-white shadow-sm transform translate-x-1 border border-neutral-200" />
+                          </button>
+                          <span className="text-sm font-poppinsMedium text-neutral-700">
+                            No aprobado
+                          </span>
+                        </>
+                      )}
                     </div>
                   </td>
                 </tr>
