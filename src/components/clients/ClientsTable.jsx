@@ -4,19 +4,58 @@ import { FiChevronUp, FiChevronDown } from "react-icons/fi";
 import { useClientsList } from "../../store/useClientsList";
 import { TableSkeleton } from "../sharedComponents/Skeletons";
 import { ROUTES } from "../../utils/routes";
+import Modal from "../sharedComponents/Modal";
+import { changeCreditLineStatus } from "../../api/clientsApi";
 
 export default function ClientsTable() {
-  const { clients, loading, searchTerm } = useClientsList();
+  const { clients, loading, searchTerm, setClients } = useClientsList();
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [sortColumn, setSortColumn] = useState("client_id");
   const [sortDirection, setSortDirection] = useState("asc");
+  const [selectedClient, setSelectedClient] = useState(null);
+  const [pendingCreditStatus, setPendingCreditStatus] = useState(null);
+  const [isCreditModalOpen, setIsCreditModalOpen] = useState(false);
+  const [creditLoading, setCreditLoading] = useState(false);
+  const [creditError, setCreditError] = useState(null);
 
   // Función para navegar a la página de detalles del cliente
   // El cliente se obtiene del store usando el ID de la URL
   const handleClientClick = (client) => {
     navigate(ROUTES.CLIENTS_DETAILS.replace(":client_id", client.client_id));
+  };
+
+  const openCreditModal = (client, nextStatus) => {
+    setSelectedClient(client);
+    setPendingCreditStatus(nextStatus);
+    setCreditError(null);
+    setIsCreditModalOpen(true);
+  };
+
+  const handleConfirmCreditChange = async () => {
+    if (!selectedClient || typeof pendingCreditStatus !== "boolean") return;
+    setCreditLoading(true);
+    setCreditError(null);
+    try {
+      await changeCreditLineStatus(selectedClient.client_id, pendingCreditStatus);
+      setClients(
+        clients.map((c) =>
+          c.client_id === selectedClient.client_id
+            ? { ...c, credit_status: pendingCreditStatus }
+            : c
+        )
+      );
+      setIsCreditModalOpen(false);
+      setSelectedClient(null);
+      setPendingCreditStatus(null);
+    } catch (err) {
+      setCreditError(
+        err?.message || "Error al cambiar la línea de crédito del cliente"
+      );
+    } finally {
+      setCreditLoading(false);
+    }
   };
 
   // Filtrar clientes por búsqueda
@@ -79,7 +118,7 @@ export default function ClientsTable() {
   };
 
   if (loading) {
-    return <TableSkeleton rows={5} columns={5} />;
+    return <TableSkeleton rows={5} columns={6} />;
   }
 
   return (
@@ -114,6 +153,9 @@ export default function ClientsTable() {
               </th>
               <th className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium">
                 ACTIVO
+              </th>
+              <th className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium">
+                CREDITO
               </th>
             </tr>
           </thead>
@@ -150,12 +192,43 @@ export default function ClientsTable() {
                     <div className="flex items-center gap-2">
                       <span
                         className={`text-sm ${
-                          client.user_status === true
+                          client.user_status
                             ? "text-emerald-700"
                             : "text-neutral-600"
                         }`}
                       >
-                        {client.user_status === true ? "Sí" : "No"}
+                        {client.user_status ? "Sí" : "No"}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 text-neutral-600">
+                    <div
+                      className="flex items-center gap-2"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <button
+                        type="button"
+                        onClick={() =>
+                          openCreditModal(client, !Boolean(client.credit_status))
+                        }
+                        className={`relative inline-flex h-5 w-10 items-center rounded-full border transition-colors ${
+                          client.credit_status
+                            ? "bg-highlight-500 border-highlight-500"
+                            : "bg-rose-100 border-rose-200"
+                        }`}
+                      >
+                        <span
+                          className={`h-4 w-4 rounded-full bg-white shadow-sm transform transition-transform ${
+                            client.credit_status ? "translate-x-5" : "translate-x-1"
+                          }`}
+                        />
+                      </button>
+                      <span
+                        className={`text-sm font-poppinsMedium ${
+                          client.credit_status ? "text-emerald-700" : "text-rose-700"
+                        }`}
+                      >
+                        {client.credit_status ? "Activo" : "Inactivo"}
                       </span>
                     </div>
                   </td>
@@ -218,6 +291,62 @@ export default function ClientsTable() {
           </div>
         </div>
       )}
+
+      <Modal
+        isOpen={isCreditModalOpen}
+        onClose={() => {
+          if (creditLoading) return;
+          setIsCreditModalOpen(false);
+          setSelectedClient(null);
+          setPendingCreditStatus(null);
+          setCreditError(null);
+        }}
+        title={pendingCreditStatus ? "Activar línea de crédito" : "Desactivar línea de crédito"}
+        size="sm"
+      >
+        {selectedClient && (
+          <div className="space-y-4">
+            <p className="text-sm text-neutral-700 font-poppinsRegular">
+              ¿Estás seguro de{" "}
+              {pendingCreditStatus ? "activar" : "desactivar"} la línea de crédito
+              del cliente{" "}
+              <span className="font-poppinsBold text-neutral-900">
+                {selectedClient.name || `#${selectedClient.client_id}`}
+              </span>
+              ?
+            </p>
+            {creditError && (
+              <div className="rounded-lg bg-red-50 border border-red-200 px-3 py-2 text-xs text-red-800 font-poppinsRegular">
+                {creditError}
+              </div>
+            )}
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                disabled={creditLoading}
+                onClick={() => {
+                  if (creditLoading) return;
+                  setIsCreditModalOpen(false);
+                  setSelectedClient(null);
+                  setPendingCreditStatus(null);
+                  setCreditError(null);
+                }}
+                className="px-4 py-2 text-sm font-poppinsMedium rounded-lg border border-neutral-300 text-neutral-700 bg-white hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmCreditChange}
+                disabled={creditLoading}
+                className="px-4 py-2 text-sm font-poppinsMedium rounded-lg text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {creditLoading ? "Guardando..." : "Continuar"}
+              </button>
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }

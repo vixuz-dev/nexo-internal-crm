@@ -4,19 +4,58 @@ import { FiChevronUp, FiChevronDown } from 'react-icons/fi';
 import { useAffiliatesList } from '../../store/useAffiliatesList';
 import { TableSkeleton } from '../sharedComponents/Skeletons';
 import { ROUTES } from '../../utils/routes';
+import Modal from '../sharedComponents/Modal';
+import { changeAffiliateStatus } from '../../api/AfiliatesApi';
 
 export default function AffiliatesTable() {
-  const { affiliates, loading, searchTerm } = useAffiliatesList();
+  const { affiliates, loading, searchTerm, setAffiliates } = useAffiliatesList();
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [sortColumn, setSortColumn] = useState('affiliate_id');
   const [sortDirection, setSortDirection] = useState('asc');
+  const [selectedAffiliate, setSelectedAffiliate] = useState(null);
+  const [pendingStatus, setPendingStatus] = useState(null);
+  const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+  const [statusLoading, setStatusLoading] = useState(false);
+  const [statusError, setStatusError] = useState(null);
 
   const handleAffiliateClick = (affiliate) => {
     navigate(
       ROUTES.AFFILIATES_DETAILS.replace(':affiliate_id', affiliate.affiliate_id)
     );
+  };
+
+  const openStatusModal = (affiliate, nextStatus) => {
+    setSelectedAffiliate(affiliate);
+    setPendingStatus(nextStatus);
+    setStatusError(null);
+    setIsStatusModalOpen(true);
+  };
+
+  const handleConfirmStatusChange = async () => {
+    if (!selectedAffiliate || typeof pendingStatus !== 'boolean') return;
+    setStatusLoading(true);
+    setStatusError(null);
+    try {
+      await changeAffiliateStatus(selectedAffiliate.user_id, pendingStatus);
+      setAffiliates(
+        affiliates.map((a) =>
+          a.affiliate_id === selectedAffiliate.affiliate_id
+            ? { ...a, user_status: pendingStatus }
+            : a
+        )
+      );
+      setIsStatusModalOpen(false);
+      setSelectedAffiliate(null);
+      setPendingStatus(null);
+    } catch (err) {
+      setStatusError(
+        err?.message || 'Error al cambiar el estatus del afiliado'
+      );
+    } finally {
+      setStatusLoading(false);
+    }
   };
 
   // Filtrar afiliados por búsqueda
@@ -75,7 +114,7 @@ export default function AffiliatesTable() {
   };
 
   if (loading) {
-    return <TableSkeleton rows={10} columns={3} />;
+    return <TableSkeleton rows={10} columns={4} />;
   }
 
   return (
@@ -111,6 +150,9 @@ export default function AffiliatesTable() {
                   <SortIcon column="comercial_name" />
                 </div>
               </th>
+              <th className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium">
+                Estatus
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-100">
@@ -130,6 +172,37 @@ export default function AffiliatesTable() {
                   <td className="px-4 py-3 text-neutral-900">{affiliate.affiliate_id || '-'}</td>
                   <td className="px-4 py-3 text-neutral-900">{affiliate.legal_name || '-'}</td>
                   <td className="px-4 py-3 text-neutral-600">{affiliate.comercial_name || '-'}</td>
+                  <td className="px-4 py-3 text-neutral-600">
+                    <div
+                      className="flex items-center gap-2"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <button
+                        type="button"
+                        onClick={() =>
+                          openStatusModal(affiliate, !affiliate.user_status)
+                        }
+                        className={`relative inline-flex h-5 w-10 items-center rounded-full border transition-colors ${
+                          affiliate.user_status
+                            ? 'bg-highlight-500 border-highlight-500'
+                            : 'bg-rose-100 border-rose-200'
+                        }`}
+                      >
+                        <span
+                          className={`h-4 w-4 rounded-full bg-white shadow-sm transform transition-transform ${
+                            affiliate.user_status ? 'translate-x-5' : 'translate-x-1'
+                          }`}
+                        />
+                      </button>
+                      <span
+                        className={`text-sm font-poppinsMedium ${
+                          affiliate.user_status ? 'text-emerald-700' : 'text-rose-700'
+                        }`}
+                      >
+                        {affiliate.user_status ? 'Activo' : 'Inactivo'}
+                      </span>
+                    </div>
+                  </td>
                 </tr>
               ))
             )}
@@ -182,6 +255,62 @@ export default function AffiliatesTable() {
           </div>
         </div>
       )}
+
+      <Modal
+        isOpen={isStatusModalOpen}
+        onClose={() => {
+          if (statusLoading) return;
+          setIsStatusModalOpen(false);
+          setSelectedAffiliate(null);
+          setPendingStatus(null);
+          setStatusError(null);
+        }}
+        title={pendingStatus ? 'Activar afiliado' : 'Desactivar afiliado'}
+        size="sm"
+      >
+        {selectedAffiliate && (
+          <div className="space-y-4">
+            <p className="text-sm text-neutral-700 font-poppinsRegular">
+              ¿Estás seguro de {pendingStatus ? 'activar' : 'desactivar'} al afiliado{' '}
+              <span className="font-poppinsBold text-neutral-900">
+                {selectedAffiliate.comercial_name ||
+                  selectedAffiliate.legal_name ||
+                  `#${selectedAffiliate.affiliate_id}`}
+              </span>
+              ?
+            </p>
+            {statusError && (
+              <div className="rounded-lg bg-red-50 border border-red-200 px-3 py-2 text-xs text-red-800 font-poppinsRegular">
+                {statusError}
+              </div>
+            )}
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                disabled={statusLoading}
+                onClick={() => {
+                  if (statusLoading) return;
+                  setIsStatusModalOpen(false);
+                  setSelectedAffiliate(null);
+                  setPendingStatus(null);
+                  setStatusError(null);
+                }}
+                className="px-4 py-2 text-sm font-poppinsMedium rounded-lg border border-neutral-300 text-neutral-700 bg-white hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmStatusChange}
+                disabled={statusLoading}
+                className="px-4 py-2 text-sm font-poppinsMedium rounded-lg text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {statusLoading ? 'Guardando...' : 'Continuar'}
+              </button>
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }

@@ -41,3 +41,27 @@ export async function updateClient(clientId, clientData) {
   }
 }
 
+export async function changeCreditLineStatus(clientId, status) {
+  try {
+    const response = await axios.put(
+      `${API_BASE_URL}/web/clients/change_credit_line_status`,
+      {
+        clientId: Number(clientId),
+        status: Boolean(status),
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          token: getCookie('accessToken'),
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    const errMsg =
+      error.response?.data?.message ||
+      'Error al cambiar el estado de la línea de crédito';
+    throw new Error(errMsg);
+  }
+}
+

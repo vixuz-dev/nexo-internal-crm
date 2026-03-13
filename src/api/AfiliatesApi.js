@@ -22,3 +22,27 @@ export async function getCompaniesCatalog() {
     throw new Error(errMsg);
   }
 }
+
+export async function changeAffiliateStatus(userId, status) {
+  try {
+    const response = await axios.put(
+      `${API_BASE_URL}/web/affiliates/change_affiliate_status`,
+      {
+        userId: Number(userId),
+        status: Boolean(status),
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: getCookie("accessToken"),
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    const errMsg =
+      error.response?.data?.message ||
+      "Error al cambiar el estatus del afiliado";
+    throw new Error(errMsg);
+  }
+}

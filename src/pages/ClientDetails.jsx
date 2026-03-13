@@ -141,15 +141,15 @@ const ClientDetails = () => {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  {client.user_status === true ? (
+                  {client.user_status ? (
                     <FiCheckCircle className="h-5 w-5 text-emerald-600 flex-shrink-0 mt-0.5" />
                   ) : (
                     <FiXCircle className="h-5 w-5 text-rose-600 flex-shrink-0 mt-0.5" />
                   )}
                   <div className="flex-1">
                     <p className="text-sm text-neutral-600 font-poppinsMedium mb-1">Estado</p>
-                    <p className={`font-poppinsRegular ${client.user_status === true ? "text-emerald-700" : "text-rose-700"}`}>
-                      {client.user_status === true ? "Activo" : "Inactivo"}
+                    <p className={`font-poppinsRegular ${client.user_status ? "text-emerald-700" : "text-rose-700"}`}>
+                      {client.user_status ? "Activo" : "Inactivo"}
                     </p>
                   </div>
                 </div>
@@ -282,7 +282,7 @@ const ClientDetails = () => {
                     <div className="flex-1">
                       <p className="text-sm text-neutral-600 font-poppinsMedium mb-1">Estado del crédito</p>
                       <p className="text-neutral-900 font-poppinsRegular">
-                        {client.credit_status === 1 ? "Activo" : client.credit_status === 0 ? "Inactivo" : "-"}
+                        {client.credit_status ? "Activo" : "Inactivo"}
                       </p>
                     </div>
                   </div>
