@@ -51,7 +51,11 @@ const OrderDetails = () => {
 
   const formatDate = (dateString) => {
     if (!dateString) return "-";
-    const date = new Date(dateString);
+    // Fechas solo día (YYYY-MM-DD): interpretar como fecha local para evitar desfase por UTC
+    const dateOnlyMatch = String(dateString).match(/^(\d{4})-(\d{2})-(\d{2})/);
+    const date = dateOnlyMatch
+      ? new Date(Number(dateOnlyMatch[1]), Number(dateOnlyMatch[2]) - 1, Number(dateOnlyMatch[3]))
+      : new Date(dateString);
     if (isNaN(date.getTime())) return dateString;
     return date.toLocaleDateString("es-MX", {
       year: "numeric",
@@ -97,8 +101,8 @@ const OrderDetails = () => {
     if (statusLower === 'en tránsito' || statusLower === 'en transito') {
       return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-purple-50 text-purple-800">En tránsito</span>;
     }
-    if (statusLower === 'completado') {
-      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-emerald-50 text-emerald-800">Completado</span>;
+    if (statusLower === 'entregado') {
+      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-emerald-50 text-emerald-800">Entregado</span>;
     }
     return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-neutral-50 text-neutral-800">{status || '-'}</span>;
   };

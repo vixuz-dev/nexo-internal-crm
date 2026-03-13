@@ -130,6 +130,13 @@ export default function InvoicesTable() {
         </span>
       );
     }
+    if (invoice_status === "Eliminado") {
+      return (
+        <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-red-50 text-red-800">
+          Eliminada
+        </span>
+      );
+    }
     return (
       <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-neutral-50 text-neutral-800">
         -

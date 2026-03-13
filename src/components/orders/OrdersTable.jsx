@@ -64,6 +64,9 @@ export default function OrdersTable() {
     if (statusLower === 'en tránsito' || statusLower === 'en transito') {
       return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-purple-50 text-purple-800">En tránsito</span>;
     }
+    if (statusLower === 'eliminado') {
+      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-red-50 text-red-800">Eliminado</span>;
+    }
     return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-neutral-50 text-neutral-800">{status || '-'}</span>;
   };
 

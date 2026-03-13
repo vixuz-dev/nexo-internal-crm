@@ -8,6 +8,7 @@ const getStatusBadgeClass = (status) => {
   if (s === 'Pendiente') return 'bg-amber-50 text-amber-700';
   if (s === 'Pendiente de pago') return 'bg-sky-50 text-sky-700';
   if (s === 'Cancelado') return 'bg-rose-50 text-rose-700';
+  if (s === 'Eliminado') return 'bg-red-50 text-red-700';
   return 'bg-neutral-100 text-neutral-700';
 };
 

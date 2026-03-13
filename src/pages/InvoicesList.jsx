@@ -68,7 +68,7 @@ const InvoicesList = () => {
             <button
               onClick={() => setStatusFilter("Pagado")}
               className={`px-4 py-2 rounded-lg transition font-poppinsMedium ${
-                statusFilter === "Pagada"
+                statusFilter === "Pagado"
                   ? "bg-emerald-600 text-white"
                   : "bg-white text-neutral-700 border border-neutral-300 hover:bg-neutral-50"
               }`}
@@ -104,6 +104,16 @@ const InvoicesList = () => {
               }`}
             >
               Canceladas
+            </button>
+            <button
+              onClick={() => setStatusFilter("Eliminado")}
+              className={`px-4 py-2 rounded-lg transition font-poppinsMedium ${
+                statusFilter === "Eliminado"
+                  ? "bg-red-400 text-white"
+                  : "bg-white text-neutral-700 border border-neutral-300 hover:bg-neutral-50"
+              }`}
+            >
+              Eliminadas
             </button>
           </div>
 
