@@ -47,18 +47,18 @@ const menuItems = [
       // { label: 'Auditoria', path: ROUTES.CONSULTAS_AUDIT },
       // { label: 'Fichas', path: ROUTES.CONSULTAS_FICHAS },
       { label: 'Facturas', path: ROUTES.CONSULTAS_FACTURAS },
-      { label: 'Cobranza', path: ROUTES.CONSULTAS_COBRANZA },
+      // { label: 'Cobranza', path: ROUTES.CONSULTAS_COBRANZA },
       // { label: 'Cobranza diaria', path: ROUTES.CONSULTAS_COBRANZA_DIA },
     ],
   },
   // Dashboards y Análisis
-  {
-    label: 'Dashboards',
-    icon: FiBarChart2,
-    children: [
-      { label: 'Cobranza Zona', path: ROUTES.DASHBOARDS_COBRANZA_ZONA },
-    ],
-  },
+  // {
+  //   label: 'Dashboards',
+  //   icon: FiBarChart2,
+  //   children: [
+  //     { label: 'Cobranza Zona', path: ROUTES.DASHBOARDS_COBRANZA_ZONA },
+  //   ],
+  // },
 ];
 
 const DashboardLayout = ({ children }) => {
