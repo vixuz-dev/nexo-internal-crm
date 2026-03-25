@@ -6,6 +6,7 @@ import { login } from "../api/authApi";
 import { setCookie, getCookie } from "../utils/sessionCookie";
 import { useAfiliateInformation } from "../store/useAfiliateInformation";
 import nexoMainLogo from "../assets/images/logos/nexo-main-logo.png";
+import { hashPassword } from "../utils/encryp";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ username: "", password: "" });
@@ -37,7 +38,7 @@ const LoginPage = () => {
     try {
       const response = await login({
         username: formData.username,
-        password: formData.password,
+        password: hashPassword(formData.password),
       });
       if (
         response &&
