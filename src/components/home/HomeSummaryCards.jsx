@@ -24,7 +24,7 @@ export default function HomeSummaryCards() {
     },
     {
       label: 'Cobranza semanal',
-      value: formatNumber(weeklyCollection?.totalWeely),
+      value: formatNumber(weeklyCollection?.totalWeekly),
       sub: `Nuevas (semana): ${weeklyCollection?.newWeeklyCollection ?? 0}`,
       bg: 'bg-secondary-50',
       text: 'text-secondary-900',
