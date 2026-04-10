@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useNavigate, Navigate } from "react-router-dom";
-import { FiEye, FiEyeOff, FiPhone, FiLock } from "react-icons/fi";
+import { Navigate } from "react-router-dom";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import { ROUTES } from "../utils/routes";
 import { login } from "../api/authApi";
 import { setCookie, getCookie } from "../utils/sessionCookie";
@@ -14,7 +14,6 @@ const LoginPage = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [redirecting, setRedirecting] = useState(false);
-  const navigate = useNavigate();
   const setUser = useAfiliateInformation((state) => state.setUser);
 
   const handleChange = (e) => {
@@ -83,8 +82,11 @@ const LoginPage = () => {
     return <Navigate to={ROUTES.AFFILIATES_DASHBOARD} replace />;
   }
 
+  const inputUnderline =
+    "block w-full border-0 border-b-2 border-black/15 bg-transparent py-3 px-0 text-base text-black placeholder:text-black/40 placeholder:font-normal focus:border-primary-500 focus:ring-0 focus:outline-none transition-colors rounded-none";
+
   return (
-    <div className="min-h-screen w-full bg-neutral-200 flex items-center justify-center p-6">
+    <div className="min-h-screen w-full relative flex flex-col lg:flex-row">
       {redirecting && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
           <div className="bg-white rounded-xl shadow-lg px-8 py-6 flex flex-col items-center">
@@ -108,42 +110,61 @@ const LoginPage = () => {
                 d="M4 12a8 8 0 018-8v8z"
               ></path>
             </svg>
-            <span className="text-primary-700 font-poppinsBold text-lg">
+            <span className="text-primary-700 font-bold text-lg">
               Cargando tu panel...
             </span>
           </div>
         </div>
       )}
-      {/* Formulario centrado */}
-      <div className="w-full max-w-md flex flex-col items-center">
-        {/* Logo */}
-        <img
-          src={nexoMainLogo}
-          alt="NexoPay"
-          className="h-12 md:h-14 lg:h-16 mb-6"
-        />
-        {/* Título */}
-        <h1 className="text-2xl md:text-3xl font-poppinsBold text-neutral-900 mb-8 text-center font-black tracking-tight">
-          Inicia sesión en NexoPay
-        </h1>
-        <form
-          className="w-full rounded-xl p-6 md:p-8 bg-white shadow-lg"
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSubmit();
-          }}
-        >
-          <div className="mb-4">
-            <label
-              htmlFor="username"
-              className="block text-sm font-poppinsBold text-primary-700 font-bold mb-2"
-            >
-              Usuario
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FiPhone className="h-5 w-5 text-neutral-600" />
-              </div>
+
+      {/* Fondo gradiente (primary) en toda la pantalla */}
+      <div
+        className="absolute inset-0 bg-gradient-to-br from-primary-900 via-primary-600 to-primary-400"
+        aria-hidden="true"
+      />
+      {/* Textura muy sutil */}
+      <div
+        className="absolute inset-0 opacity-[0.12] pointer-events-none mix-blend-overlay"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Formulario ~60% desktop: blanco; móvil: toda la pantalla blanca + bloque ¡Hola! solo aquí */}
+      <div className="relative z-10 w-full lg:w-3/5 min-h-screen bg-white flex flex-col justify-center lg:rounded-tr-[6.5rem] lg:rounded-br-[6.5rem] shadow-[8px_0_48px_-12px_rgba(8,30,34,0.12)]">
+        <div className="w-full max-w-md mx-auto px-8 py-12 lg:px-14 lg:py-16">
+          <img
+            src={nexoMainLogo}
+            alt="NexoPay"
+            className="h-10 md:h-12 mb-8 lg:mb-10"
+          />
+
+          {/* Saludo motivacional: solo móvil (sobre fondo blanco) */}
+          <p className="lg:hidden text-2xl font-bold leading-tight text-primary-700 mb-8">
+            ¡Hola! 👋
+          </p>
+          <h1 className="text-3xl md:text-4xl font-bold text-black tracking-tight">
+            Bienvenido de nuevo
+          </h1>
+          <p className="mt-3 text-sm text-black/55 leading-relaxed">
+            Ingresa tus credenciales para acceder al CRM interno de NexoPay.
+          </p>
+
+          <form
+            className="mt-10 space-y-8"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit();
+            }}
+          >
+            <div>
+              <label
+                htmlFor="username"
+                className="block text-xs font-semibold text-black/45 uppercase tracking-wider mb-1"
+              >
+                Usuario
+              </label>
               <input
                 type="text"
                 id="username"
@@ -152,91 +173,105 @@ const LoginPage = () => {
                 onChange={handleChange}
                 autoComplete="off"
                 placeholder="5512345678"
-                className="block w-full pl-10 pr-3 py-2.5 border border-neutral-400 rounded-lg focus:border-primary-400 focus:ring-2 focus:ring-primary-400 focus:outline-none font-poppinsRegular text-neutral-700 placeholder:text-neutral-600 placeholder:font-semibold"
+                className={inputUnderline}
               />
+              {errors.username && (
+                <div className="text-red-600 text-xs mt-2">{errors.username}</div>
+              )}
             </div>
-            {errors.username && (
-              <div className="text-red-600 text-xs mt-1 font-poppinsRegular">
-                {errors.username}
-              </div>
-            )}
-          </div>
-          <div className="mb-6">
-            <label
-              htmlFor="password"
-              className="block text-sm font-poppinsBold text-primary-700 font-bold mb-2"
-            >
-              Contraseña
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FiLock className="h-5 w-5 text-neutral-600" />
-              </div>
-              <input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                name="password"
-                autoComplete="off"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Mínimo 8 caracteres"
-                className="block w-full pl-10 pr-10 py-2.5 border border-neutral-400 rounded-lg focus:border-primary-400 focus:ring-2 focus:ring-primary-400 focus:outline-none font-poppinsRegular text-neutral-700 placeholder:text-neutral-600 placeholder:font-semibold"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword((v) => !v)}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-neutral-600 hover:text-neutral-700"
-                tabIndex={-1}
+
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-xs font-semibold text-black/45 uppercase tracking-wider mb-1"
               >
-                {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
-              </button>
-            </div>
-            {errors.password && (
-              <div className="text-red-600 text-xs mt-1 font-poppinsRegular">
-                {errors.password}
+                Contraseña
+              </label>
+              <div className="relative flex items-end">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  name="password"
+                  autoComplete="off"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Mínimo 8 caracteres"
+                  className={`${inputUnderline} pr-10`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute right-0 bottom-3 p-1 text-black/45 hover:text-black transition-colors"
+                  tabIndex={-1}
+                  aria-label={
+                    showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
+                  }
+                >
+                  {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+                </button>
               </div>
-            )}
+              {errors.password && (
+                <div className="text-red-600 text-xs mt-2">{errors.password}</div>
+              )}
+            </div>
+
             {errors.general && (
-              <div className="text-red-600 text-xs mt-3 font-poppinsRegular text-center">
+              <div className="text-red-600 text-sm text-center -mt-2">
                 {errors.general}
               </div>
             )}
-          </div>
-          <button
-            type="submit"
-            className="w-full py-3 px-4 rounded-lg bg-primary-500 text-white font-poppinsBold font-extrabold hover:bg-primary-600 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={loading}
-          >
-            {loading ? (
-              <span className="flex items-center gap-2">
-                <svg
-                  className="animate-spin h-5 w-5 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                  ></path>
-                </svg>
-                Iniciando...
-              </span>
-            ) : (
-              "Iniciar sesión"
-            )}
-          </button>
-        </form>
+
+            <button
+              type="submit"
+              className="w-full py-3.5 px-4 rounded-xl bg-primary-700 text-white text-base font-semibold hover:bg-primary-800 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={loading}
+            >
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    ></path>
+                  </svg>
+                  Iniciando...
+                </span>
+              ) : (
+                "Iniciar sesión"
+              )}
+            </button>
+          </form>
+        </div>
       </div>
+
+      {/* Desktop / tablet (lg+): texto completo sobre el gradiente */}
+      <aside className="hidden lg:flex relative z-10 w-2/5 shrink-0 min-h-screen flex-col justify-center px-8 lg:pl-6 lg:pr-12 lg:py-16 text-white">
+        <p className="text-3xl md:text-4xl font-bold leading-tight max-w-md">
+          ¡Hola! 👋
+        </p>
+        <p className="mt-6 text-base sm:text-lg font-medium leading-relaxed text-white/95 max-w-md">
+          Cada gestión cuenta. Aquí transformas datos en decisiones que impulsan
+          a NexoPay.
+        </p>
+        <p className="mt-6 text-sm sm:text-base leading-relaxed text-white/80 max-w-sm">
+          Bienvenido al <span className="font-semibold text-white">CRM interno</span>{" "}
+          de NexoPay. Tu espacio para operar con orden y visión clara.
+        </p>
+      </aside>
     </div>
   );
 };

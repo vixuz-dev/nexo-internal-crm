@@ -9,24 +9,26 @@ export default {
       screens: {
         'xs': '365px',
       },
+      container: {
+        center: true,
+        padding: {
+          DEFAULT: '1rem',
+          sm: '1.5rem',
+          lg: '2rem',
+        },
+      },
       fontFamily: {
-        'sans': ['Poppins', 'system-ui', 'sans-serif'],
-        'poppins': ['Poppins', 'system-ui', 'sans-serif'],
-        poppinsRegular: ['PoppinsRegular', 'sans-serif'],
-        poppinsMedium: ['PoppinsMedium', 'sans-serif'],
-        poppinsSemiBold: ['PoppinsSemiBold', 'sans-serif'],
-        poppinsBold: ['PoppinsBold', 'sans-serif'],
-        serifDisplay: ['DMSerifDisplay', 'serif'],
+        sans: ['Poppins', 'system-ui', 'sans-serif'],
+        poppins: ['Poppins', 'system-ui', 'sans-serif'],
       },
       colors: {
-        // Colores principales del proyecto
         primary: {
           50: '#f0f9fc',
           100: '#d1f0f7',
           200: '#a3e1ef',
           300: '#75d2e7',
           400: '#47c3df',
-          500: '#208eaa', // Color principal
+          500: '#208eaa',
           600: '#1a7288',
           700: '#145666',
           800: '#0e3a44',
@@ -38,7 +40,7 @@ export default {
           200: '#a3e5f1',
           300: '#75d8ea',
           400: '#47cbe3',
-          500: '#5ec4e3', // Color secundario
+          500: '#5ec4e3',
           600: '#4b9db6',
           700: '#387689',
           800: '#254f5c',
@@ -50,7 +52,7 @@ export default {
           200: '#e5ebd1',
           300: '#d8e1ba',
           400: '#cbd7a3',
-          500: '#c1d224', // Color de highlights
+          500: '#c1d224',
           600: '#9ba81d',
           700: '#757e16',
           800: '#4f540f',
@@ -62,7 +64,7 @@ export default {
           200: '#fbfbfb',
           300: '#f9f9f9',
           400: '#f5f5f5',
-          500: '#f1f1f0', // Color neutro
+          500: '#f1f1f0',
           600: '#c1c1c0',
           700: '#919190',
           800: '#616160',

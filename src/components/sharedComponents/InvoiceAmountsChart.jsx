@@ -9,7 +9,7 @@ const formatAbbreviated = (num) => {
   return num;
 };
 
-const COLORS = ['#10B981', '#F59E0B', '#EF4444']; // Pagadas, Pendientes, Canceladas
+const COLORS = ['#208eaa', '#c1d224', '#919190'];
 
 const InvoiceAmountsChart = ({ data }) => {
   const chartData = [
@@ -30,7 +30,7 @@ const InvoiceAmountsChart = ({ data }) => {
   if (!data) {
     return (
       <div className="h-[400px] w-full flex items-center justify-center">
-        <p className="text-gray-500">No hay datos disponibles</p>
+        <p className="text-black">No hay datos disponibles</p>
       </div>
     );
   }

@@ -114,7 +114,7 @@ export default function AffiliatesTable() {
   };
 
   if (loading) {
-    return <TableSkeleton rows={10} columns={4} />;
+    return <TableSkeleton rows={10} columns={5} />;
   }
 
   return (
@@ -124,7 +124,7 @@ export default function AffiliatesTable() {
           <thead className="bg-neutral-50 border-b border-neutral-200">
             <tr>
               <th 
-                className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium cursor-pointer hover:bg-neutral-100 transition"
+                className="px-4 py-3 text-left text-black font-medium cursor-pointer hover:bg-neutral-100 transition"
                 onClick={() => handleSort('affiliate_id')}
               >
                 <div className="flex items-center gap-2">
@@ -133,7 +133,7 @@ export default function AffiliatesTable() {
                 </div>
               </th>
               <th 
-                className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium cursor-pointer hover:bg-neutral-100 transition"
+                className="px-4 py-3 text-left text-black font-medium cursor-pointer hover:bg-neutral-100 transition"
                 onClick={() => handleSort('legal_name')}
               >
                 <div className="flex items-center gap-2">
@@ -142,7 +142,7 @@ export default function AffiliatesTable() {
                 </div>
               </th>
               <th 
-                className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium cursor-pointer hover:bg-neutral-100 transition"
+                className="px-4 py-3 text-left text-black font-medium cursor-pointer hover:bg-neutral-100 transition"
                 onClick={() => handleSort('comercial_name')}
               >
                 <div className="flex items-center gap-2">
@@ -150,15 +150,18 @@ export default function AffiliatesTable() {
                   <SortIcon column="comercial_name" />
                 </div>
               </th>
-              <th className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium">
-                Estatus
+              <th className="px-4 py-3 text-left text-black font-medium">
+                ESTATUS
+              </th>
+              <th className="px-4 py-3 text-left text-black font-medium">
+                ACCIONES
               </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-100">
             {paginatedAffiliates.length === 0 ? (
               <tr>
-                <td colSpan={3} className="px-4 py-8 text-center text-neutral-600">
+                <td colSpan={5} className="px-4 py-8 text-center text-black">
                   {searchTerm ? 'No se encontraron afiliados' : 'No hay afiliados registrados'}
                 </td>
               </tr>
@@ -169,12 +172,23 @@ export default function AffiliatesTable() {
                   onClick={() => handleAffiliateClick(affiliate)}
                   className="hover:bg-highlight-50 transition cursor-pointer"
                 >
-                  <td className="px-4 py-3 text-neutral-900">{affiliate.affiliate_id || '-'}</td>
-                  <td className="px-4 py-3 text-neutral-900">{affiliate.legal_name || '-'}</td>
-                  <td className="px-4 py-3 text-neutral-600">{affiliate.comercial_name || '-'}</td>
-                  <td className="px-4 py-3 text-neutral-600">
+                  <td className="px-4 py-3 text-black">{affiliate.affiliate_id || '-'}</td>
+                  <td className="px-4 py-3 text-black">{affiliate.legal_name || '-'}</td>
+                  <td className="px-4 py-3 text-black">{affiliate.comercial_name || '-'}</td>
+                  <td className="px-4 py-3">
+                    <span
+                      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold border ${
+                        affiliate.user_status
+                          ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                          : 'bg-rose-50 text-rose-800 border-rose-200'
+                      }`}
+                    >
+                      {affiliate.user_status ? 'Activo' : 'Inactivo'}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-black">
                     <div
-                      className="flex items-center gap-2"
+                      className="flex items-center"
                       onClick={(e) => e.stopPropagation()}
                     >
                       <button
@@ -182,25 +196,14 @@ export default function AffiliatesTable() {
                         onClick={() =>
                           openStatusModal(affiliate, !affiliate.user_status)
                         }
-                        className={`relative inline-flex h-5 w-10 items-center rounded-full border transition-colors ${
+                        className={`text-xs font-semibold px-3 py-1.5 rounded-lg border transition focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 ${
                           affiliate.user_status
-                            ? 'bg-highlight-500 border-highlight-500'
-                            : 'bg-rose-100 border-rose-200'
+                            ? 'border-primary-200 bg-primary-50 text-primary-800 hover:bg-primary-100'
+                            : 'border-primary-600 bg-primary-600 text-white hover:bg-primary-700'
                         }`}
                       >
-                        <span
-                          className={`h-4 w-4 rounded-full bg-white shadow-sm transform transition-transform ${
-                            affiliate.user_status ? 'translate-x-5' : 'translate-x-1'
-                          }`}
-                        />
+                        {affiliate.user_status ? 'Desactivar' : 'Activar'}
                       </button>
-                      <span
-                        className={`text-sm font-poppinsMedium ${
-                          affiliate.user_status ? 'text-emerald-700' : 'text-rose-700'
-                        }`}
-                      >
-                        {affiliate.user_status ? 'Activo' : 'Inactivo'}
-                      </span>
                     </div>
                   </td>
                 </tr>
@@ -215,14 +218,14 @@ export default function AffiliatesTable() {
         <div className="bg-neutral-50 border-t border-neutral-200 px-4 py-3">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <span className="text-sm text-neutral-600 font-poppinsRegular">Filas por página:</span>
+              <span className="text-sm text-black">Filas por página:</span>
               <select
                 value={itemsPerPage}
                 onChange={(e) => {
                   setItemsPerPage(Number(e.target.value));
                   setCurrentPage(1);
                 }}
-                className="border border-neutral-300 rounded px-2 py-1 text-sm font-poppinsRegular focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
+                className="border border-neutral-300 rounded px-2 py-1 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
               >
                 <option value={5}>5</option>
                 <option value={10}>10</option>
@@ -232,7 +235,7 @@ export default function AffiliatesTable() {
             </div>
             
             <div className="flex items-center gap-2">
-              <span className="text-sm text-neutral-600 font-poppinsRegular">
+              <span className="text-sm text-black">
                 {startIndex + 1}-{Math.min(endIndex, totalItems)} de {totalItems}
               </span>
               <div className="flex items-center gap-1">
@@ -241,14 +244,14 @@ export default function AffiliatesTable() {
                   disabled={currentPage === 1}
                   className="p-2 rounded border border-neutral-300 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed transition"
                 >
-                  <span className="text-neutral-700">‹</span>
+                  <span className="text-black">‹</span>
                 </button>
                 <button
                   onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                   disabled={currentPage === totalPages}
                   className="p-2 rounded border border-neutral-300 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed transition"
                 >
-                  <span className="text-neutral-700">›</span>
+                  <span className="text-black">›</span>
                 </button>
               </div>
             </div>
@@ -270,9 +273,9 @@ export default function AffiliatesTable() {
       >
         {selectedAffiliate && (
           <div className="space-y-4">
-            <p className="text-sm text-neutral-700 font-poppinsRegular">
+            <p className="text-sm text-black">
               ¿Estás seguro de {pendingStatus ? 'activar' : 'desactivar'} al afiliado{' '}
-              <span className="font-poppinsBold text-neutral-900">
+              <span className="font-bold text-black">
                 {selectedAffiliate.comercial_name ||
                   selectedAffiliate.legal_name ||
                   `#${selectedAffiliate.affiliate_id}`}
@@ -280,7 +283,7 @@ export default function AffiliatesTable() {
               ?
             </p>
             {statusError && (
-              <div className="rounded-lg bg-red-50 border border-red-200 px-3 py-2 text-xs text-red-800 font-poppinsRegular">
+              <div className="rounded-lg bg-neutral-100 border border-neutral-300 px-3 py-2 text-xs text-black">
                 {statusError}
               </div>
             )}
@@ -295,7 +298,7 @@ export default function AffiliatesTable() {
                   setPendingStatus(null);
                   setStatusError(null);
                 }}
-                className="px-4 py-2 text-sm font-poppinsMedium rounded-lg border border-neutral-300 text-neutral-700 bg-white hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 text-sm font-medium rounded-lg border border-neutral-300 text-black bg-white hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Cancelar
               </button>
@@ -303,7 +306,7 @@ export default function AffiliatesTable() {
                 type="button"
                 onClick={handleConfirmStatusChange}
                 disabled={statusLoading}
-                className="px-4 py-2 text-sm font-poppinsMedium rounded-lg text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 text-sm font-medium rounded-lg text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {statusLoading ? 'Guardando...' : 'Continuar'}
               </button>

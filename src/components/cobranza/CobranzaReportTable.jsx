@@ -83,7 +83,7 @@ const CobranzaReportTable = ({ data = [], loading = false }) => {
           <thead className="bg-neutral-50 border-b border-neutral-200">
             <tr>
               <th 
-                className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium cursor-pointer hover:bg-neutral-100 transition"
+                className="px-4 py-3 text-left text-black font-medium cursor-pointer hover:bg-neutral-100 transition"
                 onClick={() => handleSort('product')}
               >
                 <div className="flex items-center gap-2">
@@ -92,7 +92,7 @@ const CobranzaReportTable = ({ data = [], loading = false }) => {
                 </div>
               </th>
               <th 
-                className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium cursor-pointer hover:bg-neutral-100 transition"
+                className="px-4 py-3 text-left text-black font-medium cursor-pointer hover:bg-neutral-100 transition"
                 onClick={() => handleSort('client')}
               >
                 <div className="flex items-center gap-2">
@@ -101,7 +101,7 @@ const CobranzaReportTable = ({ data = [], loading = false }) => {
                 </div>
               </th>
               <th 
-                className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium cursor-pointer hover:bg-neutral-100 transition"
+                className="px-4 py-3 text-left text-black font-medium cursor-pointer hover:bg-neutral-100 transition"
                 onClick={() => handleSort('amount')}
               >
                 <div className="flex items-center gap-2">
@@ -110,7 +110,7 @@ const CobranzaReportTable = ({ data = [], loading = false }) => {
                 </div>
               </th>
               <th 
-                className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium cursor-pointer hover:bg-neutral-100 transition"
+                className="px-4 py-3 text-left text-black font-medium cursor-pointer hover:bg-neutral-100 transition"
                 onClick={() => handleSort('date')}
               >
                 <div className="flex items-center gap-2">
@@ -123,19 +123,19 @@ const CobranzaReportTable = ({ data = [], loading = false }) => {
           <tbody className="divide-y divide-neutral-100">
             {paginatedData.length === 0 ? (
               <tr>
-                <td colSpan={4} className="px-4 py-8 text-center text-neutral-600">
+                <td colSpan={4} className="px-4 py-8 text-center text-black">
                   No hay datos para el rango de fechas seleccionado
                 </td>
               </tr>
             ) : (
               paginatedData.map((item, index) => (
                 <tr key={index} className="hover:bg-neutral-50 transition">
-                  <td className="px-4 py-3 text-neutral-900">{item.product || '-'}</td>
-                  <td className="px-4 py-3 text-neutral-900">{item.client || '-'}</td>
-                  <td className="px-4 py-3 text-neutral-900 font-poppinsMedium">
+                  <td className="px-4 py-3 text-black">{item.product || '-'}</td>
+                  <td className="px-4 py-3 text-black">{item.client || '-'}</td>
+                  <td className="px-4 py-3 text-black font-medium">
                     ${formatCurrency(item.amount || 0)}
                   </td>
-                  <td className="px-4 py-3 text-neutral-600">{formatDate(item.date)}</td>
+                  <td className="px-4 py-3 text-black">{formatDate(item.date)}</td>
                 </tr>
               ))
             )}
@@ -148,14 +148,14 @@ const CobranzaReportTable = ({ data = [], loading = false }) => {
         <div className="bg-neutral-50 border-t border-neutral-200 px-4 py-3">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <span className="text-sm text-neutral-600 font-poppinsRegular">Filas por página:</span>
+              <span className="text-sm text-black">Filas por página:</span>
               <select
                 value={itemsPerPage}
                 onChange={(e) => {
                   setItemsPerPage(Number(e.target.value));
                   setCurrentPage(1);
                 }}
-                className="border border-neutral-300 rounded px-2 py-1 text-sm font-poppinsRegular focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
+                className="border border-neutral-300 rounded px-2 py-1 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
               >
                 <option value={5}>5</option>
                 <option value={10}>10</option>
@@ -165,7 +165,7 @@ const CobranzaReportTable = ({ data = [], loading = false }) => {
             </div>
             
             <div className="flex items-center gap-2">
-              <span className="text-sm text-neutral-600 font-poppinsRegular">
+              <span className="text-sm text-black">
                 {startIndex + 1}-{Math.min(endIndex, totalItems)} de {totalItems}
               </span>
               <div className="flex items-center gap-1">
@@ -174,14 +174,14 @@ const CobranzaReportTable = ({ data = [], loading = false }) => {
                   disabled={currentPage === 1}
                   className="p-2 rounded border border-neutral-300 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed transition"
                 >
-                  <span className="text-neutral-700">‹</span>
+                  <span className="text-black">‹</span>
                 </button>
                 <button
                   onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                   disabled={currentPage === totalPages}
                   className="p-2 rounded border border-neutral-300 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed transition"
                 >
-                  <span className="text-neutral-700">›</span>
+                  <span className="text-black">›</span>
                 </button>
               </div>
             </div>

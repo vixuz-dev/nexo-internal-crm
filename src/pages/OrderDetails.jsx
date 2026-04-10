@@ -1,39 +1,57 @@
 import React, { useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { FiArrowLeft, FiFileText, FiUser, FiCalendar, FiDollarSign, FiPhone, FiMapPin, FiInfo, FiTruck } from "react-icons/fi";
+import { FiArrowLeft } from "react-icons/fi";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { useOrdersList } from "../store/useOrdersList";
 import { ROUTES } from "../utils/routes";
+
+const Field = ({ label, children }) => (
+  <div>
+    <p className="text-xs font-semibold uppercase tracking-wide text-black/55 mb-1">
+      {label}
+    </p>
+    <p className="text-sm md:text-base text-black font-medium leading-snug">
+      {children}
+    </p>
+  </div>
+);
+
+const SectionCard = ({ title, children }) => (
+  <div className="rounded-xl bg-white border border-neutral-200 p-6 shadow-sm">
+    <h3 className="text-base md:text-lg font-semibold text-black border-b border-neutral-200 border-l-4 border-l-primary-500 pl-3 pb-3 mb-5 -ml-px">
+      {title}
+    </h3>
+    {children}
+  </div>
+);
 
 const OrderDetails = () => {
   const { id_order } = useParams();
   const navigate = useNavigate();
   const { orders } = useOrdersList();
 
-  // Obtener pedido del store usando el ID de la URL (soporta order_id y orderId)
   const order = useMemo(() => {
     const orderId = Number(id_order);
     const foundOrder = orders.find((o) => (o.order_id ?? o.orderId) === orderId);
     return foundOrder || null;
   }, [id_order, orders]);
 
-  // Si no se encuentra el pedido, mostrar mensaje o redirigir
   if (!order) {
     return (
       <DashboardLayout>
         <div className="min-h-screen bg-neutral-200 px-4 py-8">
           <div className="w-full max-w-7xl mx-auto">
-            <div className="mb-8 mt-4">
-              <h2 className="text-2xl md:text-3xl font-poppinsMedium text-neutral-900 mb-2">
+            <div className="mb-8 mt-4 rounded-xl bg-white border border-neutral-200 p-6 shadow-sm">
+              <h2 className="text-2xl md:text-3xl font-semibold text-black mb-2">
                 Pedido no encontrado
               </h2>
-              <p className="text-neutral-600 font-poppinsRegular text-base md:text-lg mb-4">
+              <p className="text-black text-base md:text-lg mb-4">
                 No se pudo encontrar la información del pedido con ID:{" "}
                 {id_order}
               </p>
               <button
                 onClick={() => navigate(ROUTES.ORDERS_LIST)}
-                className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-poppinsMedium"
+                className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-medium"
               >
                 Volver al listado
               </button>
@@ -51,7 +69,6 @@ const OrderDetails = () => {
 
   const formatDate = (dateString) => {
     if (!dateString) return "-";
-    // Fechas solo día (YYYY-MM-DD): interpretar como fecha local para evitar desfase por UTC
     const dateOnlyMatch = String(dateString).match(/^(\d{4})-(\d{2})-(\d{2})/);
     const date = dateOnlyMatch
       ? new Date(Number(dateOnlyMatch[1]), Number(dateOnlyMatch[2]) - 1, Number(dateOnlyMatch[3]))
@@ -77,84 +94,105 @@ const OrderDetails = () => {
     });
   };
 
-  /** Devuelve lista { name, value } para mostrar atributos. Soporta array [{ name, value }] u objeto { key: value }. */
   const getAttributesDisplayList = (attributes) => {
     if (!attributes) return [];
     const raw = Array.isArray(attributes)
       ? attributes
-      : (typeof attributes === 'object' && attributes !== null
-          ? Object.entries(attributes).map(([key, value]) => ({ name: key, value }))
-          : []);
+      : typeof attributes === "object" && attributes !== null
+        ? Object.entries(attributes).map(([key, value]) => ({ name: key, value }))
+        : [];
     return raw
-      .map((a) => ({ name: String(a?.name ?? a?.key ?? ''), value: String(a?.value ?? '') }))
-      .filter((a) => a.name !== '' || a.value !== '');
+      .map((a) => ({
+        name: String(a?.name ?? a?.key ?? ""),
+        value: String(a?.value ?? ""),
+      }))
+      .filter((a) => a.name !== "" || a.value !== "");
   };
 
+  /** Badge sin relleno de color: borde y texto con acento primary / neutro */
   const getStatusBadge = (status) => {
-    const statusLower = status?.toLowerCase() || '';
-    if (statusLower === 'pendiente de pago') {
-      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-sky-50 text-sky-800">Pendiente de pago</span>;
+    const statusLower = status?.toLowerCase() || "";
+    const base =
+      "inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-white border";
+    if (statusLower === "pendiente de pago") {
+      return (
+        <span className={`${base} border-primary-300 text-primary-800`}>
+          Pendiente de pago
+        </span>
+      );
     }
-    if (statusLower === 'pendiente') {
-      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-amber-50 text-amber-800">Pendiente</span>;
+    if (statusLower === "pendiente") {
+      return (
+        <span className={`${base} border-primary-400 text-primary-700`}>
+          Pendiente
+        </span>
+      );
     }
-    if (statusLower === 'en tránsito' || statusLower === 'en transito') {
-      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-purple-50 text-purple-800">En tránsito</span>;
+    if (statusLower === "en tránsito" || statusLower === "en transito") {
+      return (
+        <span className={`${base} border-primary-500 text-primary-800`}>
+          En tránsito
+        </span>
+      );
     }
-    if (statusLower === 'entregado') {
-      return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-emerald-50 text-emerald-800">Entregado</span>;
+    if (statusLower === "entregado") {
+      return (
+        <span className={`${base} border-primary-600 text-primary-900`}>
+          Entregado
+        </span>
+      );
     }
-    return <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-neutral-50 text-neutral-800">{status || '-'}</span>;
+    return (
+      <span className={`${base} border-neutral-300 text-black`}>
+        {status || "—"}
+      </span>
+    );
   };
+
+  const shipping = order.shipping_info ?? order.shippingInfo;
+  const addressLine =
+    (shipping?.address ??
+      [
+        order.shippingInfo?.deliveryStreet,
+        order.shippingInfo?.deliveryExternalNum,
+        order.shippingInfo?.deliveryInternalNum &&
+          `Int. ${order.shippingInfo.deliveryInternalNum}`,
+        order.shippingInfo?.deliveryNeighborhood,
+        order.shippingInfo?.deliveryCity,
+        order.shippingInfo?.deliveryState,
+        order.shippingInfo?.deliveryZipCode,
+      ]
+        .filter(Boolean)
+        .join(", ")) || "";
 
   return (
     <DashboardLayout>
       <div className="min-h-screen bg-neutral-200 px-4 py-8">
-        <div className="w-full max-w-7xl mx-auto">
-          {/* Encabezado con título, folio, cliente y botón de regresar */}
-          <div className="mb-6 mt-4 rounded-xl bg-primary-50 border border-primary-200 p-6">
+        <div className="w-full max-w-7xl mx-auto space-y-6">
+          <div className="rounded-xl bg-white border border-neutral-200 p-6 shadow-sm">
             <div className="flex items-start justify-between gap-4">
-              <div className="flex-1">
-                <h2 className="text-2xl md:text-3xl font-poppinsBold font-semibold text-neutral-900 mb-4 flex items-center gap-2">
-                  <FiFileText className="h-6 w-6 text-primary-600" />
+              <div className="flex-1 min-w-0">
+                <h2 className="text-2xl md:text-3xl font-semibold text-black mb-1 border-l-4 border-primary-500 pl-3">
                   Detalle del pedido
                 </h2>
-                {/* Información resumida del pedido */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div className="flex items-center gap-2 text-neutral-700">
-                    <FiFileText className="h-5 w-5 text-primary-600 flex-shrink-0" />
-                    <div>
-                      <p className="text-xs text-neutral-600 font-poppinsMedium">Folio</p>
-                      <p className="text-sm font-poppinsBold text-neutral-900">{order.folio || "Sin folio"}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 text-neutral-700">
-                    <FiUser className="h-5 w-5 text-primary-600 flex-shrink-0" />
-                    <div>
-                      <p className="text-xs text-neutral-600 font-poppinsMedium">Cliente</p>
-                      <p className="text-sm font-poppinsBold text-neutral-900">{(order.client_name ?? order.name) || "Sin nombre"}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 text-neutral-700">
-                    <FiCalendar className="h-5 w-5 text-primary-600 flex-shrink-0" />
-                    <div>
-                      <p className="text-xs text-neutral-600 font-poppinsMedium">Fecha</p>
-                      <p className="text-sm font-poppinsBold text-neutral-900">{formatDateTime(order.created_at ?? order.date)}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 text-neutral-700">
-                    <FiDollarSign className="h-5 w-5 text-primary-600 flex-shrink-0" />
-                    <div>
-                      <p className="text-xs text-neutral-600 font-poppinsMedium">Total</p>
-                      <p className="text-sm font-poppinsBold text-neutral-900">{formatCurrency(order.total)}</p>
-                    </div>
-                  </div>
+                <p className="text-sm text-primary-700 font-medium mb-5 pl-3">
+                  Folio {order.folio || "Sin folio"} · ID {order.order_id ?? order.orderId ?? id_order}
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pl-0 sm:pl-3">
+                  <Field label="Cliente">
+                    {(order.client_name ?? order.name) || "Sin nombre"}
+                  </Field>
+                  <Field label="Fecha del pedido">
+                    {formatDateTime(order.created_at ?? order.date)}
+                  </Field>
+                  <Field label="Total">
+                    <span className="text-primary-700">{formatCurrency(order.total)}</span>
+                  </Field>
                 </div>
               </div>
-              {/* Botón de regresar */}
               <button
                 onClick={() => navigate(ROUTES.ORDERS_LIST)}
-                className="flex items-center gap-2 px-4 py-2 border border-highlight-500 rounded-lg text-neutral-700 hover:bg-highlight-100 transition font-poppinsMedium whitespace-nowrap"
+                className="flex items-center gap-2 px-4 py-2 border border-primary-300 rounded-lg text-primary-800 bg-white hover:bg-primary-50 transition font-medium whitespace-nowrap shrink-0 shadow-sm"
                 title="Volver al listado de pedidos"
               >
                 <FiArrowLeft className="h-5 w-5" />
@@ -163,72 +201,40 @@ const OrderDetails = () => {
             </div>
           </div>
 
-          {/* Información de envío (soporta shipping_info y shippingInfo) */}
-          {((order.shipping_info ?? order.shippingInfo)) && (
-            <div className="mb-6 rounded-xl bg-highlight-50 border border-highlight-200 p-6">
-              <h3 className="text-lg md:text-xl font-poppinsBold font-bold text-neutral-900 mb-4 flex items-center gap-2">
-                <FiTruck className="h-5 w-5 text-highlight-600" />
-                Información de envío
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex items-start gap-3">
-                  <FiUser className="h-5 w-5 text-highlight-600 flex-shrink-0 mt-0.5" />
-                  <div className="flex-1">
-                    <p className="text-sm text-neutral-600 font-poppinsMedium mb-1">Nombre del receptor</p>
-                    <p className="text-neutral-900 font-poppinsRegular">{((order.shipping_info ?? order.shippingInfo)?.name_received ?? order.shippingInfo?.nameReceived) || "-"}</p>
-                  </div>
+          {shipping && (
+            <SectionCard title="Información de envío">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Field label="Nombre del receptor">
+                  {(shipping?.name_received ?? order.shippingInfo?.nameReceived) || "—"}
+                </Field>
+                <Field label="Teléfono">
+                  {(
+                    (shipping?.phone_received ?? order.shippingInfo?.phoneReceived) ??
+                    ""
+                  ) || "—"}
+                </Field>
+                <div className="md:col-span-2">
+                  <Field label="Dirección">{addressLine || "—"}</Field>
                 </div>
-                <div className="flex items-start gap-3">
-                  <FiPhone className="h-5 w-5 text-highlight-600 flex-shrink-0 mt-0.5" />
-                  <div className="flex-1">
-                    <p className="text-sm text-neutral-600 font-poppinsMedium mb-1">Teléfono</p>
-                    <p className="text-neutral-900 font-poppinsRegular">{(((order.shipping_info ?? order.shippingInfo)?.phone_received ?? order.shippingInfo?.phoneReceived) ?? "") || "-"}</p>
-                  </div>
-                </div>
-                <div className="md:col-span-2 flex items-start gap-3">
-                  <FiMapPin className="h-5 w-5 text-highlight-600 flex-shrink-0 mt-0.5" />
-                  <div className="flex-1">
-                    <p className="text-sm text-neutral-600 font-poppinsMedium mb-1">Dirección</p>
-                    <p className="text-neutral-900 font-poppinsRegular">
-                      {(((order.shipping_info ?? order.shippingInfo)?.address ??
-                        [
-                          order.shippingInfo?.deliveryStreet,
-                          order.shippingInfo?.deliveryExternalNum,
-                          order.shippingInfo?.deliveryInternalNum && `Int. ${order.shippingInfo.deliveryInternalNum}`,
-                          order.shippingInfo?.deliveryNeighborhood,
-                          order.shippingInfo?.deliveryCity,
-                          order.shippingInfo?.deliveryState,
-                          order.shippingInfo?.deliveryZipCode
-                        ].filter(Boolean).join(", ")) ?? "") || "-"}
-                    </p>
-                  </div>
-                </div>
-                {((order.shipping_info ?? order.shippingInfo)?.delivery_references ?? order.shippingInfo?.deliveryReferences) && (
-                  <div className="md:col-span-2 flex items-start gap-3">
-                    <FiInfo className="h-5 w-5 text-highlight-600 flex-shrink-0 mt-0.5" />
-                    <div className="flex-1">
-                      <p className="text-sm text-neutral-600 font-poppinsMedium mb-1">Referencias</p>
-                      <p className="text-neutral-900 font-poppinsRegular">{(order.shipping_info ?? order.shippingInfo)?.delivery_references ?? order.shippingInfo?.deliveryReferences}</p>
-                    </div>
+                {(shipping?.delivery_references ?? order.shippingInfo?.deliveryReferences) && (
+                  <div className="md:col-span-2">
+                    <Field label="Referencias">
+                      {shipping?.delivery_references ?? order.shippingInfo?.deliveryReferences}
+                    </Field>
                   </div>
                 )}
                 {(order.completed_date ?? order.deliveryDate) && (
-                  <div className="flex items-start gap-3">
-                    <FiCalendar className="h-5 w-5 text-highlight-600 flex-shrink-0 mt-0.5" />
-                    <div className="flex-1">
-                      <p className="text-sm text-neutral-600 font-poppinsMedium mb-1">Fecha de entrega</p>
-                      <p className="text-neutral-900 font-poppinsRegular">{formatDate(order.completed_date ?? order.deliveryDate)}</p>
-                    </div>
-                  </div>
+                  <Field label="Fecha de entrega">
+                    {formatDate(order.completed_date ?? order.deliveryDate)}
+                  </Field>
                 )}
               </div>
-            </div>
+            </SectionCard>
           )}
 
-          {/* Tabla de productos */}
-          <div className="rounded-xl bg-white border border-neutral-200 overflow-hidden">
+          <div className="rounded-xl bg-white border border-neutral-200 overflow-hidden shadow-sm">
             <div className="px-6 py-4 border-b border-neutral-200">
-              <h3 className="text-lg md:text-xl font-poppinsBold font-bold text-neutral-900">
+              <h3 className="text-base md:text-lg font-semibold text-black border-l-4 border-primary-500 pl-3">
                 Productos del pedido
               </h3>
             </div>
@@ -236,15 +242,33 @@ const OrderDetails = () => {
               <table className="min-w-full text-sm">
                 <thead className="bg-neutral-50 border-b border-neutral-200">
                   <tr>
-                    <th className="px-4 py-3 text-left text-neutral-700 font-poppinsBold">Imagen</th>
-                    <th className="px-4 py-3 text-left text-neutral-700 font-poppinsBold">Producto</th>
-                    <th className="px-4 py-3 text-left text-neutral-700 font-poppinsBold">Cantidad</th>
-                    <th className="px-4 py-3 text-left text-neutral-700 font-poppinsBold">Precio</th>
-                    <th className="px-4 py-3 text-left text-neutral-700 font-poppinsBold">Total</th>
-                    <th className="px-4 py-3 text-left text-neutral-700 font-poppinsBold">Estado</th>
-                    <th className="px-4 py-3 text-left text-neutral-700 font-poppinsBold">Afiliado</th>
-                    <th className="px-4 py-3 text-left text-neutral-700 font-poppinsBold">Atributos</th>
-                    <th className="px-4 py-3 text-left text-neutral-700 font-poppinsBold">Fecha entrega</th>
+                    <th className="px-4 py-3 text-left text-black font-bold">
+                      Imagen
+                    </th>
+                    <th className="px-4 py-3 text-left text-black font-bold">
+                      Producto
+                    </th>
+                    <th className="px-4 py-3 text-left text-black font-bold">
+                      Cantidad
+                    </th>
+                    <th className="px-4 py-3 text-left text-black font-bold">
+                      Precio
+                    </th>
+                    <th className="px-4 py-3 text-left text-black font-bold">
+                      Total
+                    </th>
+                    <th className="px-4 py-3 text-left text-black font-bold">
+                      Estado
+                    </th>
+                    <th className="px-4 py-3 text-left text-black font-bold">
+                      Afiliado
+                    </th>
+                    <th className="px-4 py-3 text-left text-black font-bold">
+                      Atributos
+                    </th>
+                    <th className="px-4 py-3 text-left text-black font-bold">
+                      Fecha entrega
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-neutral-100">
@@ -252,63 +276,74 @@ const OrderDetails = () => {
                     order.products.map((product) => {
                       const attributesList = getAttributesDisplayList(product.attributes);
                       return (
-                        <tr key={product.order_detail_id} className="hover:bg-neutral-50 transition">
+                        <tr
+                          key={product.order_detail_id}
+                          className="hover:bg-neutral-50 transition"
+                        >
                           <td className="px-4 py-3">
-                            {(product.variant_image_url ?? product.image) ? (
-                              <img 
-                                src={product.variant_image_url ?? product.image} 
+                            {product.variant_image_url ?? product.image ? (
+                              <img
+                                src={product.variant_image_url ?? product.image}
                                 alt={product.product_name}
-                                className="w-16 h-16 object-cover rounded-lg"
+                                className="w-16 h-16 object-cover rounded-lg border border-neutral-200"
                                 onError={(e) => {
-                                  e.target.style.display = 'none';
+                                  e.target.style.display = "none";
                                 }}
                               />
                             ) : (
-                              <div className="w-16 h-16 bg-neutral-200 rounded-lg flex items-center justify-center">
-                                <span className="text-neutral-400 text-xs">Sin imagen</span>
+                              <div className="w-16 h-16 bg-neutral-100 rounded-lg border border-neutral-200 flex items-center justify-center">
+                                <span className="text-black text-xs">Sin imagen</span>
                               </div>
                             )}
                           </td>
-                          <td className="px-4 py-3 text-neutral-900 font-poppinsMedium">
-                            {product.product_name || "-"}
+                          <td className="px-4 py-3 text-black font-medium">
+                            {product.product_name || "—"}
                           </td>
-                          <td className="px-4 py-3 text-neutral-600">
+                          <td className="px-4 py-3 text-black">
                             {product.product_quantity || 0}
                           </td>
-                          <td className="px-4 py-3 text-neutral-900">
+                          <td className="px-4 py-3 text-black">
                             {formatCurrency(product.price)}
                           </td>
-                          <td className="px-4 py-3 text-neutral-900 font-poppinsMedium">
+                          <td className="px-4 py-3 text-black font-medium">
                             {formatCurrency(product.total)}
                           </td>
                           <td className="px-4 py-3">
                             {getStatusBadge(product.status)}
                           </td>
-                          <td className="px-4 py-3 text-neutral-600 text-sm">
-                            {product.affiliate || "-"}
+                          <td className="px-4 py-3 text-black text-sm">
+                            {product.affiliate || "—"}
                           </td>
-                          <td className="px-4 py-3 text-neutral-600 text-sm">
+                          <td className="px-4 py-3 text-black text-sm">
                             {attributesList.length > 0 ? (
                               <div className="flex flex-col gap-1">
                                 {attributesList.map((item, idx) => (
                                   <span key={item.name || idx}>
-                                    <span className="font-poppinsMedium">{item.name}:</span> {item.value}
+                                    <span className="font-medium text-primary-800">
+                                      {item.name}:
+                                    </span>{" "}
+                                    {item.value}
                                   </span>
                                 ))}
                               </div>
                             ) : (
-                              "-"
+                              "—"
                             )}
                           </td>
-                          <td className="px-4 py-3 text-neutral-600">
-                            {product.delivery_date ? formatDate(product.delivery_date) : "-"}
+                          <td className="px-4 py-3 text-black">
+                            {product.delivery_date
+                              ? formatDate(product.delivery_date)
+                              : "—"}
                           </td>
                         </tr>
                       );
                     })
                   ) : (
                     <tr>
-                      <td colSpan={9} className="px-4 py-8 text-center text-neutral-600">
+                      <td
+                        colSpan={9}
+                        className="px-4 py-8 text-center text-black"
+                      >
                         No hay productos en este pedido
                       </td>
                     </tr>
@@ -324,4 +359,3 @@ const OrderDetails = () => {
 };
 
 export default OrderDetails;
-

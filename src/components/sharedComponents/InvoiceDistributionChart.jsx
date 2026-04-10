@@ -5,7 +5,7 @@ const formatNumber = (num) => {
   return Number(num).toLocaleString('es-MX');
 };
 
-const COLORS = ['#10B981', '#F59E0B', '#EF4444'];
+const COLORS = ['#208eaa', '#c1d224', '#919190'];
 
 const InvoiceDistributionChart = ({ data }) => {
   const chartData = [
@@ -30,10 +30,10 @@ const InvoiceDistributionChart = ({ data }) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
-        <div className="bg-white p-3 rounded-lg shadow-lg border border-gray-100">
-          <p className="font-poppinsMedium text-gray-800">{data.name}</p>
-          <p className="text-sm text-gray-600">Cantidad: {formatNumber(data.value)}</p>
-          <p className="text-sm text-gray-600">
+        <div className="bg-white p-3 rounded-lg shadow-lg border border-neutral-200">
+          <p className="font-medium text-black">{data.name}</p>
+          <p className="text-sm text-black">Cantidad: {formatNumber(data.value)}</p>
+          <p className="text-sm text-black">
             Monto: {Number(data.amount).toLocaleString('es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 })}
           </p>
         </div>
@@ -46,7 +46,7 @@ const InvoiceDistributionChart = ({ data }) => {
   if (!data) {
     return (
       <div className="h-[400px] w-full flex items-center justify-center">
-        <p className="text-gray-500">No hay datos disponibles</p>
+        <p className="text-black">No hay datos disponibles</p>
       </div>
     );
   }
@@ -72,8 +72,8 @@ const InvoiceDistributionChart = ({ data }) => {
           <Legend
             verticalAlign="bottom"
             height={36}
-            formatter={(value, entry) => (
-              <span className="font-poppinsRegular text-sm text-gray-600">
+            formatter={(value) => (
+              <span className="text-sm text-black">
                 {value}
               </span>
             )}

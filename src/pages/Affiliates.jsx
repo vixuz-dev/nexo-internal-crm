@@ -29,10 +29,10 @@ const Affiliates = () => {
         <div className="w-full max-w-7xl mx-auto">
           {/* Encabezado con título y descripción */}
           <div className="mb-8 mt-4">
-            <h2 className="text-2xl md:text-3xl font-poppinsMedium text-neutral-900 mb-2">
+            <h2 className="text-2xl md:text-3xl font-medium text-black mb-2">
               Afiliados
             </h2>
-            <p className="text-neutral-600 font-poppinsRegular text-base md:text-lg">
+            <p className="text-black text-base md:text-lg">
               Gestiona y visualiza todos los afiliados registrados en el sistema.
             </p>
           </div>
@@ -48,8 +48,8 @@ const Affiliates = () => {
           
           {/* Tabla de afiliados */}
           {error ? (
-            <div className="rounded-xl bg-red-50 border border-red-200 p-4">
-              <p className="text-red-800">{error}</p>
+            <div className="rounded-xl bg-neutral-100 border border-neutral-300 p-4">
+              <p className="text-black">{error}</p>
             </div>
           ) : (
             <AffiliatesTable />

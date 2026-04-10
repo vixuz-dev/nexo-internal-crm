@@ -14,19 +14,19 @@ const CobranzaTodayCards = ({ todayTotal = 0, todayProducts = 0, loading = false
 
   return (
     <div className="rounded-xl bg-white border border-neutral-200 p-4 mb-6">
-      <h3 className="text-lg font-poppinsBold text-neutral-900 mb-4">
+      <h3 className="text-lg font-bold text-black mb-4">
         Cobranza del día de hoy
       </h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Total de dinero */}
         <div className="rounded-xl bg-primary-50 ring-1 ring-primary-200 p-5">
           <div className="flex items-start justify-between">
-            <p className="text-sm text-neutral-700 font-poppinsMedium">Total de dinero</p>
+            <p className="text-sm text-black font-medium">Total de dinero</p>
             <div className="shrink-0 rounded-lg bg-white/70 p-2 ring-1 ring-white/60">
               <FiDollarSign className="h-6 w-6 text-primary-600" />
             </div>
           </div>
-          <p className="mt-2 text-3xl font-poppinsBold text-primary-900">
+          <p className="mt-2 text-3xl font-bold text-primary-900">
             {loading ? '—' : `$${formatCurrency(todayTotal)}`}
           </p>
         </div>
@@ -34,12 +34,12 @@ const CobranzaTodayCards = ({ todayTotal = 0, todayProducts = 0, loading = false
         {/* Cantidad de productos */}
         <div className="rounded-xl bg-secondary-50 ring-1 ring-secondary-200 p-5">
           <div className="flex items-start justify-between">
-            <p className="text-sm text-neutral-700 font-poppinsMedium">Cantidad de productos</p>
+            <p className="text-sm text-black font-medium">Cantidad de productos</p>
             <div className="shrink-0 rounded-lg bg-white/70 p-2 ring-1 ring-white/60">
               <FiPackage className="h-6 w-6 text-secondary-600" />
             </div>
           </div>
-          <p className="mt-2 text-3xl font-poppinsBold text-secondary-900">
+          <p className="mt-2 text-3xl font-bold text-secondary-900">
             {loading ? '—' : formatNumber(todayProducts)}
           </p>
         </div>

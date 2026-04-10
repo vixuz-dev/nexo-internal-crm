@@ -54,13 +54,13 @@ export default function HomeSummaryCards() {
         {items.map((c) => (
           <div key={c.label} className={`rounded-xl ${c.bg} ring-1 ${c.ring} p-5 ${c.span || ''}`}>
             <div className="flex items-start justify-between">
-              <p className="text-sm text-neutral-700 font-poppinsMedium">{c.label}</p>
+              <p className="text-sm text-black font-medium">{c.label}</p>
               <div className="shrink-0 rounded-lg bg-white/70 p-2 ring-1 ring-white/60">
                 {c.icon}
               </div>
             </div>
-            <p className={`mt-2 text-3xl font-poppinsBold ${c.text}`}>{loading ? '—' : c.value}</p>
-            <p className="mt-1 text-xs text-neutral-700">{loading ? 'Cargando…' : c.sub}</p>
+            <p className={`mt-2 text-3xl font-bold ${c.text}`}>{loading ? '—' : c.value}</p>
+            <p className="mt-1 text-xs text-black">{loading ? 'Cargando…' : c.sub}</p>
           </div>
         ))}
       </div>

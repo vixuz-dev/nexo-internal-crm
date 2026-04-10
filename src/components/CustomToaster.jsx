@@ -5,7 +5,7 @@ const CustomToaster = () => (
     position="top-center"
     toastOptions={{
       style: {
-        fontFamily: 'PoppinsMedium, PoppinsRegular, sans-serif',
+        fontFamily: "'Poppins', system-ui, sans-serif",
         fontSize: '1rem',
         width: '100%',
         borderRadius: '12px',
@@ -13,36 +13,36 @@ const CustomToaster = () => (
       },
       success: {
         style: {
-          background: '#22c55e',
+          background: '#1a7288',
           color: '#fff',
         },
         iconTheme: {
           primary: '#fff',
-          secondary: '#22c55e',
+          secondary: '#1a7288',
         },
       },
       error: {
         style: {
-          background: '#ef4444',
+          background: '#616160',
           color: '#fff',
         },
         iconTheme: {
           primary: '#fff',
-          secondary: '#ef4444',
+          secondary: '#616160',
         },
       },
       loading: {
         style: {
-          background: '#2563eb',
+          background: '#208eaa',
           color: '#fff',
         },
         iconTheme: {
           primary: '#fff',
-          secondary: '#2563eb',
+          secondary: '#208eaa',
         },
       },
     }}
   />
 );
 
-export default CustomToaster; 
+export default CustomToaster;

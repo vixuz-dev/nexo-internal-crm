@@ -40,10 +40,10 @@ const InvoicesList = () => {
         <div className="w-full max-w-7xl mx-auto">
           {/* Encabezado con título y descripción */}
           <div className="mb-8 mt-4">
-            <h2 className="text-2xl md:text-3xl font-poppinsMedium text-neutral-900 mb-2">
+            <h2 className="text-2xl md:text-3xl font-medium text-black mb-2">
               Facturas
             </h2>
-            <p className="text-neutral-600 font-poppinsRegular text-base md:text-lg">
+            <p className="text-black text-base md:text-lg">
               Gestiona y visualiza todas las facturas registradas en el sistema.
             </p>
           </div>
@@ -57,60 +57,60 @@ const InvoicesList = () => {
           <div className="mb-6 flex flex-wrap gap-3">
             <button
               onClick={() => setStatusFilter(null)}
-              className={`px-4 py-2 rounded-lg transition font-poppinsMedium ${
+              className={`px-4 py-2 rounded-lg transition font-medium ${
                 statusFilter === null
                   ? "bg-primary-600 text-white"
-                  : "bg-white text-neutral-700 border border-neutral-300 hover:bg-neutral-50"
+                  : "bg-white text-black border border-neutral-300 hover:bg-neutral-50"
               }`}
             >
               Todas
             </button>
             <button
               onClick={() => setStatusFilter("Pagado")}
-              className={`px-4 py-2 rounded-lg transition font-poppinsMedium ${
+              className={`px-4 py-2 rounded-lg transition font-medium ${
                 statusFilter === "Pagado"
-                  ? "bg-emerald-600 text-white"
-                  : "bg-white text-neutral-700 border border-neutral-300 hover:bg-neutral-50"
+                  ? "bg-primary-600 text-white"
+                  : "bg-white text-black border border-neutral-300 hover:bg-neutral-50"
               }`}
             >
               Pagadas
             </button>
             <button
               onClick={() => setStatusFilter("Pendiente")}
-              className={`px-4 py-2 rounded-lg transition font-poppinsMedium ${
+              className={`px-4 py-2 rounded-lg transition font-medium ${
                 statusFilter === "Pendiente"
-                  ? "bg-amber-600 text-white"
-                  : "bg-white text-neutral-700 border border-neutral-300 hover:bg-neutral-50"
+                  ? "bg-highlight-600 text-white"
+                  : "bg-white text-black border border-neutral-300 hover:bg-neutral-50"
               }`}
             >
               Sin pagar
             </button>
             <button
               onClick={() => setStatusFilter("Pendiente de pago")}
-              className={`px-4 py-2 rounded-lg transition font-poppinsMedium ${
+              className={`px-4 py-2 rounded-lg transition font-medium ${
                 statusFilter === "Pendiente de pago"
-                  ? "bg-sky-600 text-white"
-                  : "bg-white text-neutral-700 border border-neutral-300 hover:bg-neutral-50"
+                  ? "bg-secondary-600 text-white"
+                  : "bg-white text-black border border-neutral-300 hover:bg-neutral-50"
               }`}
             >
               Pendiente de pago
             </button>
             <button
               onClick={() => setStatusFilter("Cancelado")}
-              className={`px-4 py-2 rounded-lg transition font-poppinsMedium ${
+              className={`px-4 py-2 rounded-lg transition font-medium ${
                 statusFilter === "Cancelado"
-                  ? "bg-rose-600 text-white"
-                  : "bg-white text-neutral-700 border border-neutral-300 hover:bg-neutral-50"
+                  ? "bg-neutral-700 text-white"
+                  : "bg-white text-black border border-neutral-300 hover:bg-neutral-50"
               }`}
             >
               Canceladas
             </button>
             <button
               onClick={() => setStatusFilter("Eliminado")}
-              className={`px-4 py-2 rounded-lg transition font-poppinsMedium ${
+              className={`px-4 py-2 rounded-lg transition font-medium ${
                 statusFilter === "Eliminado"
-                  ? "bg-red-400 text-white"
-                  : "bg-white text-neutral-700 border border-neutral-300 hover:bg-neutral-50"
+                  ? "bg-neutral-900 text-white"
+                  : "bg-white text-black border border-neutral-300 hover:bg-neutral-50"
               }`}
             >
               Eliminadas
@@ -128,8 +128,8 @@ const InvoicesList = () => {
 
           {/* Tabla de facturas */}
           {error ? (
-            <div className="rounded-xl bg-red-50 border border-red-200 p-4">
-              <p className="text-red-800">{error}</p>
+            <div className="rounded-xl bg-neutral-100 border border-neutral-300 p-4">
+              <p className="text-black">{error}</p>
             </div>
           ) : (
             <InvoicesTable />

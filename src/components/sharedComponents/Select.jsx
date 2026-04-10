@@ -61,7 +61,7 @@ const Select = ({
     return (
       <div>
         {label && (
-          <label className="block text-sm font-poppinsMedium text-neutral-700 mb-2">
+          <label className="block text-sm font-medium text-black mb-2">
             {label} {required && <span className="text-red-500">*</span>}
           </label>
         )}
@@ -70,7 +70,7 @@ const Select = ({
           value={displayValue}
           readOnly
           disabled
-          className={`w-full px-4 py-2 border-2 border-neutral-500 rounded-lg bg-neutral-50 font-poppinsRegular cursor-not-allowed ${readOnlyClassName || 'text-neutral-900'} ${className}`}
+          className={`w-full px-4 py-2 border-2 border-neutral-500 rounded-lg bg-neutral-50 cursor-not-allowed ${readOnlyClassName || 'text-black'} ${className}`}
         />
         {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
       </div>
@@ -98,7 +98,7 @@ const Select = ({
   return (
     <div className="relative">
       {label && (
-        <label className="block text-sm font-poppinsMedium text-neutral-700 mb-2">
+        <label className="block text-sm font-medium text-black mb-2">
           {label} {required && <span className="text-red-500">*</span>}
         </label>
       )}
@@ -107,19 +107,19 @@ const Select = ({
           type="button"
           onClick={() => !disabled && setIsOpen(!isOpen)}
           disabled={disabled}
-          className={`w-full px-5 py-3 border-2 rounded-lg bg-white text-neutral-900 font-poppinsRegular text-base focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none flex items-center justify-between transition min-h-[48px] ${
+          className={`w-full px-5 py-3 border-2 rounded-lg bg-white text-black text-base focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none flex items-center justify-between transition min-h-[48px] ${
             error
               ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
               : 'border-neutral-500'
-          } ${disabled ? 'bg-neutral-100 text-neutral-500 cursor-not-allowed' : 'cursor-pointer hover:border-primary-400'} ${className}`}
+          } ${disabled ? 'bg-neutral-100 text-black cursor-not-allowed' : 'cursor-pointer hover:border-primary-400'} ${className}`}
         >
-          <span className={`flex-1 text-left ${value ? 'text-neutral-900' : 'text-neutral-400'}`}>
+          <span className={`flex-1 text-left ${value ? 'text-black' : 'text-black'}`}>
             {displayValue}
           </span>
           <FiChevronDown
             className={`h-5 w-5 transition-transform duration-200 flex-shrink-0 ml-3 ${
               isOpen ? 'transform rotate-180' : ''
-            } ${error ? 'text-red-500' : 'text-neutral-400'}`}
+            } ${error ? 'text-red-500' : 'text-black'}`}
           />
         </button>
 
@@ -137,7 +137,7 @@ const Select = ({
             }}
           >
             {options.length === 0 ? (
-              <div className="px-4 py-4 text-base text-neutral-500 text-center">
+              <div className="px-4 py-4 text-base text-black text-center">
                 No hay opciones disponibles
               </div>
             ) : (
@@ -153,10 +153,10 @@ const Select = ({
                       key={key}
                       type="button"
                       onClick={() => handleSelect(optionValueResolved)}
-                      className={`w-full px-4 py-3 text-left text-base font-poppinsRegular transition flex items-center justify-between ${
+                      className={`w-full px-4 py-3 text-left text-base transition flex items-center justify-between ${
                         isSelected
-                          ? 'bg-primary-50 text-primary-700 font-poppinsMedium'
-                          : 'text-neutral-700 hover:bg-neutral-50'
+                          ? 'bg-primary-50 text-primary-700 font-medium'
+                          : 'text-black hover:bg-neutral-50'
                       }`}
                     >
                       <span className="flex-1 whitespace-nowrap pr-4">{optionLabelResolved}</span>

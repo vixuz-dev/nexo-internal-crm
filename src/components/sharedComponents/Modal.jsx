@@ -37,12 +37,12 @@ const Modal = ({ isOpen, onClose, title, children, size = 'lg' }) => {
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-200">
-          <h2 className="text-xl md:text-2xl font-poppinsBold text-neutral-900">
+          <h2 className="text-xl md:text-2xl font-bold text-black">
             {title}
           </h2>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-neutral-100 transition text-neutral-600 hover:text-neutral-900"
+            className="p-2 rounded-lg hover:bg-neutral-100 transition text-black hover:text-black"
           >
             <FiX className="h-5 w-5" />
           </button>

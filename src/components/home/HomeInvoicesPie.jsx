@@ -3,9 +3,6 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recha
 import { useHomePageInformacion } from '../../store/useHomePageInformacion';
 import { HomePieSkeleton } from '../sharedComponents/Skeletons';
 
-// Gradients are defined in <defs>; keep solid fallbacks for safety
-const SOLID_COLORS = ['#10B981', '#F59E0B', '#EF4444'];
-
 export default function HomeInvoicesPie() {
   const { totalInvoices, loading } = useHomePageInformacion();
 
@@ -28,12 +25,12 @@ export default function HomeInvoicesPie() {
   return (
     <div className="h-full w-full bg-transparent flex flex-col">
       <div className="px-4 py-3 border-b border-neutral-200">
-        <h3 className="text-base md:text-lg font-poppinsMedium text-neutral-900">Distribución de facturas</h3>
+        <h3 className="text-base md:text-lg font-medium text-black">Distribución de facturas</h3>
       </div>
       <div className="flex-1 p-2">
         {allZero ? (
           <div className="h-full flex items-center justify-center">
-            <p className="text-neutral-700 text-center font-poppinsRegular">
+            <p className="text-black text-center">
               No hay facturas registradas
             </p>
           </div>
@@ -42,16 +39,16 @@ export default function HomeInvoicesPie() {
             <PieChart>
               <defs>
                 <linearGradient id="grad-paid" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#34D399" />
-                  <stop offset="100%" stopColor="#059669" />
+                  <stop offset="0%" stopColor="#47c3df" />
+                  <stop offset="100%" stopColor="#1a7288" />
                 </linearGradient>
                 <linearGradient id="grad-pending" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#FBBF24" />
-                  <stop offset="100%" stopColor="#B45309" />
+                  <stop offset="0%" stopColor="#d8e1ba" />
+                  <stop offset="100%" stopColor="#757e16" />
                 </linearGradient>
                 <linearGradient id="grad-canceled" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#FCA5A5" />
-                  <stop offset="100%" stopColor="#BE123C" />
+                  <stop offset="0%" stopColor="#f5f5f5" />
+                  <stop offset="100%" stopColor="#919190" />
                 </linearGradient>
               </defs>
               <Pie data={data} cx="50%" cy="50%" innerRadius={45} outerRadius={110} paddingAngle={5} cornerRadius={10} dataKey="value" stroke="#ffffff" strokeWidth={3}>

@@ -13,7 +13,7 @@ const WelcomeMessage = ({ companyInformation }) => {
 
   return (
     <div className="mb-8 mt-4">
-      <h2 className="text-2xl md:text-3xl font-poppinsMedium text-neutral-900 mb-2">
+      <h2 className="text-2xl md:text-3xl font-medium text-black mb-2">
         Hola{' '}
         <span
           className="bg-gradient-to-r from-primary-700 via-primary-600 to-primary-500 bg-clip-text text-transparent"
@@ -23,7 +23,7 @@ const WelcomeMessage = ({ companyInformation }) => {
         </span>
         ,{' '}{greeting}
       </h2>
-      <p className="text-neutral-600 font-poppinsRegular text-base md:text-lg">
+      <p className="text-black text-base md:text-lg">
         Lo más interesante de tu perfil.
       </p>
     </div>

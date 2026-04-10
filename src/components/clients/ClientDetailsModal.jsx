@@ -300,14 +300,14 @@ const ClientDetailsModal = ({ isOpen, onClose, client }) => {
       <div className="space-y-6">
         {/* Información General */}
         <div>
-          <h3 className="text-lg font-poppinsBold text-neutral-900 mb-4 flex items-center gap-2">
+          <h3 className="text-lg font-bold text-black mb-4 flex items-center gap-2">
             <FiTag className="h-5 w-5 text-primary-600" />
             Información General
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Nombre */}
             <div className={"md:col-span-2"}>
-              <label className="block text-sm font-poppinsMedium text-neutral-700 mb-2">
+              <label className="block text-sm font-medium text-black mb-2">
                 Nombre
               </label>
               <div className="relative">
@@ -325,12 +325,12 @@ const ClientDetailsModal = ({ isOpen, onClose, client }) => {
                       });
                     }
                   }}
-                  className={`w-full px-4 py-2 border-2 rounded-lg font-poppinsRegular ${
+                  className={`w-full px-4 py-2 border-2 rounded-lg ${
                     errors.name
                       ? "border-red-500 focus:ring-2 focus:ring-red-500 focus:border-red-500"
                       : isEditing
-                      ? "border-neutral-500 bg-white text-neutral-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                      : "border-neutral-500 bg-neutral-50 text-neutral-900"
+                      ? "border-neutral-500 bg-white text-black focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                      : "border-neutral-500 bg-neutral-50 text-black"
                   }`}
                 />
               </div>
@@ -342,7 +342,7 @@ const ClientDetailsModal = ({ isOpen, onClose, client }) => {
             {/* ID Cliente - Solo mostrar en modo edición/vista, no en create */}
             {!isCreateMode && (
               <div className="md:col-span-1">
-                <label className="block text-sm font-poppinsMedium text-neutral-700 mb-2">
+                <label className="block text-sm font-medium text-black mb-2">
                   ID Cliente
                 </label>
                 <input
@@ -350,14 +350,14 @@ const ClientDetailsModal = ({ isOpen, onClose, client }) => {
                   value={client.id_client || ""}
                   readOnly
                   disabled
-                  className="w-full px-4 py-2 border-2 border-neutral-500 rounded-lg bg-neutral-100 text-neutral-700 font-poppinsRegular cursor-not-allowed"
+                  className="w-full px-4 py-2 border-2 border-neutral-500 rounded-lg bg-neutral-100 text-black cursor-not-allowed"
                 />
               </div>
             )}
 
             {/* Teléfono Celular */}
             <div className="md:col-span-1">
-              <label className="block text-sm font-poppinsMedium text-neutral-700 mb-2 flex items-center gap-2">
+              <label className="block text-sm font-medium text-black mb-2 flex items-center gap-2">
                 <FiPhone className="h-4 w-4" />
                 Teléfono celular <span className="text-red-500">*</span>
               </label>
@@ -372,12 +372,12 @@ const ClientDetailsModal = ({ isOpen, onClose, client }) => {
                   onBlur={(e) =>
                     handleBlur("personal_phonenumber", e.target.value)
                   }
-                  className={`w-full px-4 py-2 border-2 rounded-lg font-poppinsRegular ${
+                  className={`w-full px-4 py-2 border-2 rounded-lg ${
                     errors.personal_phonenumber
                       ? "border-red-500 focus:ring-2 focus:ring-red-500 focus:border-red-500"
                       : isEditing
-                      ? "border-neutral-500 bg-white text-neutral-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                      : "border-neutral-500 bg-neutral-50 text-neutral-900"
+                      ? "border-neutral-500 bg-white text-black focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                      : "border-neutral-500 bg-neutral-50 text-black"
                   }`}
                   placeholder="10 dígitos"
                   maxLength={10}
@@ -392,7 +392,7 @@ const ClientDetailsModal = ({ isOpen, onClose, client }) => {
 
             {/* Email */}
             <div className="md:col-span-2">
-              <label className="block text-sm font-poppinsMedium text-neutral-700 mb-2 flex items-center gap-2">
+              <label className="block text-sm font-medium text-black mb-2 flex items-center gap-2">
                 <FiMail className="h-4 w-4" />
                 Correo electrónico
               </label>
@@ -402,12 +402,12 @@ const ClientDetailsModal = ({ isOpen, onClose, client }) => {
                 readOnly={!isEditing}
                 onChange={(e) => handleInputChange("email", e.target.value)}
                 onBlur={(e) => handleBlur("email", e.target.value)}
-                className={`w-full px-4 py-2 border-2 rounded-lg font-poppinsRegular ${
+                className={`w-full px-4 py-2 border-2 rounded-lg ${
                   errors.email
                     ? "border-red-500 focus:ring-2 focus:ring-red-500 focus:border-red-500"
                     : isEditing
-                    ? "border-neutral-500 bg-white text-neutral-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                    : "border-neutral-500 bg-neutral-50 text-neutral-900"
+                    ? "border-neutral-500 bg-white text-black focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    : "border-neutral-500 bg-neutral-50 text-black"
                 }`}
                 placeholder="ejemplo@correo.com"
               />
@@ -430,9 +430,9 @@ const ClientDetailsModal = ({ isOpen, onClose, client }) => {
                 // NOTA: readOnlyClassName condicional para isCreateMode será simplificado
                 readOnlyClassName={
                   !isCreateMode && client?.status === 1
-                    ? "text-emerald-700"
+                    ? "text-primary-700"
                     : !isCreateMode && client?.status === 0
-                    ? "text-rose-700"
+                    ? "text-black"
                     : ""
                 }
                 optionValue="value"
@@ -443,7 +443,7 @@ const ClientDetailsModal = ({ isOpen, onClose, client }) => {
             {/* Fecha de Creación - Solo mostrar en modo edición/vista, no en create */}
             {!isCreateMode && (
               <div className="md:col-span-2">
-                <label className="block text-sm font-poppinsMedium text-neutral-700 mb-2 flex items-center gap-2">
+                <label className="block text-sm font-medium text-black mb-2 flex items-center gap-2">
                   <FiCalendar className="h-4 w-4" />
                   Fecha de Creación
                 </label>
@@ -452,7 +452,7 @@ const ClientDetailsModal = ({ isOpen, onClose, client }) => {
                   value={formatDate(client.created_at)}
                   readOnly
                   disabled
-                  className="w-full px-4 py-2 border-2 border-neutral-500 rounded-lg bg-neutral-100 text-neutral-700 font-poppinsRegular cursor-not-allowed"
+                  className="w-full px-4 py-2 border-2 border-neutral-500 rounded-lg bg-neutral-100 text-black cursor-not-allowed"
                 />
               </div>
             )}
@@ -461,14 +461,14 @@ const ClientDetailsModal = ({ isOpen, onClose, client }) => {
 
         {/* Dirección */}
         <div>
-          <h3 className="text-lg font-poppinsBold text-neutral-900 mb-4 flex items-center gap-2">
+          <h3 className="text-lg font-bold text-black mb-4 flex items-center gap-2">
             <FiMapPin className="h-5 w-5 text-primary-600" />
             Dirección
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {/* Calle */}
             <div className="md:col-span-2">
-              <label className="block text-sm font-poppinsMedium text-neutral-700 mb-2">
+              <label className="block text-sm font-medium text-black mb-2">
                 Calle
               </label>
               <input
@@ -476,10 +476,10 @@ const ClientDetailsModal = ({ isOpen, onClose, client }) => {
                 value={formData.street || ""}
                 readOnly={!isEditing}
                 onChange={(e) => handleInputChange("street", e.target.value)}
-                className={`w-full px-4 py-2 border-2 border-neutral-500 rounded-lg font-poppinsRegular ${
+                className={`w-full px-4 py-2 border-2 border-neutral-500 rounded-lg ${
                   isEditing
-                    ? "bg-white text-neutral-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                    : "bg-neutral-50 text-neutral-900"
+                    ? "bg-white text-black focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    : "bg-neutral-50 text-black"
                 }`}
                 placeholder="Sin calle"
               />
@@ -487,7 +487,7 @@ const ClientDetailsModal = ({ isOpen, onClose, client }) => {
 
             {/* No. Exterior */}
             <div className="md:col-span-1">
-              <label className="block text-sm font-poppinsMedium text-neutral-700 mb-2">
+              <label className="block text-sm font-medium text-black mb-2">
                 No. Exterior
               </label>
               <input
@@ -497,10 +497,10 @@ const ClientDetailsModal = ({ isOpen, onClose, client }) => {
                 onChange={(e) =>
                   handleInputChange("external_number", e.target.value)
                 }
-                className={`w-full px-4 py-2 border-2 border-neutral-500 rounded-lg font-poppinsRegular ${
+                className={`w-full px-4 py-2 border-2 border-neutral-500 rounded-lg ${
                   isEditing
-                    ? "bg-white text-neutral-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                    : "bg-neutral-50 text-neutral-900"
+                    ? "bg-white text-black focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    : "bg-neutral-50 text-black"
                 }`}
                 placeholder="Sin número"
               />
@@ -508,7 +508,7 @@ const ClientDetailsModal = ({ isOpen, onClose, client }) => {
 
             {/* No. Interior */}
             <div className="md:col-span-1">
-              <label className="block text-sm font-poppinsMedium text-neutral-700 mb-2">
+              <label className="block text-sm font-medium text-black mb-2">
                 No. Interior
               </label>
               <input
@@ -518,10 +518,10 @@ const ClientDetailsModal = ({ isOpen, onClose, client }) => {
                 onChange={(e) =>
                   handleInputChange("internal_number", e.target.value)
                 }
-                className={`w-full px-4 py-2 border-2 border-neutral-500 rounded-lg font-poppinsRegular ${
+                className={`w-full px-4 py-2 border-2 border-neutral-500 rounded-lg ${
                   isEditing
-                    ? "bg-white text-neutral-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                    : "bg-neutral-50 text-neutral-900"
+                    ? "bg-white text-black focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    : "bg-neutral-50 text-black"
                 }`}
                 placeholder="Sin número"
               />
@@ -529,7 +529,7 @@ const ClientDetailsModal = ({ isOpen, onClose, client }) => {
 
             {/* Colonia */}
             <div className="md:col-span-2">
-              <label className="block text-sm font-poppinsMedium text-neutral-700 mb-2">
+              <label className="block text-sm font-medium text-black mb-2">
                 Colonia
               </label>
               <input
@@ -539,10 +539,10 @@ const ClientDetailsModal = ({ isOpen, onClose, client }) => {
                 onChange={(e) =>
                   handleInputChange("neighborhood", e.target.value)
                 }
-                className={`w-full px-4 py-2 border-2 border-neutral-500 rounded-lg font-poppinsRegular ${
+                className={`w-full px-4 py-2 border-2 border-neutral-500 rounded-lg ${
                   isEditing
-                    ? "bg-white text-neutral-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                    : "bg-neutral-50 text-neutral-900"
+                    ? "bg-white text-black focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    : "bg-neutral-50 text-black"
                 }`}
                 placeholder="Sin colonia"
               />
@@ -550,7 +550,7 @@ const ClientDetailsModal = ({ isOpen, onClose, client }) => {
 
             {/* Municipio */}
             <div className="md:col-span-1">
-              <label className="block text-sm font-poppinsMedium text-neutral-700 mb-2">
+              <label className="block text-sm font-medium text-black mb-2">
                 Municipio
               </label>
               <input
@@ -558,10 +558,10 @@ const ClientDetailsModal = ({ isOpen, onClose, client }) => {
                 value={formData.city || ""}
                 readOnly={!isEditing}
                 onChange={(e) => handleInputChange("city", e.target.value)}
-                className={`w-full px-4 py-2 border-2 border-neutral-500 rounded-lg font-poppinsRegular ${
+                className={`w-full px-4 py-2 border-2 border-neutral-500 rounded-lg ${
                   isEditing
-                    ? "bg-white text-neutral-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                    : "bg-neutral-50 text-neutral-900"
+                    ? "bg-white text-black focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    : "bg-neutral-50 text-black"
                 }`}
                 placeholder="Sin municipio"
               />
@@ -608,7 +608,7 @@ const ClientDetailsModal = ({ isOpen, onClose, client }) => {
 
             {/* Código Postal */}
             <div className="md:col-span-1">
-              <label className="block text-sm font-poppinsMedium text-neutral-700 mb-2">
+              <label className="block text-sm font-medium text-black mb-2">
                 Código Postal <span className="text-red-500">*</span>
               </label>
               <input
@@ -617,12 +617,12 @@ const ClientDetailsModal = ({ isOpen, onClose, client }) => {
                 readOnly={!isEditing}
                 onChange={(e) => handleInputChange("zip_code", e.target.value)}
                 onBlur={(e) => handleBlur("zip_code", e.target.value)}
-                className={`w-full px-4 py-2 border-2 rounded-lg font-poppinsRegular ${
+                className={`w-full px-4 py-2 border-2 rounded-lg ${
                   errors.zip_code
                     ? "border-red-500 focus:ring-2 focus:ring-red-500 focus:border-red-500"
                     : isEditing
-                    ? "border-neutral-500 bg-white text-neutral-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                    : "border-neutral-500 bg-neutral-50 text-neutral-900"
+                    ? "border-neutral-500 bg-white text-black focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    : "border-neutral-500 bg-neutral-50 text-black"
                 }`}
                 placeholder="5 dígitos"
                 maxLength={5}
@@ -648,7 +648,7 @@ const ClientDetailsModal = ({ isOpen, onClose, client }) => {
               <button
                 onClick={handleCancel}
                 disabled={isSaving}
-                className="px-6 py-2 border border-neutral-300 rounded-lg text-neutral-700 hover:bg-neutral-50 transition font-poppinsMedium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-2 border border-neutral-300 rounded-lg text-black hover:bg-neutral-50 transition font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <FiX className="h-4 w-4" />
 
@@ -657,7 +657,7 @@ const ClientDetailsModal = ({ isOpen, onClose, client }) => {
               <button
                 onClick={handleSave}
                 disabled={isSaving}
-                className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-poppinsMedium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <FiSave className="h-4 w-4" />
 
@@ -672,13 +672,13 @@ const ClientDetailsModal = ({ isOpen, onClose, client }) => {
             <>
               <button
                 onClick={onClose}
-                className="px-6 py-2 border border-neutral-300 rounded-lg text-neutral-700 hover:bg-neutral-50 transition font-poppinsMedium"
+                className="px-6 py-2 border border-neutral-300 rounded-lg text-black hover:bg-neutral-50 transition font-medium"
               >
                 Cerrar
               </button>
               <button
                 onClick={() => setIsEditing(true)}
-                className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-poppinsMedium flex items-center gap-2"
+                className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-medium flex items-center gap-2"
               >
                 <FiEdit2 className="h-4 w-4" />
                 Editar Cliente

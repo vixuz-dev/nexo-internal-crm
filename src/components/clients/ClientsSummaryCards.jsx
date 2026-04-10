@@ -25,18 +25,18 @@ export default function ClientsSummaryCards() {
     {
       label: 'Clientes activos',
       value: formatNumber(activeClients),
-      bg: 'bg-emerald-50',
-      text: 'text-emerald-900',
-      ring: 'ring-emerald-200',
-      icon: <FiCheckCircle className="h-6 w-6 text-emerald-600" />,
+      bg: 'bg-secondary-50',
+      text: 'text-secondary-900',
+      ring: 'ring-secondary-200',
+      icon: <FiCheckCircle className="h-6 w-6 text-secondary-600" />,
     },
     {
       label: 'Clientes inactivos',
       value: formatNumber(inactiveClients),
-      bg: 'bg-rose-50',
-      text: 'text-rose-900',
-      ring: 'ring-rose-200',
-      icon: <FiXCircle className="h-6 w-6 text-rose-600" />,
+      bg: 'bg-neutral-200',
+      text: 'text-black',
+      ring: 'ring-neutral-300',
+      icon: <FiXCircle className="h-6 w-6 text-black" />,
     },
   ];
 
@@ -46,12 +46,12 @@ export default function ClientsSummaryCards() {
         {items.map((c) => (
           <div key={c.label} className={`rounded-xl ${c.bg} ring-1 ${c.ring} p-5`}>
             <div className="flex items-start justify-between">
-              <p className="text-sm text-neutral-700 font-poppinsMedium">{c.label}</p>
+              <p className="text-sm text-black font-medium">{c.label}</p>
               <div className="shrink-0 rounded-lg bg-white/70 p-2 ring-1 ring-white/60">
                 {c.icon}
               </div>
             </div>
-            <p className={`mt-2 text-3xl font-poppinsBold ${c.text}`}>
+            <p className={`mt-2 text-3xl font-bold ${c.text}`}>
               {loading ? '—' : c.value}
             </p>
           </div>

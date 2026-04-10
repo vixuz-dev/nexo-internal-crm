@@ -148,7 +148,7 @@ const DashboardLayout = ({ children }) => {
               {item.children ? (
                 <>
                   <button
-                    className={`flex items-center gap-3 w-full rounded-md px-3 py-2 text-neutral-700 hover:text-primary-600 hover:bg-primary-50 transition font-poppinsRegular ${collapsed ? 'justify-center px-0' : ''}`}
+                    className={`flex items-center gap-3 w-full rounded-md px-3 py-2 text-black hover:text-primary-600 hover:bg-primary-50 transition ${collapsed ? 'justify-center px-0' : ''}`}
                     onClick={toggleOpen}
                     title={collapsed ? item.label : undefined}
                   >
@@ -166,7 +166,7 @@ const DashboardLayout = ({ children }) => {
                           <NavLink
                             to={child.path}
                             className={({ isActive }) =>
-                              `block py-1 px-2 rounded font-poppinsRegular ${isActive ? 'text-primary-600 bg-primary-100 font-bold' : 'text-neutral-700 hover:text-primary-600 hover:bg-primary-50'}`
+                              `block py-1 px-2 rounded ${isActive ? 'text-primary-600 bg-primary-100 font-bold' : 'text-black hover:text-primary-600 hover:bg-primary-50'}`
                             }
                           >
                             {child.label}
@@ -180,7 +180,7 @@ const DashboardLayout = ({ children }) => {
                 <NavLink
                   to={item.path}
                   className={({ isActive }) =>
-                    `flex items-center gap-3 rounded-md px-3 py-2 font-poppinsRegular transition ${isActive ? 'text-primary-600 bg-primary-100 font-bold' : 'text-neutral-700 hover:text-primary-600 hover:bg-primary-50'} ${collapsed ? 'justify-center px-0' : ''}`
+                    `flex items-center gap-3 rounded-md px-3 py-2 transition ${isActive ? 'text-primary-600 bg-primary-100 font-bold' : 'text-black hover:text-primary-600 hover:bg-primary-50'} ${collapsed ? 'justify-center px-0' : ''}`
                   }
                   title={collapsed ? item.label : undefined}
                 >
@@ -209,7 +209,7 @@ const DashboardLayout = ({ children }) => {
     <NavLink
       to={ROUTES.LOGOUT}
       className={({ isActive }) =>
-        `flex items-center gap-3 rounded-md px-3 py-2 font-poppinsRegular mb-4 mx-2 transition ${isActive ? 'text-primary-600 bg-primary-100 font-bold' : 'text-neutral-700 hover:text-primary-600 hover:bg-primary-50'} ${collapsed ? 'justify-center px-0' : ''}`
+        `flex items-center gap-3 rounded-md px-3 py-2 mb-4 mx-2 transition ${isActive ? 'text-primary-600 bg-primary-100 font-bold' : 'text-black hover:text-primary-600 hover:bg-primary-50'} ${collapsed ? 'justify-center px-0' : ''}`
       }
       title="Cerrar sesión"
     >
@@ -223,7 +223,7 @@ const DashboardLayout = ({ children }) => {
     <NavLink
       to={ROUTES.LOGOUT}
       className={({ isActive }) =>
-        `flex items-center gap-3 rounded-md px-3 py-2 font-poppinsRegular mb-4 mx-2 transition ${isActive ? 'text-primary-600 bg-primary-100 font-bold' : 'text-neutral-700 hover:text-primary-600 hover:bg-primary-50'}`
+        `flex items-center gap-3 rounded-md px-3 py-2 mb-4 mx-2 transition ${isActive ? 'text-primary-600 bg-primary-100 font-bold' : 'text-black hover:text-primary-600 hover:bg-primary-50'}`
       }
     >
       <FiLogOut className="text-xl" />
@@ -291,7 +291,7 @@ const DashboardLayout = ({ children }) => {
                     {item.children ? (
                       <>
                         <button
-                          className="flex items-center gap-3 w-full rounded-md px-3 py-2 text-neutral-700 hover:text-primary-600 hover:bg-primary-50 transition font-poppinsRegular"
+                          className="flex items-center gap-3 w-full rounded-md px-3 py-2 text-black hover:text-primary-600 hover:bg-primary-50 transition"
                           onClick={toggleMobileOpen}
                         >
                           <item.icon className="text-xl" />
@@ -305,7 +305,7 @@ const DashboardLayout = ({ children }) => {
                                 <NavLink
                                   to={child.path}
                                   className={({ isActive }) =>
-                                    `block py-1 px-2 rounded font-poppinsRegular ${isActive ? 'text-primary-600 bg-primary-100 font-bold' : 'text-neutral-700 hover:text-primary-600 hover:bg-primary-50'}`
+                                    `block py-1 px-2 rounded ${isActive ? 'text-primary-600 bg-primary-100 font-bold' : 'text-black hover:text-primary-600 hover:bg-primary-50'}`
                                   }
                                 >
                                   {child.label}
@@ -319,7 +319,7 @@ const DashboardLayout = ({ children }) => {
                       <NavLink
                         to={item.path}
                         className={({ isActive }) =>
-                          `flex items-center gap-3 rounded-md px-3 py-2 font-poppinsRegular transition ${isActive ? 'text-primary-600 bg-primary-100 font-bold' : 'text-neutral-700 hover:text-primary-600 hover:bg-primary-50'}`
+                          `flex items-center gap-3 rounded-md px-3 py-2 transition ${isActive ? 'text-primary-600 bg-primary-100 font-bold' : 'text-black hover:text-primary-600 hover:bg-primary-50'}`
                         }
                       >
                         <item.icon className="text-xl" />

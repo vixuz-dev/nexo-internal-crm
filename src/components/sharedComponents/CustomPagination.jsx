@@ -42,11 +42,11 @@ const CustomPagination = ({
               <button
                 key={number}
                 onClick={() => onPageChange(number)}
-                className={`w-10 h-10 flex items-center justify-center rounded-full border text-base font-poppinsMedium transition
+                className={`w-10 h-10 flex items-center justify-center rounded-full border text-base transition
                   ${
                     currentPage === number
-                      ? "bg-primary-600 text-white border-primary-600 font-poppinsBold shadow-lg"
-                      : "border-neutral-300 text-neutral-700 hover:bg-primary-50 hover:text-primary-600"
+                      ? "bg-primary-600 text-white border-primary-600 font-bold shadow-lg"
+                      : "border-neutral-300 text-black hover:bg-primary-50 hover:text-primary-600 font-medium"
                   }`}
               >
                 {number}
@@ -112,11 +112,11 @@ const CustomPagination = ({
             <button
               key={number}
               onClick={() => onPageChange(number)}
-              className={`w-10 h-10 flex items-center justify-center rounded-full border text-base font-poppinsMedium transition
+              className={`w-10 h-10 flex items-center justify-center rounded-full border text-base transition
                 ${
                   currentPage === number
-                    ? "bg-primary-600 text-white border-primary-600 font-poppinsBold shadow-lg"
-                    : "border-neutral-300 text-neutral-700 hover:bg-primary-50 hover:text-primary-600"
+                    ? "bg-primary-600 text-white border-primary-600 font-bold shadow-lg"
+                    : "border-neutral-300 text-black hover:bg-primary-50 hover:text-primary-600 font-medium"
                 }`}
             >
               {number}

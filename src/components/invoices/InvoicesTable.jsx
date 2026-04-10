@@ -6,6 +6,67 @@ import { TableSkeleton } from "../sharedComponents/Skeletons";
 import Modal from "../sharedComponents/Modal";
 import { ROUTES } from "../../utils/routes";
 
+function InvoiceModalField({ label, children, className = "" }) {
+  return (
+    <div className={`space-y-1 ${className}`}>
+      <p className="text-xs font-semibold uppercase tracking-wide text-black/55">
+        {label}
+      </p>
+      <div className="rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm text-black">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function InvoiceModalSection({
+  title,
+  borderAccentClass,
+  defaultOpen = false,
+  children,
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <section>
+      <div
+        className={`rounded-xl bg-white border border-neutral-200 shadow-sm overflow-hidden border-l-4 ${borderAccentClass}`}
+      >
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          className="w-full flex items-center justify-between gap-3 px-4 py-3 sm:px-5 md:py-4 text-left hover:bg-neutral-50 transition-colors"
+        >
+          <h3 className="text-sm font-semibold text-black">{title}</h3>
+          <span
+            className={`shrink-0 text-black/70 transition-transform duration-300 ease-out motion-reduce:transition-none ${
+              open ? "rotate-180" : ""
+            }`}
+          >
+            <FiChevronDown className="h-5 w-5" aria-hidden />
+          </span>
+        </button>
+        <div
+          className={`grid transition-[grid-template-rows] duration-300 ease-in-out motion-reduce:transition-none ${
+            open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+          }`}
+        >
+          <div className="min-h-0 overflow-hidden">
+            <div
+              className={`border-t border-neutral-200 px-4 py-4 sm:px-5 md:py-5 bg-neutral-50/60 transition-opacity duration-300 ease-in-out motion-reduce:transition-none ${
+                open ? "opacity-100" : "opacity-0 pointer-events-none"
+              }`}
+              aria-hidden={!open}
+            >
+              {children}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function InvoicesTable() {
   const { invoices, loading, searchTerm, statusFilter } = useInvoicesList();
   const navigate = useNavigate();
@@ -102,43 +163,45 @@ export default function InvoicesTable() {
   };
 
   const getStatusBadge = (invoice_status) => {
+    const base =
+      "inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-white border";
     if (invoice_status === "Pagado") {
       return (
-        <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-emerald-50 text-emerald-800">
+        <span className={`${base} border-primary-500 text-primary-900`}>
           Pagada
         </span>
       );
     }
     if (invoice_status === "Pendiente de pago") {
       return (
-        <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-sky-50 text-sky-800">
+        <span className={`${base} border-primary-400 text-primary-800`}>
           Pendiente de pago
         </span>
       );
     }
     if (invoice_status === "Pendiente") {
       return (
-        <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-amber-50 text-amber-800">
+        <span className={`${base} border-highlight-400 text-highlight-900`}>
           Pendiente
         </span>
       );
     }
     if (invoice_status === "Cancelado") {
       return (
-        <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-rose-50 text-rose-800">
+        <span className={`${base} border-neutral-400 text-black`}>
           Cancelada
         </span>
       );
     }
     if (invoice_status === "Eliminado") {
       return (
-        <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-red-50 text-red-800">
+        <span className={`${base} border-neutral-600 bg-neutral-800 text-neutral-50`}>
           Eliminada
         </span>
       );
     }
     return (
-      <span className="px-2 py-1 rounded text-xs font-poppinsMedium bg-neutral-50 text-neutral-800">
+      <span className={`${base} border-neutral-300 text-black`}>
         -
       </span>
     );
@@ -165,7 +228,7 @@ export default function InvoicesTable() {
           <thead className="bg-neutral-50 border-b border-neutral-200">
             <tr>
               <th
-                className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium cursor-pointer hover:bg-neutral-100 transition"
+                className="px-4 py-3 text-left text-black font-medium cursor-pointer hover:bg-neutral-100 transition"
                 onClick={() => handleSort("invoice_id")}
               >
                 <div className="flex items-center gap-2">
@@ -174,7 +237,7 @@ export default function InvoicesTable() {
                 </div>
               </th>
               <th
-                className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium cursor-pointer hover:bg-neutral-100 transition"
+                className="px-4 py-3 text-left text-black font-medium cursor-pointer hover:bg-neutral-100 transition"
                 onClick={() => handleSort("name")}
               >
                 <div className="flex items-center gap-2">
@@ -183,7 +246,7 @@ export default function InvoicesTable() {
                 </div>
               </th>
               <th
-                className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium cursor-pointer hover:bg-neutral-100 transition"
+                className="px-4 py-3 text-left text-black font-medium cursor-pointer hover:bg-neutral-100 transition"
                 onClick={() => handleSort("created_at")}
               >
                 <div className="flex items-center gap-2">
@@ -192,7 +255,7 @@ export default function InvoicesTable() {
                 </div>
               </th>
               <th
-                className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium cursor-pointer hover:bg-neutral-100 transition"
+                className="px-4 py-3 text-left text-black font-medium cursor-pointer hover:bg-neutral-100 transition"
                 onClick={() => handleSort("initial_payment")}
               >
                 <div className="flex items-center gap-2">
@@ -201,7 +264,7 @@ export default function InvoicesTable() {
                 </div>
               </th>
               <th
-                className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium cursor-pointer hover:bg-neutral-100 transition"
+                className="px-4 py-3 text-left text-black font-medium cursor-pointer hover:bg-neutral-100 transition"
                 onClick={() => handleSort("number_payments")}
               >
                 <div className="flex items-center gap-2">
@@ -210,7 +273,7 @@ export default function InvoicesTable() {
                 </div>
               </th>
               <th
-                className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium cursor-pointer hover:bg-neutral-100 transition"
+                className="px-4 py-3 text-left text-black font-medium cursor-pointer hover:bg-neutral-100 transition"
                 onClick={() => handleSort("total")}
               >
                 <div className="flex items-center gap-2">
@@ -218,13 +281,13 @@ export default function InvoicesTable() {
                   <SortIcon column="total" />
                 </div>
               </th>
-              <th className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium">
+              <th className="px-4 py-3 text-left text-black font-medium">
                 ESTADO
               </th>
-              <th className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium">
+              <th className="px-4 py-3 text-left text-black font-medium">
                 SALDO PENDIENTE
               </th>
-              <th className="px-4 py-3 text-left text-neutral-700 font-poppinsMedium">
+              <th className="px-4 py-3 text-left text-black font-medium">
                 ACCIÓN
               </th>
             </tr>
@@ -234,7 +297,7 @@ export default function InvoicesTable() {
               <tr>
                 <td
                   colSpan={9}
-                  className="px-4 py-8 text-center text-neutral-600"
+                  className="px-4 py-8 text-center text-black"
                 >
                   {searchTerm
                     ? "No se encontraron facturas"
@@ -247,36 +310,36 @@ export default function InvoicesTable() {
                   key={invoice.invoice_id}
                   className="hover:bg-neutral-50 transition"
                 >
-                  <td className="px-4 py-3 text-neutral-900">
+                  <td className="px-4 py-3 text-black">
                     {invoice.invoice_id || "-"}
                   </td>
-                  <td className="px-4 py-3 text-neutral-900">
+                  <td className="px-4 py-3 text-black">
                     {invoice.name || "-"}
                   </td>
-                  <td className="px-4 py-3 text-neutral-600">
+                  <td className="px-4 py-3 text-black">
                     {formatDate(invoice.created_at)}
                   </td>
-                  <td className="px-4 py-3 text-neutral-900 font-poppinsMedium">
+                  <td className="px-4 py-3 text-black font-medium">
                     {formatCurrency(invoice.initial_payment || 0)}
                   </td>
-                  <td className="px-4 py-3 text-neutral-600">
+                  <td className="px-4 py-3 text-black">
                     {invoice.number_payments ?? "-"}
                   </td>
-                  <td className="px-4 py-3 text-neutral-900 font-poppinsMedium">
+                  <td className="px-4 py-3 text-black font-medium">
                     {formatCurrency(invoice.total || 0)}
                   </td>
                   <td className="px-4 py-3">
                     {getStatusBadge(invoice.invoice_status)}
                   </td>
-                  <td className="px-4 py-3 text-neutral-900 font-poppinsMedium">
+                  <td className="px-4 py-3 text-black font-medium">
                     {formatCurrency(invoice.remaining_payment || 0)}
                   </td>
-                  <td className="px-4 py-3 text-neutral-600">
+                  <td className="px-4 py-3 text-black">
                     <div className="flex items-center gap-2">
                       <button
                         type="button"
                         onClick={() => handleOpenDetails(invoice)}
-                        className="inline-flex items-center justify-center rounded-lg border border-neutral-300 px-2.5 py-1.5 text-xs font-poppinsMedium text-neutral-700 hover:bg-neutral-50 transition"
+                        className="inline-flex items-center justify-center rounded-lg border border-neutral-300 px-2.5 py-1.5 text-xs font-medium text-black hover:bg-neutral-50 transition"
                         title="Ver detalle de la factura"
                       >
                         <FiEye className="h-4 w-4" />
@@ -291,7 +354,7 @@ export default function InvoicesTable() {
                             ),
                           )
                         }
-                        className="inline-flex items-center justify-center rounded-lg border border-neutral-300 px-2.5 py-1.5 text-xs font-poppinsMedium text-neutral-700 hover:bg-neutral-50 transition"
+                        className="inline-flex items-center justify-center rounded-lg border border-neutral-300 px-2.5 py-1.5 text-xs font-medium text-black hover:bg-neutral-50 transition"
                         title="Ver abonos y cortes"
                       >
                         <FiDollarSign className="h-4 w-4" />
@@ -310,7 +373,7 @@ export default function InvoicesTable() {
         <div className="bg-neutral-50 border-t border-neutral-200 px-4 py-3">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <span className="text-sm text-neutral-600 font-poppinsRegular">
+              <span className="text-sm text-black">
                 Filas por página:
               </span>
               <select
@@ -319,7 +382,7 @@ export default function InvoicesTable() {
                   setItemsPerPage(Number(e.target.value));
                   setCurrentPage(1);
                 }}
-                className="border border-neutral-300 rounded px-2 py-1 text-sm font-poppinsRegular focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
+                className="border border-neutral-300 rounded px-2 py-1 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
               >
                 <option value={5}>5</option>
                 <option value={10}>10</option>
@@ -329,7 +392,7 @@ export default function InvoicesTable() {
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="text-sm text-neutral-600 font-poppinsRegular">
+              <span className="text-sm text-black">
                 {startIndex + 1}-{Math.min(endIndex, totalItems)} de{" "}
                 {totalItems}
               </span>
@@ -341,7 +404,7 @@ export default function InvoicesTable() {
                   disabled={currentPage === 1}
                   className="p-2 rounded border border-neutral-300 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed transition"
                 >
-                  <span className="text-neutral-700">‹</span>
+                  <span className="text-black">‹</span>
                 </button>
                 <button
                   onClick={() =>
@@ -350,7 +413,7 @@ export default function InvoicesTable() {
                   disabled={currentPage === totalPages}
                   className="p-2 rounded border border-neutral-300 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed transition"
                 >
-                  <span className="text-neutral-700">›</span>
+                  <span className="text-black">›</span>
                 </button>
               </div>
             </div>
@@ -369,217 +432,127 @@ export default function InvoicesTable() {
         size="xl"
       >
         {selectedInvoice && (
-          <div className="space-y-8">
-            {/* Información general */}
-            <section>
-              <h3 className="text-sm font-poppinsBold text-neutral-900 mb-3">
-                Información general
-              </h3>
-              <div className="rounded-xl border border-secondary-200 bg-secondary-50 p-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-1">
-                    <p className="text-xs text-neutral-600 font-poppinsMedium">
-                      Cliente
-                    </p>
-                    <div className="rounded-lg bg-white border border-neutral-200 px-3 py-2 text-sm text-neutral-900 font-poppinsMedium">
-                      {selectedInvoice.name || '-'}
-                    </div>
+          <div className="space-y-6" key={selectedInvoice.invoice_id}>
+            <InvoiceModalSection
+              title="Información general"
+              borderAccentClass="border-l-primary-500"
+              defaultOpen
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <InvoiceModalField label="Cliente">
+                  <span className="font-medium">
+                    {selectedInvoice.name || "—"}
+                  </span>
+                </InvoiceModalField>
+                <InvoiceModalField label="ID factura">
+                  <span className="font-medium">
+                    {selectedInvoice.invoice_id}
+                  </span>
+                </InvoiceModalField>
+                <InvoiceModalField label="Fecha de emisión">
+                  {formatDate(selectedInvoice.created_at)}
+                </InvoiceModalField>
+                <InvoiceModalField label="Fecha de finalización">
+                  {selectedInvoice.finished_at
+                    ? formatDate(selectedInvoice.finished_at)
+                    : "—"}
+                </InvoiceModalField>
+                <InvoiceModalField label="Estado" className="md:col-span-2">
+                  <div className="inline-flex items-center min-h-[2.25rem]">
+                    {getStatusBadge(selectedInvoice.invoice_status)}
                   </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-neutral-600 font-poppinsMedium">
-                      ID factura
-                    </p>
-                    <div className="rounded-lg bg-white border border-neutral-200 px-3 py-2 text-sm text-neutral-900 font-poppinsMedium">
-                      {selectedInvoice.invoice_id}
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-neutral-600 font-poppinsMedium">
-                      Fecha de emisión
-                    </p>
-                    <div className="rounded-lg bg-white border border-neutral-200 px-3 py-2 text-sm text-neutral-900 font-poppinsRegular">
-                      {formatDate(selectedInvoice.created_at)}
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-neutral-600 font-poppinsMedium">
-                      Fecha de finalización
-                    </p>
-                    <div className="rounded-lg bg-white border border-neutral-200 px-3 py-2 text-sm text-neutral-900 font-poppinsRegular">
-                      {selectedInvoice.finished_at
-                        ? formatDate(selectedInvoice.finished_at)
-                        : '-'}
-                    </div>
-                  </div>
-                  <div className="space-y-1 md:col-span-2">
-                    <p className="text-xs text-neutral-600 font-poppinsMedium">
-                      Estado
-                    </p>
-                    <div className="rounded-lg bg-white border border-neutral-200 px-3 py-2 inline-flex items-center gap-2">
-                      {getStatusBadge(selectedInvoice.invoice_status)}
-                    </div>
-                  </div>
-                </div>
+                </InvoiceModalField>
               </div>
-            </section>
+            </InvoiceModalSection>
 
-            {/* Pagos */}
-            <section>
-              <h3 className="text-sm font-poppinsBold text-neutral-900 mb-3">
-                Pagos
-              </h3>
-              <div className="rounded-xl border border-highlight-200 bg-highlight-50 p-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="space-y-1">
-                    <p className="text-xs text-neutral-600 font-poppinsMedium">
-                      % pago inicial
-                    </p>
-                    <div className="rounded-lg bg-white border border-neutral-200 px-3 py-2 text-sm text-neutral-900 font-poppinsRegular">
-                      {selectedInvoice.initial_payment_percentage ?? 0}%
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-neutral-600 font-poppinsMedium">
-                      Pago inicial
-                    </p>
-                    <div className="rounded-lg bg-white border border-neutral-200 px-3 py-2 text-sm text-neutral-900 font-poppinsMedium">
-                      {formatCurrency(selectedInvoice.initial_payment || 0)}
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-neutral-600 font-poppinsMedium">
-                      Número de pagos
-                    </p>
-                    <div className="rounded-lg bg-white border border-neutral-200 px-3 py-2 text-sm text-neutral-900 font-poppinsRegular">
-                      {selectedInvoice.number_payments ?? '-'}
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-neutral-600 font-poppinsMedium">
-                      Pagos pendientes
-                    </p>
-                    <div className="rounded-lg bg-white border border-neutral-200 px-3 py-2 text-sm text-neutral-900 font-poppinsRegular">
-                      {selectedInvoice.missing_payments ?? '-'}
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-neutral-600 font-poppinsMedium">
-                      Total factura
-                    </p>
-                    <div className="rounded-lg bg-white border border-neutral-200 px-3 py-2 text-sm text-neutral-900 font-poppinsMedium">
-                      {formatCurrency(selectedInvoice.total || 0)}
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-neutral-600 font-poppinsMedium">
-                      Saldo pendiente
-                    </p>
-                    <div className="rounded-lg bg-white border border-neutral-200 px-3 py-2 text-sm text-neutral-900 font-poppinsMedium">
-                      {formatCurrency(selectedInvoice.remaining_payment || 0)}
-                    </div>
-                  </div>
-                </div>
+            <InvoiceModalSection
+              title="Pagos"
+              borderAccentClass="border-l-highlight-500"
+            >
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <InvoiceModalField label="% pago inicial">
+                  {selectedInvoice.initial_payment_percentage ?? 0}%
+                </InvoiceModalField>
+                <InvoiceModalField label="Pago inicial">
+                  <span className="font-medium">
+                    {formatCurrency(selectedInvoice.initial_payment || 0)}
+                  </span>
+                </InvoiceModalField>
+                <InvoiceModalField label="Número de pagos">
+                  {selectedInvoice.number_payments ?? "—"}
+                </InvoiceModalField>
+                <InvoiceModalField label="Pagos pendientes">
+                  {selectedInvoice.missing_payments ?? "—"}
+                </InvoiceModalField>
+                <InvoiceModalField label="Total factura">
+                  <span className="font-medium">
+                    {formatCurrency(selectedInvoice.total || 0)}
+                  </span>
+                </InvoiceModalField>
+                <InvoiceModalField label="Saldo pendiente">
+                  <span className="font-medium">
+                    {formatCurrency(selectedInvoice.remaining_payment || 0)}
+                  </span>
+                </InvoiceModalField>
               </div>
-            </section>
+            </InvoiceModalSection>
 
-            {/* Afiliado y comisiones */}
-            <section>
-              <h3 className="text-sm font-poppinsBold text-neutral-900 mb-3">
-                Afiliado y comisiones
-              </h3>
-              <div className="rounded-xl border border-primary-200 bg-primary-50 p-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="space-y-1">
-                    <p className="text-xs text-neutral-600 font-poppinsMedium">
-                      % comisión afiliado
-                    </p>
-                    <div className="rounded-lg bg-white border border-neutral-200 px-3 py-2 text-sm text-neutral-900 font-poppinsRegular">
-                      {selectedInvoice.affiliate_fee_percentage ?? 0}%
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-neutral-600 font-poppinsMedium">
-                      % margen de ganancia
-                    </p>
-                    <div className="rounded-lg bg-white border border-neutral-200 px-3 py-2 text-sm text-neutral-900 font-poppinsRegular">
-                      {selectedInvoice.profit_margin_percentage ?? 0}%
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-neutral-600 font-poppinsMedium">
-                      % recargo por atraso
-                    </p>
-                    <div className="rounded-lg bg-white border border-neutral-200 px-3 py-2 text-sm text-neutral-900 font-poppinsRegular">
-                      {selectedInvoice.late_fee_percentage ?? 0}%
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-neutral-600 font-poppinsMedium">
-                      Pago al afiliado
-                    </p>
-                    <div className="rounded-lg bg-white border border-neutral-200 px-3 py-2 text-sm text-neutral-900 font-poppinsMedium">
-                      {formatCurrency(selectedInvoice.affiliate_payment || 0)}
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-neutral-600 font-poppinsMedium">
-                      Pagado al afiliado
-                    </p>
-                    <div className="rounded-lg bg-white border border-neutral-200 px-3 py-2 text-sm text-neutral-900 font-poppinsMedium">
-                      {formatCurrency(selectedInvoice.amount_paid_affiliate || 0)}
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-neutral-600 font-poppinsMedium">
-                      Margen de ganancia total
-                    </p>
-                    <div className="rounded-lg bg-white border border-neutral-200 px-3 py-2 text-sm text-neutral-900 font-poppinsMedium">
-                      {formatCurrency(selectedInvoice.total_profit_margin || 0)}
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-neutral-600 font-poppinsMedium">
-                      Margen de ganancia pagado
-                    </p>
-                    <div className="rounded-lg bg-white border border-neutral-200 px-3 py-2 text-sm text-neutral-900 font-poppinsMedium">
-                      {formatCurrency(selectedInvoice.paid_profit_margin || 0)}
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-neutral-600 font-poppinsMedium">
-                      Comisión afiliado total
-                    </p>
-                    <div className="rounded-lg bg-white border border-neutral-200 px-3 py-2 text-sm text-neutral-900 font-poppinsMedium">
-                      {formatCurrency(selectedInvoice.total_affiliate_fee || 0)}
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-neutral-600 font-poppinsMedium">
-                      Comisión afiliado pagada
-                    </p>
-                    <div className="rounded-lg bg-white border border-neutral-200 px-3 py-2 text-sm text-neutral-900 font-poppinsMedium">
-                      {formatCurrency(selectedInvoice.paid_affiliate_fee || 0)}
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-neutral-600 font-poppinsMedium">
-                      Recargos por atraso totales
-                    </p>
-                    <div className="rounded-lg bg-white border border-neutral-200 px-3 py-2 text-sm text-neutral-900 font-poppinsMedium">
-                      {formatCurrency(selectedInvoice.total_late_fees || 0)}
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-neutral-600 font-poppinsMedium">
-                      Recargos por atraso pagados
-                    </p>
-                    <div className="rounded-lg bg-white border border-neutral-200 px-3 py-2 text-sm text-neutral-900 font-poppinsMedium">
-                      {formatCurrency(selectedInvoice.paid_late_fees || 0)}
-                    </div>
-                  </div>
-                </div>
+            <InvoiceModalSection
+              title="Afiliado y comisiones"
+              borderAccentClass="border-l-secondary-500"
+            >
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <InvoiceModalField label="% comisión afiliado">
+                  {selectedInvoice.affiliate_fee_percentage ?? 0}%
+                </InvoiceModalField>
+                <InvoiceModalField label="% margen de ganancia">
+                  {selectedInvoice.profit_margin_percentage ?? 0}%
+                </InvoiceModalField>
+                <InvoiceModalField label="% recargo por atraso">
+                  {selectedInvoice.late_fee_percentage ?? 0}%
+                </InvoiceModalField>
+                <InvoiceModalField label="Pago al afiliado">
+                  <span className="font-medium">
+                    {formatCurrency(selectedInvoice.affiliate_payment || 0)}
+                  </span>
+                </InvoiceModalField>
+                <InvoiceModalField label="Pagado al afiliado">
+                  <span className="font-medium">
+                    {formatCurrency(selectedInvoice.amount_paid_affiliate || 0)}
+                  </span>
+                </InvoiceModalField>
+                <InvoiceModalField label="Margen de ganancia total">
+                  <span className="font-medium">
+                    {formatCurrency(selectedInvoice.total_profit_margin || 0)}
+                  </span>
+                </InvoiceModalField>
+                <InvoiceModalField label="Margen de ganancia pagado">
+                  <span className="font-medium">
+                    {formatCurrency(selectedInvoice.paid_profit_margin || 0)}
+                  </span>
+                </InvoiceModalField>
+                <InvoiceModalField label="Comisión afiliado total">
+                  <span className="font-medium">
+                    {formatCurrency(selectedInvoice.total_affiliate_fee || 0)}
+                  </span>
+                </InvoiceModalField>
+                <InvoiceModalField label="Comisión afiliado pagada">
+                  <span className="font-medium">
+                    {formatCurrency(selectedInvoice.paid_affiliate_fee || 0)}
+                  </span>
+                </InvoiceModalField>
+                <InvoiceModalField label="Recargos por atraso totales">
+                  <span className="font-medium">
+                    {formatCurrency(selectedInvoice.total_late_fees || 0)}
+                  </span>
+                </InvoiceModalField>
+                <InvoiceModalField label="Recargos por atraso pagados">
+                  <span className="font-medium">
+                    {formatCurrency(selectedInvoice.paid_late_fees || 0)}
+                  </span>
+                </InvoiceModalField>
               </div>
-            </section>
+            </InvoiceModalSection>
           </div>
         )}
       </Modal>
