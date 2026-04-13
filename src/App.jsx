@@ -11,6 +11,7 @@ import OrderDetails from "./pages/OrderDetails";
 import InvoicesList from "./pages/InvoicesList";
 import InvoicePayments from "./pages/InvoicePayments";
 import CobranzaSummary from "./pages/CobranzaSummary";
+import AffiliateFinancialSummary from "./pages/AffiliateFinancialSummary";
 import Logout from "./pages/Logout";
 import { ROUTES } from "./utils/routes";
 import "./App.css";
@@ -82,6 +83,14 @@ function App() {
           element={
             <PrivateRoute>
               <InvoicesList />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={ROUTES.CONSULTAS_RESUMEN_FINANCIERO}
+          element={
+            <PrivateRoute>
+              <AffiliateFinancialSummary />
             </PrivateRoute>
           }
         />

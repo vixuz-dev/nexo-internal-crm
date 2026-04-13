@@ -23,6 +23,35 @@ export async function getCompaniesCatalog() {
   }
 }
 
+export async function getAffiliateFinancialSummary() {
+  try {
+    const response = await axios.get(
+      `${API_BASE_URL}/web/affiliates/get_affiliates_dashboard`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: getCookie("accessToken"),
+        },
+      }
+    );
+    const data = response.data;
+    if (data && data.success === false) {
+      throw new Error(
+        data.statusMessage || data.message || "Error al obtener el resumen financiero"
+      );
+    }
+    return data;
+  } catch (error) {
+    const res = error.response?.data;
+    const errMsg =
+      res?.statusMessage ||
+      res?.message ||
+      error.message ||
+      "Error al obtener el resumen financiero de afiliados";
+    throw new Error(errMsg);
+  }
+}
+
 export async function changeAffiliateStatus(userId, status) {
   try {
     const response = await axios.put(

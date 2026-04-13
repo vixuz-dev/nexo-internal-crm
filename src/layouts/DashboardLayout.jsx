@@ -47,6 +47,7 @@ const menuItems = [
       // { label: 'Auditoria', path: ROUTES.CONSULTAS_AUDIT },
       // { label: 'Fichas', path: ROUTES.CONSULTAS_FICHAS },
       { label: 'Facturas', path: ROUTES.CONSULTAS_FACTURAS },
+      { label: 'Resumen financiero', path: ROUTES.CONSULTAS_RESUMEN_FINANCIERO },
       // { label: 'Cobranza', path: ROUTES.CONSULTAS_COBRANZA },
       // { label: 'Cobranza diaria', path: ROUTES.CONSULTAS_COBRANZA_DIA },
     ],
@@ -79,7 +80,10 @@ const DashboardLayout = ({ children }) => {
     if (location.pathname.startsWith('/afiliados/pedidos') || location.pathname.startsWith('/administrador/rutas')) {
       setOpenPedidos(true);
     }
-    if (location.pathname.startsWith('/administrador/consultas')) {
+    if (
+      location.pathname.startsWith('/administrador/consultas') ||
+      location.pathname === ROUTES.CONSULTAS_RESUMEN_FINANCIERO
+    ) {
       setOpenConsultas(true);
     }
     if (location.pathname.startsWith('/administrador/cobranza')) {
