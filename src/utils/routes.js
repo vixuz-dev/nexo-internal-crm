@@ -1,5 +1,8 @@
 export const ROUTES = {
   LOGIN: '/iniciar-sesion',
+  FORGOT_PASSWORD: '/recuperar-contraseña',
+  RESET_PASSWORD_OTP: '/recuperar-contraseña/verificar-codigo',
+  NEW_PASSWORD_AFTER_RESET: '/recuperar-contraseña/nueva-contrasena',
   HOMEADMINPANEL: '/administrador/panel',
   LOGOUT: '/logout',
   // Nuevas rutas organizadas

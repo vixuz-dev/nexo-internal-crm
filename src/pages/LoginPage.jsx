@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { ROUTES } from "../utils/routes";
 import { login } from "../api/authApi";
@@ -213,6 +213,14 @@ const LoginPage = () => {
               {errors.password && (
                 <div className="text-red-600 text-xs mt-2">{errors.password}</div>
               )}
+              <div className="text-right mt-2">
+                <Link
+                  to={ROUTES.FORGOT_PASSWORD}
+                  className="text-sm font-medium text-primary-600 hover:text-primary-800 hover:underline transition-colors inline-block"
+                >
+                  ¿Olvidaste tu contraseña?
+                </Link>
+              </div>
             </div>
 
             {errors.general && (

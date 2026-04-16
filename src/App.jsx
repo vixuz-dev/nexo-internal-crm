@@ -1,6 +1,9 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordOtpPage from "./pages/ResetPasswordOtpPage";
+import NewPasswordAfterResetPage from "./pages/NewPasswordAfterResetPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import ClientsList from "./pages/ClientsList";
 import ClientDetails from "./pages/ClientDetails";
@@ -22,6 +25,18 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+        <Route
+          path={ROUTES.FORGOT_PASSWORD}
+          element={<ForgotPasswordPage />}
+        />
+        <Route
+          path={ROUTES.RESET_PASSWORD_OTP}
+          element={<ResetPasswordOtpPage />}
+        />
+        <Route
+          path={ROUTES.NEW_PASSWORD_AFTER_RESET}
+          element={<NewPasswordAfterResetPage />}
+        />
         <Route
           path={ROUTES.HOMEADMINPANEL}
           element={
