@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import ClientsList from "./pages/ClientsList";
@@ -13,6 +13,7 @@ import InvoicePayments from "./pages/InvoicePayments";
 import CobranzaSummary from "./pages/CobranzaSummary";
 import AffiliateFinancialSummary from "./pages/AffiliateFinancialSummary";
 import Logout from "./pages/Logout";
+import NotFoundPage from "./pages/NotFoundPage";
 import { ROUTES } from "./utils/routes";
 import "./App.css";
 import PrivateRoute from "./components/PrivateRoute";
@@ -55,7 +56,7 @@ function App() {
           />
         </Route>
         <Route path={ROUTES.LOGOUT} element={<Logout />} />
-        {/*  <Route path="*" element={<Navigate to={ROUTES.HOMEADMINPANEL} replace />} /> */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );
