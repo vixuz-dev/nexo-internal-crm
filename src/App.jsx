@@ -1,9 +1,6 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
-import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-import ResetPasswordOtpPage from "./pages/ResetPasswordOtpPage";
-import NewPasswordAfterResetPage from "./pages/NewPasswordAfterResetPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import ClientsList from "./pages/ClientsList";
 import ClientDetails from "./pages/ClientDetails";
@@ -19,114 +16,46 @@ import Logout from "./pages/Logout";
 import { ROUTES } from "./utils/routes";
 import "./App.css";
 import PrivateRoute from "./components/PrivateRoute";
+import PublicRoute from "./components/PublicRoute";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={ROUTES.LOGIN} element={<LoginPage />} />
-        <Route
-          path={ROUTES.FORGOT_PASSWORD}
-          element={<ForgotPasswordPage />}
-        />
-        <Route
-          path={ROUTES.RESET_PASSWORD_OTP}
-          element={<ResetPasswordOtpPage />}
-        />
-        <Route
-          path={ROUTES.NEW_PASSWORD_AFTER_RESET}
-          element={<NewPasswordAfterResetPage />}
-        />
-        <Route
-          path={ROUTES.HOMEADMINPANEL}
-          element={
-            <PrivateRoute>
-              <AdminDashboard />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path={ROUTES.CLIENTS_LIST}
-          element={
-            <PrivateRoute>
-              <ClientsList />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path={ROUTES.CLIENTS_DETAILS}
-          element={
-            <PrivateRoute>
-              <ClientDetails />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path={ROUTES.AFFILIATES}
-          element={
-            <PrivateRoute>
-              <Affiliates />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path={ROUTES.AFFILIATES_DETAILS}
-          element={
-            <PrivateRoute>
-              <AffiliateDetails />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path={ROUTES.ORDERS_LIST}
-          element={
-            <PrivateRoute>
-              <OrdersList />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path={ROUTES.ORDERS_DETAILS}
-          element={
-            <PrivateRoute>
-              <OrderDetails />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path={ROUTES.CONSULTAS_FACTURAS}
-          element={
-            <PrivateRoute>
-              <InvoicesList />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path={ROUTES.CONSULTAS_RESUMEN_FINANCIERO}
-          element={
-            <PrivateRoute>
-              <AffiliateFinancialSummary />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path={ROUTES.CONSULTAS_FACTURAS_PAGOS}
-          element={
-            <PrivateRoute>
-              <InvoicePayments />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path={ROUTES.CONSULTAS_COBRANZA}
-          element={
-            <PrivateRoute>
-              <CobranzaSummary />
-            </PrivateRoute>
-          }
-        />
+        {/* Public Routes */}
+        <Route element={<PublicRoute />}>
+          <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+          <Route path={ROUTES.LOGIN_ROOT} element={<LoginPage />} />
+        </Route>
+
+        {/* Private Routes */}
+        <Route element={<PrivateRoute />}>
+          <Route path={ROUTES.HOMEADMINPANEL} element={<AdminDashboard />} />
+          <Route path={ROUTES.CLIENTS_LIST} element={<ClientsList />} />
+          <Route path={ROUTES.CLIENTS_DETAILS} element={<ClientDetails />} />
+          <Route path={ROUTES.AFFILIATES} element={<Affiliates />} />
+          <Route
+            path={ROUTES.AFFILIATES_DETAILS}
+            element={<AffiliateDetails />}
+          />
+          <Route path={ROUTES.ORDERS_LIST} element={<OrdersList />} />
+          <Route path={ROUTES.ORDERS_DETAILS} element={<OrderDetails />} />
+          <Route path={ROUTES.CONSULTAS_FACTURAS} element={<InvoicesList />} />
+          <Route
+            path={ROUTES.CONSULTAS_RESUMEN_FINANCIERO}
+            element={<AffiliateFinancialSummary />}
+          />
+          <Route
+            path={ROUTES.CONSULTAS_FACTURAS_PAGOS}
+            element={<InvoicePayments />}
+          />
+          <Route
+            path={ROUTES.CONSULTAS_COBRANZA}
+            element={<CobranzaSummary />}
+          />
+        </Route>
         <Route path={ROUTES.LOGOUT} element={<Logout />} />
-        <Route path="*" element={<Navigate to={ROUTES.HOMEADMINPANEL} replace />} />
+        {/*  <Route path="*" element={<Navigate to={ROUTES.HOMEADMINPANEL} replace />} /> */}
       </Routes>
     </BrowserRouter>
   );

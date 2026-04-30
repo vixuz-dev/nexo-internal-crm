@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { ROUTES } from "../utils/routes";
 import { login } from "../api/authApi";
-import { setCookie, getCookie } from "../utils/sessionCookie";
+import { setCookie } from "../utils/sessionCookie";
 import { useAfiliateInformation } from "../store/useAfiliateInformation";
 import nexoMainLogo from "../assets/images/logos/nexo-main-logo.png";
 import { hashPassword } from "../utils/encryp";
@@ -76,11 +75,6 @@ const LoginPage = () => {
       setLoading(false);
     }
   };
-
-  const token = getCookie("accessToken");
-  if (token) {
-    return <Navigate to={ROUTES.AFFILIATES_DASHBOARD} replace />;
-  }
 
   const inputUnderline =
     "block w-full border-0 border-b-2 border-black/15 bg-transparent py-3 px-0 text-base text-black placeholder:text-black/40 placeholder:font-normal focus:border-primary-500 focus:ring-0 focus:outline-none transition-colors rounded-none";
@@ -176,7 +170,9 @@ const LoginPage = () => {
                 className={inputUnderline}
               />
               {errors.username && (
-                <div className="text-red-600 text-xs mt-2">{errors.username}</div>
+                <div className="text-red-600 text-xs mt-2">
+                  {errors.username}
+                </div>
               )}
             </div>
 
@@ -211,16 +207,10 @@ const LoginPage = () => {
                 </button>
               </div>
               {errors.password && (
-                <div className="text-red-600 text-xs mt-2">{errors.password}</div>
+                <div className="text-red-600 text-xs mt-2">
+                  {errors.password}
+                </div>
               )}
-              <div className="text-right mt-2">
-                <Link
-                  to={ROUTES.FORGOT_PASSWORD}
-                  className="text-sm font-medium text-primary-600 hover:text-primary-800 hover:underline transition-colors inline-block"
-                >
-                  ¿Olvidaste tu contraseña?
-                </Link>
-              </div>
             </div>
 
             {errors.general && (
@@ -276,8 +266,9 @@ const LoginPage = () => {
           a NexoPay.
         </p>
         <p className="mt-6 text-sm sm:text-base leading-relaxed text-white/80 max-w-sm">
-          Bienvenido al <span className="font-semibold text-white">CRM interno</span>{" "}
-          de NexoPay. Tu espacio para operar con orden y visión clara.
+          Bienvenido al{" "}
+          <span className="font-semibold text-white">CRM interno</span> de
+          NexoPay. Tu espacio para operar con orden y visión clara.
         </p>
       </aside>
     </div>
