@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import ClientsList from "./pages/ClientsList";
@@ -21,7 +21,7 @@ import PublicRoute from "./components/PublicRoute";
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         {/* Public Routes */}
         <Route element={<PublicRoute />}>
@@ -58,7 +58,7 @@ function App() {
         <Route path={ROUTES.LOGOUT} element={<Logout />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
