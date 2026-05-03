@@ -195,7 +195,7 @@ export default function InvoicesTable() {
     }
     if (invoice_status === "Eliminado") {
       return (
-        <span className={`${base} border-neutral-600 bg-neutral-800 text-neutral-50`}>
+        <span className={`${base} border-red-600 bg-red-50 text-red-900`}>
           Eliminada
         </span>
       );
