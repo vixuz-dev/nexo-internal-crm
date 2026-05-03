@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { ROUTES } from "../utils/routes";
 import { login } from "../api/authApi";
@@ -8,6 +9,7 @@ import nexoMainLogo from "../assets/images/logos/nexo-main-logo.png";
 import { hashPassword } from "../utils/encryp";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
@@ -53,7 +55,7 @@ const LoginPage = () => {
         localStorage.setItem("lastLogin", Date.now());
         setRedirecting(true);
         setTimeout(() => {
-          window.location.href = ROUTES.HOMEADMINPANEL;
+          navigate(ROUTES.HOMEADMINPANEL, { replace: true });
         }, 300);
         return;
       }
