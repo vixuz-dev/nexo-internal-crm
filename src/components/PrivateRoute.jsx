@@ -5,6 +5,9 @@ import { ROUTES } from "../utils/routes";
 
 const PrivateRoute = ({ children }) => {
   const token = getCookie("accessToken");
+
+  console.log("token-private", token);
+  
   if (!token) {
     return <Navigate to={ROUTES.LOGIN} replace />;
   }

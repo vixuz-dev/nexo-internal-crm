@@ -6,6 +6,8 @@ import { ROUTES } from "../utils/routes";
 export default function PublicRoute({ children }) {
   const token = getCookie("accessToken");
 
+  console.log("token-public", token);
+
   if (token) {
     return <Navigate to={ROUTES.HOMEADMINPANEL} replace />;
   }
